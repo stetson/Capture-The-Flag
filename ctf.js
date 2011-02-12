@@ -1,3 +1,12 @@
+/**
+ * ctf.js
+ * 
+ * This is the main application class, and controls
+ * daemonization, imports, and routing.
+ * 
+ * @author Allen Carroll
+ */
+
 // Imports
 var express = require("express");
 var views = require("./views.js");

@@ -2,15 +2,20 @@
  * Views.js
  * 
  * These are the views that will return the JSON necessary for gameplay
+ * 
+ * @author Mark Cahill
  */
+
+var models = require("./models.js");
 
 /**
  * Update the user's location, and fetch the locations of
  * the other players
  * 
- * @param latitude {Float}	The user's current latitude
- * @param longitude {Float} The user's current longitude
- * @param accuracy {Integer} The accuracy of the location in meters
+ * @param id {Number} The user's id
+ * @param latitude {Number}	The user's current latitude
+ * @param longitude {Number} The user's current longitude
+ * @param accuracy {Number} The accuracy of the location in meters
  */
 exports.update_location = function(request, response) {	
 	// Fixture for other players locations
