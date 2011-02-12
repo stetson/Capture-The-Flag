@@ -1,14 +1,22 @@
 /**
  * Map object which handles geolocation and mapping
+ * 
+ * @namespace map
  */
 var map = {
-	// Map object
+	/**
+	 * Google maps object
+	 */
 	map: {},
 	
-	// Map options
+	/**
+	 * Map options
+	 */
 	options: {},
 	
-	// Constructor
+	/**
+	 * Constructor, called upon page load
+	 */
 	initialize: function() {
 		// Make street level map with no UI controls
 		map.options = {
@@ -39,19 +47,24 @@ var map = {
 
 /**
  * Model which handles server calls
+ * 
+ * @namespace model
  */
 var model = {
-	username: "",
-	password: "",
-	uuid: "",
 	
-	// Conditions have been met for gameplay
+	/**
+	 * Conditions have been met for gameplay
+	 */
 	game_in_progress: false,
 	
-	// Array which holds the player objects
+	/**
+	 * Array which holds the player objects
+	 */
 	players: {},
 	
-	// Array which holds the player markers
+	/**
+	 * Array which holds the player markers
+	 */
 	player_markers: {},
 	
 	// Get a session for the current user
@@ -79,7 +92,9 @@ var model = {
 	},
 	*/
 	
-	// Center the user on their own location, and set up location listener
+	/**
+	 * Center the user on their own location, and set up location listener
+	 */
 	watchLocation: function() {
 		try {
 			
@@ -107,8 +122,10 @@ var model = {
 		}
 	},
 	
-	// Server call which updates your current location and gets
-	// the locations of all the other players
+	/**
+	 * Server call which updates your current location and gets
+	 * the locations of all the other players
+	 */
 	updateLocation: function(position) {
 		//console.debug(position);
 		// TODO - check for accuracy

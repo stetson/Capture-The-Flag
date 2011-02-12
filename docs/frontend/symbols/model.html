@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - http</title>
+		<title>JsDoc Reference - model</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -191,11 +191,9 @@ ul.inheritsList
 	
 	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
 	
-	<li><a href="../symbols/http.html">http</a></li>
+	<li><a href="../symbols/map.html">map</a></li>
 	
-	<li><a href="../symbols/models.html">models</a></li>
-	
-	<li><a href="../symbols/views.html">views</a></li>
+	<li><a href="../symbols/model.html">model</a></li>
 	
 </ul>
 <hr />
@@ -206,7 +204,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Namespace http
+				Namespace model
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -214,16 +212,16 @@ ul.inheritsList
 				
 				
 			
-				http
+				model
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/ctf.js.html">ctf.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/frontend_js_application.js.html">application.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class http.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class model.">
 				<caption>Namespace Summary</caption>
 				<thead>
 					<tr>
@@ -236,9 +234,9 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/http.html#constructor">http</a></b>
+								<b><a href="../symbols/model.html#constructor">model</a></b>
 							</div>
-							<div class="description">The server object which controls all routes</div>
+							<div class="description">Model which handles server calls</div>
 						</td>
 					</tr>
 				</tbody>
@@ -249,7 +247,7 @@ ul.inheritsList
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class http.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class model.">
 					<caption>Field Summary</caption>
 					<thead>
 						<tr>
@@ -263,10 +261,9 @@ ul.inheritsList
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								http.<b><a href="../symbols/http.html#.docs">docs</a></b>
+								model.<b><a href="../symbols/model.html#.game_in_progress">game_in_progress</a></b>
 								</div>
-								<div class="description">Documentation <br />
-<b>url: /*</b></div>
+								<div class="description">Conditions have been met for gameplay</div>
 							</td>
 						</tr>
 					
@@ -274,10 +271,9 @@ ul.inheritsList
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								http.<b><a href="../symbols/http.html#.frontend">frontend</a></b>
+								model.<b><a href="../symbols/model.html#.player_markers">player_markers</a></b>
 								</div>
-								<div class="description">Static files for frontend <br />
-<b>url: /*</b></div>
+								<div class="description">Array which holds the player markers</div>
 							</td>
 						</tr>
 					
@@ -285,11 +281,9 @@ ul.inheritsList
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								http.<b><a href="../symbols/http.html#.location">location</a></b>
+								model.<b><a href="../symbols/model.html#.players">players</a></b>
 								</div>
-								<div class="description">Calls views.update_location <br />
-<b>url: /location</b><br />
-methods: PUT</div>
+								<div class="description">Array which holds the player objects</div>
 							</td>
 						</tr>
 					
@@ -302,6 +296,43 @@ methods: PUT</div>
 
 <!-- ============================== methods summary ======================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class model.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">model.<b><a href="../symbols/model.html#.updateLocation">updateLocation</a></b>(position)
+								</div>
+								<div class="description">Server call which updates your current location and gets
+the locations of all the other players</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">model.<b><a href="../symbols/model.html#.watchLocation">watchLocation</a></b>()
+								</div>
+								<div class="description">Center the user on their own location, and set up location listener</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
 <!-- ============================== events summary ======================== -->
 			
 
@@ -313,11 +344,11 @@ methods: PUT</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>http</b>
+						<b>model</b>
 				</div>
 				
 				<div class="description">
-					The server object which controls all routes
+					Model which handles server calls
 					
 				</div>
 				
@@ -341,16 +372,15 @@ methods: PUT</div>
 					Field Detail
 				</div>
 				
-					<a name=".docs"> </a>
+					<a name=".game_in_progress"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">http.</span><b>docs</b>
+					<span class="light">model.</span><b>game_in_progress</b>
 					
 					</div>
 					<div class="description">
-						Documentation <br />
-<b>url: /*</b>
+						Conditions have been met for gameplay
 						
 						
 					</div>
@@ -364,16 +394,15 @@ methods: PUT</div>
 
 					<hr />
 				
-					<a name=".frontend"> </a>
+					<a name=".player_markers"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">http.</span><b>frontend</b>
+					<span class="light">model.</span><b>player_markers</b>
 					
 					</div>
 					<div class="description">
-						Static files for frontend <br />
-<b>url: /*</b>
+						Array which holds the player markers
 						
 						
 					</div>
@@ -387,17 +416,15 @@ methods: PUT</div>
 
 					<hr />
 				
-					<a name=".location"> </a>
+					<a name=".players"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">http.</span><b>location</b>
+					<span class="light">model.</span><b>players</b>
 					
 					</div>
 					<div class="description">
-						Calls views.update_location <br />
-<b>url: /location</b><br />
-methods: PUT
+						Array which holds the player objects
 						
 						
 					</div>
@@ -406,13 +433,6 @@ methods: PUT
 
 						
 						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-							<dd><a href="../symbols/views.html#.update_location">views.update_location</a></dd>
-							
-							</dl>
 						
 						
 
@@ -421,6 +441,73 @@ methods: PUT
 			
 
 <!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name=".updateLocation"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">model.</span><b>updateLocation</b>(position)
+					
+					</div>
+					<div class="description">
+						Server call which updates your current location and gets
+the locations of all the other players
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>position</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".watchLocation"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">model.</span><b>watchLocation</b>()
+					
+					</div>
+					<div class="description">
+						Center the user on their own location, and set up location listener
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					
+				
 			
 			
 <!-- ============================== event details ========================= -->		
@@ -433,7 +520,7 @@ methods: PUT
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2 on Sat Feb 12 2011 14:15:45 GMT-0500 (EST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2 on Sat Feb 12 2011 14:27:35 GMT-0500 (EST)
 		</div>
 	</body>
 </html>

@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - models</title>
+		<title>JsDoc Reference - map</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -191,11 +191,9 @@ ul.inheritsList
 	
 	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
 	
-	<li><a href="../symbols/http.html">http</a></li>
+	<li><a href="../symbols/map.html">map</a></li>
 	
-	<li><a href="../symbols/models.html">models</a></li>
-	
-	<li><a href="../symbols/views.html">views</a></li>
+	<li><a href="../symbols/model.html">model</a></li>
 	
 </ul>
 <hr />
@@ -206,7 +204,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Namespace models
+				Namespace map
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -214,16 +212,16 @@ ul.inheritsList
 				
 				
 			
-				models
+				map
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/backend_views.js.html">views.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/frontend_js_application.js.html">application.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class models.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class map.">
 				<caption>Namespace Summary</caption>
 				<thead>
 					<tr>
@@ -236,10 +234,9 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/models.html#constructor">models</a></b>
+								<b><a href="../symbols/map.html#constructor">map</a></b>
 							</div>
-							<div class="description">These are the models that will handle all of our
-database access</div>
+							<div class="description">Map object which handles geolocation and mapping</div>
 						</td>
 					</tr>
 				</tbody>
@@ -250,7 +247,7 @@ database access</div>
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class models.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class map.">
 					<caption>Field Summary</caption>
 					<thead>
 						<tr>
@@ -264,10 +261,9 @@ database access</div>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								models.<b><a href="../symbols/models.html#.Coordinate">Coordinate</a></b>
+								map.<b><a href="../symbols/map.html#.map">map</a></b>
 								</div>
-								<div class="description">Coordinate object, which holds a GPS coordinate,
-and the accuracy in meters</div>
+								<div class="description">Google maps object</div>
 							</td>
 						</tr>
 					
@@ -275,31 +271,9 @@ and the accuracy in meters</div>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								models.<b><a href="../symbols/models.html#.Game">Game</a></b>
+								map.<b><a href="../symbols/map.html#.options">options</a></b>
 								</div>
-								<div class="description">Game object, which holds information regarding boundaries
-and game location</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								models.<b><a href="../symbols/models.html#.Player">Player</a></b>
-								</div>
-								<div class="description">Player object, which holds all information related to the player</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								models.<b><a href="../symbols/models.html#.Team">Team</a></b>
-								</div>
-								<div class="description">Team object, used for proper load balancing of players
-on teams</div>
+								<div class="description">Map options</div>
 							</td>
 						</tr>
 					
@@ -312,6 +286,33 @@ on teams</div>
 
 <!-- ============================== methods summary ======================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class map.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">map.<b><a href="../symbols/map.html#.initialize">initialize</a></b>()
+								</div>
+								<div class="description">Constructor, called upon page load</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
 <!-- ============================== events summary ======================== -->
 			
 
@@ -323,12 +324,11 @@ on teams</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>models</b>
+						<b>map</b>
 				</div>
 				
 				<div class="description">
-					These are the models that will handle all of our
-database access
+					Map object which handles geolocation and mapping
 					
 				</div>
 				
@@ -352,19 +352,15 @@ database access
 					Field Detail
 				</div>
 				
-					<a name=".Coordinate"> </a>
+					<a name=".map"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">models.</span><b>Coordinate</b>
+					<span class="light">map.</span><b>map</b>
 					
 					</div>
 					<div class="description">
-						Coordinate object, which holds a GPS coordinate,
-and the accuracy in meters
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/backend_models.js.html">models.js</a>.
+						Google maps object
 						
 						
 					</div>
@@ -378,70 +374,15 @@ and the accuracy in meters
 
 					<hr />
 				
-					<a name=".Game"> </a>
+					<a name=".options"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">models.</span><b>Game</b>
+					<span class="light">map.</span><b>options</b>
 					
 					</div>
 					<div class="description">
-						Game object, which holds information regarding boundaries
-and game location
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/backend_models.js.html">models.js</a>.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".Player"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">models.</span><b>Player</b>
-					
-					</div>
-					<div class="description">
-						Player object, which holds all information related to the player
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/backend_models.js.html">models.js</a>.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".Team"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">models.</span><b>Team</b>
-					
-					</div>
-					<div class="description">
-						Team object, used for proper load balancing of players
-on teams
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/backend_models.js.html">models.js</a>.
+						Map options
 						
 						
 					</div>
@@ -459,6 +400,36 @@ on teams
 
 <!-- ============================== method details ========================= -->		
 			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name=".initialize"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">map.</span><b>initialize</b>()
+					
+					</div>
+					<div class="description">
+						Constructor, called upon page load
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					
+				
+			
 			
 <!-- ============================== event details ========================= -->		
 			
@@ -470,7 +441,7 @@ on teams
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2 on Sat Feb 12 2011 14:15:45 GMT-0500 (EST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2 on Sat Feb 12 2011 14:27:35 GMT-0500 (EST)
 		</div>
 	</body>
 </html>
