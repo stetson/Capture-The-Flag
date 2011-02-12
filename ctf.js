@@ -34,26 +34,15 @@ var http = express.createServer();
 	//
 	// Static routes
 	//
-
-	/**
-	 * Index file <br />
-	 * <b>url: /</b>
-	 * 
-	 * @memberOf http
-	 * @name root 
-	 **/
-	http.get('/', function(request, response) {
-		response.sendfile("static/index.html");
-	});
 	
 	/**
-	 * Static files <br />
+	 * Static files for frontend <br />
 	 * <b>url: /*</b>
 	 * 
 	 * @memberOf http
-	 * @name static 
+	 * @name frontend 
 	 **/
-	http.use(express.staticProvider('./static/'));
+	http.use(express.staticProvider('./frontend/'));
 	
 	/**
 	 * Documentation <br />
