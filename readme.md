@@ -3,11 +3,11 @@
 ## Installing
 
 First, make sure you install all of CTF's dependencies:
-[http://nodejs.org/](Node.js)
-[http://npmjs.org/](npm)
-[http://expressjs.com/](Express)
-[http://mongoosejs.com/](Mongoose ORM)
-[http://www.mongodb.org/](MongoDB)
+[http://nodejs.org/](Node.js)   
+[http://npmjs.org/](npm)   
+[http://expressjs.com/](Express)   
+[http://mongoosejs.com/](Mongoose ORM)   
+[http://www.mongodb.org/](MongoDB)   
 
 Then, clone the latest code:
 
@@ -17,6 +17,8 @@ Then run the server:
 
 	cd Capture-The-Flag
 	node ctf.js
+
+## Additional documentation
 
 Additional documentation is available in the docs folder:
 
