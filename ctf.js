@@ -35,11 +35,13 @@ var http = express.createServer();
  * Stores all active players
  */
 var players = {};
+setInterval(views.persist_players, 60000);
 
 /**
  * Stores all active games
  */
 var games = {};
+setInterval(views.persist_games, 60000);
 
 // Routes
 
