@@ -29,6 +29,18 @@ var views = require("./backend/views.js");
  */
 var http = express.createServer();
 
+// Global memory caches
+
+/**
+ * Stores all active players
+ */
+var players = {};
+
+/**
+ * Stores all active games
+ */
+var games = {};
+
 // Routes
 
 	//

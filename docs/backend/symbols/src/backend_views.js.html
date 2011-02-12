@@ -1,0 +1,46 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  * Views.js
+<span class='line'>  3</span>  * 
+<span class='line'>  4</span>  * These are the views that will return the JSON necessary for gameplay
+<span class='line'>  5</span>  * 
+<span class='line'>  6</span>  * @author Mark Cahill
+<span class='line'>  7</span>  */</span><span class="WHIT">
+<span class='line'>  8</span> 
+<span class='line'>  9</span> </span><span class="COMM">/**
+<span class='line'> 10</span>  * These are the models that will handle all of our
+<span class='line'> 11</span>  * database access
+<span class='line'> 12</span>  * 
+<span class='line'> 13</span>  * @namespace models
+<span class='line'> 14</span>  */</span><span class="WHIT">
+<span class='line'> 15</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">models</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">"./models.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 16</span> 
+<span class='line'> 17</span> </span><span class="COMM">/**
+<span class='line'> 18</span>  * Update the user's location, and fetch the locations of
+<span class='line'> 19</span>  * the other players
+<span class='line'> 20</span>  * 
+<span class='line'> 21</span>  * @memberOf views
+<span class='line'> 22</span>  * @name update_location
+<span class='line'> 23</span>  * @param id {Number} The user's id
+<span class='line'> 24</span>  * @param latitude {Number}	The user's current latitude
+<span class='line'> 25</span>  * @param longitude {Number} The user's current longitude
+<span class='line'> 26</span>  * @param accuracy {Number} The accuracy of the location in meters
+<span class='line'> 27</span>  */</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="NAME">exports.update_location</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">request</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">	
+<span class='line'> 29</span> 	</span><span class="COMM">// Fixture for other players locations</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="WHIT">	</span><span class="NAME">players</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="WHIT">		</span><span class="NUMB">1</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="STRN">'latitude'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">47.5432</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'longitude'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">83.34567</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'accuracy'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">5</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 32</span> </span><span class="WHIT">		</span><span class="NUMB">2</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="STRN">'latitude'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">47.4753</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'longitude'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">83.3478</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'accuracy'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">5</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 33</span> </span><span class="WHIT">		</span><span class="NUMB">3</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="STRN">'latitude'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">47.4578</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'longitude'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">83.8568</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'accuracy'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">5</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="WHIT">	
+<span class='line'> 36</span> 	</span><span class="COMM">// Send the JSON back to the client</span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="WHIT">	</span><span class="NAME">console.log</span><span class="PUNC">(</span><span class="NAME">request.connection.remoteAddress</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">' updated their location'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 38</span> </span><span class="WHIT">	</span><span class="NAME">response.send</span><span class="PUNC">(</span><span class="NAME">players</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="PUNC">}</span><span class="PUNC">;</span></pre></body></html>
