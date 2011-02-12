@@ -2,7 +2,7 @@
 
 ## Installing
 
-First, make sure you install all of CTF's dependencies:
+First, make sure you install all of CTF's dependencies:   
 [http://nodejs.org/](Node.js)   
 [http://npmjs.org/](npm)   
 [http://expressjs.com/](Express)   
