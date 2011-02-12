@@ -9,7 +9,7 @@
 
 // Imports
 var express = require("express");
-var views = require("./views.js");
+var views = require("./backend/views.js");
 
 // Create the server
 var http = express.createServer();
