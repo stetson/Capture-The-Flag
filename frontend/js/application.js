@@ -55,6 +55,7 @@ var model = {
 	player_markers: {},
 	
 	// Get a session for the current user
+	/*
 	login: function() {
 		$.ajax({
 			url: '/login/',
@@ -76,6 +77,7 @@ var model = {
 			}
 		});
 	},
+	*/
 	
 	// Center the user on their own location, and set up location listener
 	watchLocation: function() {
@@ -145,3 +147,8 @@ var model = {
 		//}
 	}
 };
+
+// Start application
+$(document).ready(function() {
+	map.initialize();
+});
