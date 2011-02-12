@@ -37,23 +37,32 @@ var http = express.createServer();
 
 	/**
 	 * Index file <br />
-	 * url: /
+	 * <b>url: /</b>
 	 * 
 	 * @memberOf http
 	 * @name root 
 	 **/
-	http.use(express.staticProvider('./'));
+	http.get('/', function(request, response) {
+		response.sendfile("static/index.html");
+	});
 	
 	/**
 	 * Static files <br />
-	 * url: /static
+	 * <b>url: /*</b>
 	 * 
 	 * @memberOf http
 	 * @name static 
 	 **/
-	http.get('/', function(request, response) {
-		response.sendfile("static/index.html");
-	});
+	http.use(express.staticProvider('./static/'));
+	
+	/**
+	 * Documentation <br />
+	 * <b>url: /*</b>
+	 * 
+	 * @memberOf http
+	 * @name docs 
+	 **/
+	http.use(express.staticProvider('./docs/'));
 	
 	//
 	// Capture the flag routes
@@ -61,7 +70,7 @@ var http = express.createServer();
 	
 	/**
 	 * Calls views.update_location <br />
-	 * url: /location <br />
+	 * <b>url: /location</b><br />
 	 * methods: PUT
 	 * 
 	 * @memberOf http
