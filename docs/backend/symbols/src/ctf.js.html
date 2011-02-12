@@ -1,0 +1,82 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  * ctf.js
+<span class='line'>  3</span>  * 
+<span class='line'>  4</span>  * This is the main application class, and controls
+<span class='line'>  5</span>  * daemonization, imports, and routing.
+<span class='line'>  6</span>  * 
+<span class='line'>  7</span>  * @author Allen Carroll
+<span class='line'>  8</span>  */</span><span class="WHIT">
+<span class='line'>  9</span> 
+<span class='line'> 10</span> </span><span class="COMM">// Imports</span><span class="WHIT">
+<span class='line'> 11</span> 
+<span class='line'> 12</span> </span><span class="COMM">/**
+<span class='line'> 13</span>  * The express framework and HTTP middleware
+<span class='line'> 14</span>  */</span><span class="WHIT">
+<span class='line'> 15</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">express</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">"express"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 16</span> 
+<span class='line'> 17</span> </span><span class="COMM">/**
+<span class='line'> 18</span>  * The views which will handle incoming requests
+<span class='line'> 19</span>  * and return the necessary JSON
+<span class='line'> 20</span>  * 
+<span class='line'> 21</span>  * @namespace views
+<span class='line'> 22</span>  */</span><span class="WHIT">
+<span class='line'> 23</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">views</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">"./backend/views.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 24</span> 
+<span class='line'> 25</span> </span><span class="COMM">/** 
+<span class='line'> 26</span>  * The server object which controls all routes
+<span class='line'> 27</span>  * 
+<span class='line'> 28</span>  * @namespace http
+<span class='line'> 29</span>  */</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">http</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">express.createServer</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 31</span> 
+<span class='line'> 32</span> </span><span class="COMM">// Routes</span><span class="WHIT">
+<span class='line'> 33</span> 
+<span class='line'> 34</span> </span><span class="WHIT">	</span><span class="COMM">//</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="WHIT">	</span><span class="COMM">// Static routes</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="WHIT">	</span><span class="COMM">//</span><span class="WHIT">
+<span class='line'> 37</span> 
+<span class='line'> 38</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='line'> 39</span> 	 * Index file &lt;br />
+<span class='line'> 40</span> 	 * url: /
+<span class='line'> 41</span> 	 * 
+<span class='line'> 42</span> 	 * @memberOf http
+<span class='line'> 43</span> 	 * @name root 
+<span class='line'> 44</span> 	 **/</span><span class="WHIT">
+<span class='line'> 45</span> </span><span class="WHIT">	</span><span class="NAME">http.use</span><span class="PUNC">(</span><span class="NAME">express.staticProvider</span><span class="PUNC">(</span><span class="STRN">'./'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 46</span> </span><span class="WHIT">	
+<span class='line'> 47</span> 	</span><span class="COMM">/**
+<span class='line'> 48</span> 	 * Static files &lt;br />
+<span class='line'> 49</span> 	 * url: /static
+<span class='line'> 50</span> 	 * 
+<span class='line'> 51</span> 	 * @memberOf http
+<span class='line'> 52</span> 	 * @name static 
+<span class='line'> 53</span> 	 **/</span><span class="WHIT">
+<span class='line'> 54</span> </span><span class="WHIT">	</span><span class="NAME">http.get</span><span class="PUNC">(</span><span class="STRN">'/'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">request</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 55</span> </span><span class="WHIT">		</span><span class="NAME">response.sendfile</span><span class="PUNC">(</span><span class="STRN">"static/index.html"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 56</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 57</span> </span><span class="WHIT">	
+<span class='line'> 58</span> 	</span><span class="COMM">//</span><span class="WHIT">
+<span class='line'> 59</span> </span><span class="WHIT">	</span><span class="COMM">// Capture the flag routes</span><span class="WHIT">
+<span class='line'> 60</span> </span><span class="WHIT">	</span><span class="COMM">//	</span><span class="WHIT">
+<span class='line'> 61</span> </span><span class="WHIT">	
+<span class='line'> 62</span> 	</span><span class="COMM">/**
+<span class='line'> 63</span> 	 * Calls views.update_location &lt;br />
+<span class='line'> 64</span> 	 * url: /location &lt;br />
+<span class='line'> 65</span> 	 * methods: PUT
+<span class='line'> 66</span> 	 * 
+<span class='line'> 67</span> 	 * @memberOf http
+<span class='line'> 68</span> 	 * @name location
+<span class='line'> 69</span> 	 * @link views.update_location 
+<span class='line'> 70</span> 	 **/</span><span class="WHIT">
+<span class='line'> 71</span> </span><span class="WHIT">	</span><span class="NAME">http.put</span><span class="PUNC">(</span><span class="STRN">'/location'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">views.update_location</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 72</span> 
+<span class='line'> 73</span> </span><span class="COMM">// Start listening</span><span class="WHIT">
+<span class='line'> 74</span> </span><span class="NAME">http.listen</span><span class="PUNC">(</span><span class="NUMB">5555</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 75</span> </span><span class="NAME">console.log</span><span class="PUNC">(</span><span class="STRN">'CTF server running at http://127.0.0.1:5555/'</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>

@@ -6,12 +6,20 @@
  * @author Mark Cahill
  */
 
+/**
+ * These are the models that will handle all of our
+ * database access
+ * 
+ * @namespace models
+ */
 var models = require("./models.js");
 
 /**
  * Update the user's location, and fetch the locations of
  * the other players
  * 
+ * @memberOf views
+ * @name update_location
  * @param id {Number} The user's id
  * @param latitude {Number}	The user's current latitude
  * @param longitude {Number} The user's current longitude
