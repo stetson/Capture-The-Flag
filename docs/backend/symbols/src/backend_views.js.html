@@ -21,26 +21,66 @@
 <span class='line'> 14</span>  */</span><span class="WHIT">
 <span class='line'> 15</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">models</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">"./models.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 16</span> 
-<span class='line'> 17</span> </span><span class="COMM">/**
-<span class='line'> 18</span>  * Update the user's location, and fetch the locations of
-<span class='line'> 19</span>  * the other players
-<span class='line'> 20</span>  * 
-<span class='line'> 21</span>  * @memberOf views
-<span class='line'> 22</span>  * @name update_location
-<span class='line'> 23</span>  * @param id {Number} The user's id
-<span class='line'> 24</span>  * @param latitude {Number}	The user's current latitude
-<span class='line'> 25</span>  * @param longitude {Number} The user's current longitude
-<span class='line'> 26</span>  * @param accuracy {Number} The accuracy of the location in meters
-<span class='line'> 27</span>  */</span><span class="WHIT">
-<span class='line'> 28</span> </span><span class="NAME">exports.update_location</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">request</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">	
-<span class='line'> 29</span> 	</span><span class="COMM">// Fixture for other players locations</span><span class="WHIT">
-<span class='line'> 30</span> </span><span class="WHIT">	</span><span class="NAME">players</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 31</span> </span><span class="WHIT">		</span><span class="NUMB">1</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="STRN">'latitude'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">47.5432</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'longitude'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">83.34567</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'accuracy'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">5</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 32</span> </span><span class="WHIT">		</span><span class="NUMB">2</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="STRN">'latitude'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">47.4753</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'longitude'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">83.3478</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'accuracy'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">5</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 33</span> </span><span class="WHIT">		</span><span class="NUMB">3</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="STRN">'latitude'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">47.4578</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'longitude'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">83.8568</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'accuracy'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">5</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 34</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 35</span> </span><span class="WHIT">	
-<span class='line'> 36</span> 	</span><span class="COMM">// Send the JSON back to the client</span><span class="WHIT">
-<span class='line'> 37</span> </span><span class="WHIT">	</span><span class="NAME">console.log</span><span class="PUNC">(</span><span class="NAME">request.connection.remoteAddress</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">' updated their location'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 38</span> </span><span class="WHIT">	</span><span class="NAME">response.send</span><span class="PUNC">(</span><span class="NAME">players</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 39</span> </span><span class="PUNC">}</span><span class="PUNC">;</span></pre></body></html>
+<span class='line'> 17</span> </span><span class="COMM">//Global memory caches</span><span class="WHIT">
+<span class='line'> 18</span> 
+<span class='line'> 19</span> </span><span class="COMM">/**
+<span class='line'> 20</span>  * Purge old players
+<span class='line'> 21</span>  * 
+<span class='line'> 22</span>  * @memberOf players
+<span class='line'> 23</span>  * @name purge_players
+<span class='line'> 24</span>  */</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="NAME">purge_players</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">iterator</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">players</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="WHIT">		</span><span class="COMM">// Purge players who haven't updated in over 15 seconds</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">players</span><span class="PUNC">[</span><span class="NAME">iterator</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">last_update</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">15000</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="WHIT">			</span><span class="NAME">players</span><span class="PUNC">[</span><span class="NAME">iterator</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">latitude</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="WHIT">			</span><span class="NAME">players</span><span class="PUNC">[</span><span class="NAME">iterator</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">longitude</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="WHIT">			</span><span class="NAME">players</span><span class="PUNC">[</span><span class="NAME">iterator</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">accuracy</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 32</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 33</span> </span><span class="WHIT">		
+<span class='line'> 34</span> 		</span><span class="COMM">// Reclaim memory of players who haven't updated in 5 minutes</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">players</span><span class="PUNC">[</span><span class="NAME">iterator</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">last_update</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">300000</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="WHIT">			</span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">players</span><span class="PUNC">[</span><span class="NAME">iterator</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 38</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 40</span> 
+<span class='line'> 41</span> </span><span class="COMM">/**
+<span class='line'> 42</span>  * Stores all active players
+<span class='line'> 43</span>  */</span><span class="WHIT">
+<span class='line'> 44</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">players</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 45</span> </span><span class="NAME">setInterval</span><span class="PUNC">(</span><span class="NAME">purge_players</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">5000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 46</span> </span><span class="COMM">//setInterval(persist_players, 60000);</span><span class="WHIT">
+<span class='line'> 47</span> 
+<span class='line'> 48</span> </span><span class="COMM">/**
+<span class='line'> 49</span>  * Stores all active games
+<span class='line'> 50</span>  */</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">games</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="COMM">//setInterval(persist_games, 60000);</span><span class="WHIT">
+<span class='line'> 53</span> 
+<span class='line'> 54</span> </span><span class="COMM">/**
+<span class='line'> 55</span>  * Update the user's location, and fetch the locations of
+<span class='line'> 56</span>  * the other players
+<span class='line'> 57</span>  * 
+<span class='line'> 58</span>  * @memberOf views
+<span class='line'> 59</span>  * @name update_location
+<span class='line'> 60</span>  * @param id {Number} The user's id
+<span class='line'> 61</span>  * @param latitude {Number}	The user's current latitude
+<span class='line'> 62</span>  * @param longitude {Number} The user's current longitude
+<span class='line'> 63</span>  * @param accuracy {Number} The accuracy of the location in meters
+<span class='line'> 64</span>  */</span><span class="WHIT">
+<span class='line'> 65</span> </span><span class="NAME">exports.update_location</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">request</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">	
+<span class='line'> 66</span> 	</span><span class="COMM">// Record user's location</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="WHIT">	</span><span class="COMM">//try {</span><span class="WHIT">
+<span class='line'> 68</span> </span><span class="WHIT">		</span><span class="NAME">players</span><span class="PUNC">[</span><span class="NAME">request.body.user_id</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 69</span> </span><span class="WHIT">			</span><span class="STRN">'latitude'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">request.body.latitude</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 70</span> </span><span class="WHIT">			</span><span class="STRN">'longitude'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">request.body.longitude</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 71</span> </span><span class="WHIT">			</span><span class="STRN">'accuracy'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">request.body.accuracy</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 72</span> </span><span class="WHIT">			</span><span class="STRN">'last_update'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 73</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 74</span> </span><span class="WHIT">	</span><span class="COMM">//} catch (e) { }</span><span class="WHIT">
+<span class='line'> 75</span> </span><span class="WHIT">	
+<span class='line'> 76</span> 	</span><span class="COMM">// Send the players back to the client</span><span class="WHIT">
+<span class='line'> 77</span> </span><span class="WHIT">	</span><span class="NAME">console.log</span><span class="PUNC">(</span><span class="NAME">request.connection.remoteAddress</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">' updated their location'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 78</span> </span><span class="WHIT">	</span><span class="NAME">response.send</span><span class="PUNC">(</span><span class="NAME">players</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 79</span> </span><span class="PUNC">}</span><span class="PUNC">;</span></pre></body></html>
