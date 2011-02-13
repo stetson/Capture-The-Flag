@@ -129,6 +129,27 @@ var model = {
 		} catch (e) {
 			alert("Browser did not report location.");
 		}
+		
+		setInterval(function() {
+			// Trigger update on an interval
+			navigator.geolocation.getCurrentPosition(
+				// Success
+				function(position) {
+					model.updateLocation(position);
+				}, 
+				
+				// Failure
+				function() {
+					alert("Your device has not given permission for HTML5 geolocation");
+				},
+				
+				// Options
+				{
+					maximumAge: 3000,
+					enableHighAccuracy: true
+				}
+			);
+		}, 5000);
 	},
 	
 	/**
@@ -143,27 +164,32 @@ var model = {
 			map.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
 
 			$.ajax({
-		        url: '/api/location/',
+		        url: '/location/',
 		        type: 'PUT',
 		        data: {
-					uuid: model.uuid,
+					user_id: model.auth_token,
 		            latitude: position.coords.latitude,
-		            longitude: position.coords.longitude
+		            longitude: position.coords.longitude,
+		            accuracy: position.coords.accuracy
 		        },
 		        dataType: 'json',
 		        success: function(data) {
+		        	// Don't update if empty response from the server
+		        	if (!data)
+		        		return;
+		        	
 		        	model.players = data;
 		        	
 		        	// Update the locations of each player
 		        	$.each(data, function(player_iterator, player) {
-		        		if (model.player_markers[player.id] == undefined) {
-		        			model.player_markers[player.id] = new google.maps.Marker({
+		        		if (model.player_markers[player_iterator] == undefined) {
+		        			model.player_markers[player_iterator] = new google.maps.Marker({
 								position: new google.maps.LatLng(player.latitude, player.longitude),
 								map: map.map,
-								title: "Player " + player.id
+								title: "Player " + player_iterator
 							});
 		        		} else {
-		        			model.player_markers[player.id].position = new google.maps.LatLng(player.latitude, player.longitude);
+		        			model.player_markers[player_iterator].position = new google.maps.LatLng(player.latitude, player.longitude);
 		        		}
 		        	});
 		        }
