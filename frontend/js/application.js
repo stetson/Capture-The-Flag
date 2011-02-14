@@ -67,6 +67,11 @@ var model = {
 	game_in_progress: false,
 	
 	/**
+	 * Last update. Used to limit bandwidth usage.
+	 */
+	last_update: new Date(),
+	
+	/**
 	 * Array which holds the player objects
 	 */
 	players: {},
@@ -160,6 +165,13 @@ var model = {
 		//console.debug(position);
 		// TODO - check for accuracy
 		//if (position.coords.accuracy < 30) {
+			// Limit bandwidth usage
+			now = new Date();
+			if (now - model.last_update < 5000)
+				return;
+			
+			model.last_update = now;
+		
 	    	// Center map on your new coordinates
 			map.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
 
