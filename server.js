@@ -70,5 +70,4 @@ http.use(express.bodyDecoder());
 	http.put('/location', views.update_location);
 
 // Start listening
-http.listen(5555);
-console.log('CTF server running at http://127.0.0.1:5555/');
+http.listen(80);
