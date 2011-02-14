@@ -16,7 +16,7 @@ Then, clone the latest code:
 Then run the server:
 
 	cd Capture-The-Flag
-	node ctf.js
+	node server.js
 
 ## Additional documentation
 
