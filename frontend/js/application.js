@@ -134,27 +134,6 @@ var model = {
 		} catch (e) {
 			alert("Browser did not report location.");
 		}
-		
-		setInterval(function() {
-			// Trigger update on an interval
-			navigator.geolocation.getCurrentPosition(
-				// Success
-				function(position) {
-					model.updateLocation(position);
-				}, 
-				
-				// Failure
-				function() {
-					alert("Your device has not given permission for HTML5 geolocation");
-				},
-				
-				// Options
-				{
-					maximumAge: 3000,
-					enableHighAccuracy: true
-				}
-			);
-		}, 5000);
 	},
 	
 	/**
@@ -167,13 +146,13 @@ var model = {
 		//if (position.coords.accuracy < 30) {
 			// Limit bandwidth usage
 			now = new Date();
-			if (now - model.last_update < 5000)
-				return;
+			//if (now - model.last_update < 5000)
+			//	return;
 			
 			model.last_update = now;
 		
 	    	// Center map on your new coordinates
-			map.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+			//map.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
 
 			$.ajax({
 		        url: '/location/',
