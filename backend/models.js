@@ -12,7 +12,7 @@
  */
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema, ObjectId = Schema.ObjectId;
-mongoose.connect("mongodb://localhost/ctf");
+mongoose.connect("mongodb://ctf_user:B1FC2BA863F335F0BDA65818130F1CFBBD52AE82A17AE850F9882F30456FF1F1@hatch.local.mongohq.com:27045/ctf");
 
 /**
  * Player object, which holds all information related to the player
