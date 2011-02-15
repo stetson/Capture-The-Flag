@@ -8,11 +8,16 @@
  */
 
 /**
+ * The settings object
+ */
+var settings = require("../settings.js");
+
+/**
  * The Node.js MongoDB adapter
  */
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema, ObjectId = Schema.ObjectId;
-mongoose.connect("mongodb://localhost/ctf");
+mongoose.connect(settings.mongodb_url);
 
 /**
  * Player object, which holds all information related to the player
