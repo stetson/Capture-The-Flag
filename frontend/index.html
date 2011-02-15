@@ -11,14 +11,17 @@
 	</head>
 	<body>
 <div id="fb-root"></div>
-      <script src="http://connect.facebook.net/en_US/all.js"></script>
+      <script src="http://connect.facebook.net/en_US/all.js">
+      </script>
       <script>
          FB.init({ 
             appId:'YOUR_APP_ID', cookie:true, 
             status:true, xfbml:true 
          });
       </script>
-      <fb:login-button>Login with Facebook</fb:login-button>
+      <fb:login-button perms="email,user_checkins">
+         Login with Facebook
+      </fb:login-button>
 		<div id="map_canvas"></div>
         <div id="loading">Loading...</div>
 	</body>
