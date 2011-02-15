@@ -61,13 +61,17 @@ http.use(express.bodyDecoder());
 	/**
 	 * Calls views.update_location <br />
 	 * <b>url: /location</b><br />
-	 * methods: PUT
+	 * methods: POST
 	 * 
 	 * @memberOf http
 	 * @name location
 	 * @link views.update_location 
 	 **/
-	http.put('/location', views.update_location);
+	http.post('/location', views.update_location);
 
 // Start listening
-http.listen(80);
+try {
+	http.listen(80);
+} catch (e) {
+	http.listen(5555);
+};

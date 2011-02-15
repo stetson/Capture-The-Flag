@@ -29,18 +29,16 @@ var map = {
 		if (navigator.geolocation) {
 			// Generate map and render on page
 			map.map = new google.maps.Map(document.getElementById("map_canvas"), map.options);
+			
+			// Center map
+			model.centerMap();
             
             // Get user credentials
-            // FIXME - This should be in model.login();
+            // FIXME - This should be in the callback from joining a game
+			// model.login();
             model.watchLocation();
-            
-			// Get rid of loading message once map is loaded
-			// TODO - this will be replaced by login window
-            google.maps.event.addListener(map.map, 'tilesloaded', function() {
-                $("#loading").fadeOut('slow');
-            });
 		} else {
-			alert("Your device does not appear to support HTML5 geolocation");
+			$("#loading").html("Your device does not appear to support HTML5 geolocation");
 		}
 	}
 };
@@ -67,11 +65,6 @@ var model = {
 	game_in_progress: false,
 	
 	/**
-	 * Last update. Used to limit bandwidth usage.
-	 */
-	last_update: new Date(),
-	
-	/**
 	 * Array which holds the player objects
 	 */
 	players: {},
@@ -84,27 +77,21 @@ var model = {
 	// Get a session for the current user
 	/*
 	login: function() {
-		$.ajax({
-			url: '/login/',
-			type: 'POST',
-			data: {
-				'username': model.username,
-				'password': model.password,
-			},
-			success: function(data, textStatus, jqXHR) {
-				// Save UUID
-				model.uuid = data.uuid;
-				
-				// Center the user on their own location, and set up location listener
-				map.setCenter();
-			},
-			error: function(jqXHR, textStatus, errorThrown) {
-				// TODO - handle this more gracefully
-				alert("Authentication failed. Please try again. " + errorThrown);
-			}
-		});
+		// Do Facebook Connect magic here, and assign auth token to model.auth_token
 	},
 	*/
+	
+	/**
+	 * Center map after the first load
+	 */
+	centerMap: function() {
+		navigator.geolocation.getCurrentPosition(function(position) {
+			map.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+		}, function() {}, {
+			maximumAge: 3000,
+			enableHighAccuracy: true
+		});
+	},
 	
 	/**
 	 * Center the user on their own location, and set up location listener
@@ -121,18 +108,18 @@ var model = {
 				
 				// Failure
 				function() {
-					alert("Your device has not given permission for HTML5 geolocation");
+					$("#loading").html("Your location was not available. Please ensure that you have given permissions for geolocation.");
 				},
 				
 				// Options
 				{
-					maximumAge: 3000,
+					maximumAge: 1000,
 					enableHighAccuracy: true
 				}
 			);
 		
 		} catch (e) {
-			alert("Browser did not report location.");
+			$("#loading").html("Browser did not report location.");
 		}
 	},
 	
@@ -141,22 +128,11 @@ var model = {
 	 * the locations of all the other players
 	 */
 	updateLocation: function(position) {
-		//console.debug(position);
-		// TODO - check for accuracy
-		//if (position.coords.accuracy < 30) {
-			// Limit bandwidth usage
-			now = new Date();
-			//if (now - model.last_update < 5000)
-			//	return;
-			
-			model.last_update = now;
-		
-	    	// Center map on your new coordinates
-			//map.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
-
+		if (position.coords.accuracy < 30) {
+			$("#loading").fadeOut('slow');
 			$.ajax({
 		        url: '/location/',
-		        type: 'PUT',
+		        type: 'POST',
 		        data: {
 					user_id: model.auth_token,
 		            latitude: position.coords.latitude,
@@ -174,10 +150,12 @@ var model = {
 		        	// Update the locations of each player
 		        	$.each(data, function(player_iterator, player) {
 		        		if (model.player_markers[player_iterator] == undefined) {
+		        			icon = player_iterator == model.auth_token ? "/css/images/star.png" : "/css/images/person.png";
 		        			model.player_markers[player_iterator] = new google.maps.Marker({
 								position: new google.maps.LatLng(player.latitude, player.longitude),
 								map: map.map,
-								title: "Player " + player_iterator
+								title: "Player " + player_iterator,
+								icon: icon
 							});
 		        		} else {
 		        			model.player_markers[player_iterator].position = new google.maps.LatLng(player.latitude, player.longitude);
@@ -185,9 +163,10 @@ var model = {
 		        	});
 		        }
 		    });
-		//} else {
-		//	$("#loading").html("Accuracy is still not acceptable (" + position.coords.accuracy + "). <br />If this persists, please ensure that your GPS radio is on.");
-		//}
+		} else {
+			$("#loading").show();
+			$("#loading").html("Accuracy is still not acceptable (" + position.coords.accuracy + "m). <br />If this error persists, please ensure that your GPS radio is on.");
+		}
 	}
 };
 
