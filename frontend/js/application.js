@@ -77,7 +77,10 @@ var model = {
 	// Get a session for the current user
 	/*
 	login: function() {
-		// Do Facebook Connect magic here, and assign auth token to model.auth_token
+		FB.init({ 
+            appId:151829711542674, cookie:true, 
+            status:true, xfbml:true 
+         });
 	},
 	*/
 	
