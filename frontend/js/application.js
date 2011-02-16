@@ -79,7 +79,7 @@ var model = {
 			appId  : 151829711542674,
 			status : true, // check login status
 			cookie : true, // enable cookies to allow the server to access the session
-			xfbml  : false,  // parse XFBML
+			xfbml  : true,  // parse XFBML
 			next   : window.location,
 			popup: false
 		});
@@ -88,21 +88,23 @@ var model = {
 		FB.getLoginStatus(function(response) {
 			  if (response.session) {
 				  // user was already logged in
-				  model.auth_token = response.session;
-				  $(".error").html("You have successfully logged in.");
+				  model.login_successful(response);
 			  } else {
-				  FB.login(function(response) {
-					  if (response.session) {
-						  // user successfully logged in
-						  model.auth_token = response.session;
-						  $(".error").html("You have successfully logged in.");
-					  } else {
-						  // user cancelled login
-					  }
+				  FB.Event.subscribe('auth.login', function(response) {
+					  model.login_successful(response);
 				  });
 			  }
 		});
-	},	
+	},
+	
+	/**
+	 * Called after session is successfully retrieved
+	 */
+	login_successful: function(response) {
+		model.auth_token = response.session;
+		$("#fb-root").show();
+		$(".loading").fadeOut("slow");
+	},
 	
 	/**
 	 * Center map after the first load
