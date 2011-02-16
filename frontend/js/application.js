@@ -170,7 +170,7 @@ var model = {
 	 * the locations of all the other players
 	 */
 	updateLocation: function(position) {
-		if (position.coords.accuracy < 30 && model.auth_token !== "") {
+		if (position.coords.accuracy <= 30 && model.auth_token !== "") {
 			$("#loading").fadeOut('slow');
 			$.ajax({
 		        url: '/location/',
