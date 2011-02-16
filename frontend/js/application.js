@@ -38,8 +38,7 @@ var map = {
 			
             model.watchLocation();
 		} else {
-			$(".error").fadeIn();
-			$(".error").html("Your device does not appear to support HTML5 geolocation");
+			model.error("Your device does not appear to support HTML5 geolocation");
 		}
 	}
 };
@@ -107,8 +106,17 @@ var model = {
 	login_successful: function(response) {
 		model.auth_token = response.session.access_token;
 		model.user_id = response.session.uid;
-		$("#fb-root").show();
+		$("#fb-root").hide();
 		$("#loading").fadeOut("slow");
+	},
+	
+	/**
+	 * Something isn't right
+	 */
+	error: function(message) {
+		$("#loading").fadeIn();
+		$(".error").show();
+		$(".error").html(message);	
 	},
 	
 	/**
@@ -138,8 +146,7 @@ var model = {
 				
 				// Failure
 				function() {
-					$(".error").fadeIn();
-					$(".error").html("Your location was not available. Please ensure that you have given permissions for geolocation.");
+					model.error("Your location was not available. Please ensure that you have given permissions for geolocation.");
 				},
 				
 				// Options
@@ -150,8 +157,7 @@ var model = {
 			);
 		
 		} catch (e) {
-			$(".error").fadeIn();
-			$(".error").html("Browser did not report location.");
+			model.error("Browser did not report location.");
 		}
 	},
 	
@@ -196,8 +202,7 @@ var model = {
 		        }
 		    });
 		} else {
-			$(".error").fadeIn();
-			$(".error").html("The accuracy reported by your device is not acceptable (" + position.coords.accuracy + "m). <br />If this error persists, please ensure that your GPS radio is on.");
+			model.error("The accuracy reported by your device is not acceptable (" + position.coords.accuracy + "m). <br />If this error persists, please ensure that your GPS radio is on.");
 		}
 	}
 };
