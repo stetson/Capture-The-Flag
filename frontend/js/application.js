@@ -172,7 +172,8 @@ var model = {
 		        url: '/location/',
 		        type: 'POST',
 		        data: {
-					user_id: model.auth_token,
+					user_id: model.user_id,
+					auth_token: model.auth_token,
 		            latitude: position.coords.latitude,
 		            longitude: position.coords.longitude,
 		            accuracy: position.coords.accuracy

@@ -64,14 +64,15 @@ var games = {};
  */
 exports.update_location = function(request, response) {	
 	// Record user's location
-	//try {
+	try {
 		players[request.body.user_id] = {
 			'latitude': request.body.latitude,
 			'longitude': request.body.longitude,
 			'accuracy': request.body.accuracy,
-			'last_update': new Date()
+			'last_update': new Date(),
+			'auth_token': request.body.auth_token
 		};
-	//} catch (e) { }
+	} catch (e) { }
 	
 	// Send the players back to the client
 	console.log(request.connection.remoteAddress + ' updated their location');
