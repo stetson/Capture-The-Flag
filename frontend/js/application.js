@@ -36,6 +36,11 @@ var map = {
             // Get user credentials
             // FIXME - This should be in the callback from joining a game
 			model.login();
+			
+			FB.Event.subscribe('auth.login', function(response) {
+				  alert("Logged in: " + response);
+			});
+			
             model.watchLocation();
 		} else {
 			$(".error").fadeIn();
