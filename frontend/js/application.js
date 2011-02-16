@@ -105,6 +105,9 @@ var model = {
 	 * Called after session is successfully retrieved
 	 */
 	login_successful: function(response) {
+		try {
+			window.location.hash = "#play";
+		} catch (e) { }
 		model.auth_token = response.session.access_token;
 		model.user_id = response.session.uid;
 		$("#fb-root").hide();
