@@ -75,7 +75,7 @@ var model = {
 	player_markers: {},
 	
 	// Get a session for the current user
-	/*
+	
 	login: function() {
 		<div id="fb-root"></div>
 <script src="http://connect.facebook.net/en_US/all.js"></script>
@@ -87,8 +87,8 @@ var model = {
     xfbml  : true  // parse XFBML
   });
 </script>
-	},
-	*/
+	}
+	
 	
 	/**
 	 * Center map after the first load
