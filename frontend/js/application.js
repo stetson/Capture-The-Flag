@@ -32,10 +32,8 @@ var map = {
 			
 			// Center map
 			model.centerMap();
-            
-            // Get user credentials
-			model.login();
 			
+			// Watch the current location (lock onto GPS while user is reading the front page)
             model.watchLocation();
 		} else {
 			model.error("Your device does not appear to support HTML5 geolocation");
@@ -93,9 +91,8 @@ var model = {
 				  // user was already logged in
 				  model.login_successful(response);
 			  } else {
-				  FB.Event.subscribe('auth.login', function(response) {
-					  model.login_successful(response);
-				  });
+				  url = "https://www.facebook.com/dialog/oauth?client_id=" + 151829711542674 + "&redirect_uri=" + window.location + "&response_type=token";
+				  $("<a href=''><img src='/css/images/facebook_connect.jpg' alt='Login with Facebook' /></a>").appendTo($("#loading"));
 			  }
 		});
 	},
@@ -211,5 +208,14 @@ var model = {
 // Start application
 $(document).ready(function() {
 	$(".error").hide();
-	map.initialize();
+	
+	// Asynchronously load Facebook Connect js, then login
+	$.getScript("http://connect.facebook.net/en_US/all.js", function() {
+		model.login();
+	});
+	
+	// In the background, load the Google Maps API, and lock onto the user's location
+	$.getScript("http://maps.google.com/maps/api/js?sensor=true", function() {
+		map.initialize();
+	});
 });
