@@ -108,7 +108,7 @@ var model = {
 		model.auth_token = response.session.access_token;
 		model.user_id = response.session.uid;
 		$("#fb-root").show();
-		$(".loading").fadeOut("slow");
+		$("#loading").fadeOut("slow");
 	},
 	
 	/**
