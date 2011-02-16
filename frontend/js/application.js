@@ -214,8 +214,6 @@ $(document).ready(function() {
 		model.login();
 	});
 	
-	// In the background, load the Google Maps API, and lock onto the user's location
-	$.getScript("http://maps.google.com/maps/api/js?sensor=true", function() {
-		map.initialize();
-	});
+	// In the background, lock onto the user's location
+	map.initialize();
 });
