@@ -53,9 +53,13 @@ var model = {
 		
 	/**
 	 * Facebook Connect authentication token
-	 * FIXME - this is just a random UUID at the moment
 	 */
 	auth_token: "",
+	
+	/**
+	 * Facebook id
+	 */
+	user_id: "",
 	
 	/**
 	 * Conditions have been met for gameplay
@@ -101,7 +105,8 @@ var model = {
 	 * Called after session is successfully retrieved
 	 */
 	login_successful: function(response) {
-		model.auth_token = response.session;
+		model.auth_token = response.session.access_token;
+		model.user_id = response.session.uid;
 		$("#fb-root").show();
 		$(".loading").fadeOut("slow");
 	},
