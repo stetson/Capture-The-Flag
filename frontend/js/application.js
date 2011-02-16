@@ -77,10 +77,16 @@ var model = {
 	// Get a session for the current user
 	/*
 	login: function() {
-		FB.init({ 
-            appId:151829711542674, cookie:true, 
-            status:true, xfbml:true 
-         });
+		<div id="fb-root"></div>
+<script src="http://connect.facebook.net/en_US/all.js"></script>
+<script>
+  FB.init({
+    appId  : 151829711542674,
+    status : true, // check login status
+    cookie : true, // enable cookies to allow the server to access the session
+    xfbml  : true  // parse XFBML
+  });
+</script>
 	},
 	*/
 	
