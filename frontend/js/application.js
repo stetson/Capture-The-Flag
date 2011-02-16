@@ -35,7 +35,7 @@ var map = {
             
             // Get user credentials
             // FIXME - This should be in the callback from joining a game
-			// model.login();
+			model.login();
             model.watchLocation();
 		} else {
 			$("#loading").html("Your device does not appear to support HTML5 geolocation");
@@ -54,10 +54,7 @@ var model = {
 	 * Facebook Connect authentication token
 	 * FIXME - this is just a random UUID at the moment
 	 */
-	auth_token: 151829711542674.replace(/[xy]/g, function(c) {
-	    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-	    return v.toString(16);
-	}).toUpperCase(),
+	auth_token: "",
 	
 	/**
 	 * Conditions have been met for gameplay
@@ -77,18 +74,13 @@ var model = {
 	// Get a session for the current user
 	
 	login: function() {
-		<div id="fb-root"></div>
-<script src="http://connect.facebook.net/en_US/all.js"></script>
-<script>
-  FB.init({
-    appId  : 151829711542674,
-    status : true, // check login status
-    cookie : true, // enable cookies to allow the server to access the session
-    xfbml  : true  // parse XFBML
-  });
-</script>
-	}
-	
+		FB.init({
+			appId  : 151829711542674,
+			status : true, // check login status
+			cookie : true, // enable cookies to allow the server to access the session
+			xfbml  : true  // parse XFBML
+		});
+	},	
 	
 	/**
 	 * Center map after the first load
