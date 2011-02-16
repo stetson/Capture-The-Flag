@@ -49,6 +49,11 @@ var map = {
 var model = {
 		
 	/**
+	 * Facebook App ID
+	 */
+	app_id: 151829711542674,
+		
+	/**
 	 * Facebook Connect authentication token
 	 */
 	auth_token: "",
@@ -77,7 +82,7 @@ var model = {
 	
 	login: function() {
 		FB.init({
-			appId  : 151829711542674,
+			appId  : model.app_id,
 			status : true, // check login status
 			cookie : true, // enable cookies to allow the server to access the session
 			xfbml  : true,  // parse XFBML
@@ -91,8 +96,7 @@ var model = {
 				  // user was already logged in
 				  model.login_successful(response);
 			  } else {
-				  url = "https://www.facebook.com/dialog/oauth?client_id=" + 151829711542674 + "&redirect_uri=" + window.location + "&response_type=token";
-				  $("<a href=''><img src='/css/images/facebook_connect.jpg' alt='Login with Facebook' /></a>").appendTo($("#loading"));
+				  // let user log in whenever they darn well please
 			  }
 		});
 	},
