@@ -38,7 +38,8 @@ var map = {
 			model.login();
             model.watchLocation();
 		} else {
-			$("#loading").html("Your device does not appear to support HTML5 geolocation");
+			$(".error").fadeIn();
+			$(".error").html("Your device does not appear to support HTML5 geolocation");
 		}
 	}
 };
@@ -78,7 +79,8 @@ var model = {
 			appId  : 151829711542674,
 			status : true, // check login status
 			cookie : true, // enable cookies to allow the server to access the session
-			xfbml  : true  // parse XFBML
+			xfbml  : true,  // parse XFBML
+			next   : window.location
 		});
 	},	
 	
@@ -109,7 +111,8 @@ var model = {
 				
 				// Failure
 				function() {
-					$("#loading").html("Your location was not available. Please ensure that you have given permissions for geolocation.");
+					$(".error").fadeIn();
+					$(".error").html("Your location was not available. Please ensure that you have given permissions for geolocation.");
 				},
 				
 				// Options
@@ -120,7 +123,8 @@ var model = {
 			);
 		
 		} catch (e) {
-			$("#loading").html("Browser did not report location.");
+			$(".error").fadeIn();
+			$(".error").html("Browser did not report location.");
 		}
 	},
 	
@@ -129,7 +133,7 @@ var model = {
 	 * the locations of all the other players
 	 */
 	updateLocation: function(position) {
-		if (position.coords.accuracy < 30) {
+		if (position.coords.accuracy < 30 && model.auth_token !== "") {
 			$("#loading").fadeOut('slow');
 			$.ajax({
 		        url: '/location/',
@@ -165,13 +169,14 @@ var model = {
 		        }
 		    });
 		} else {
-			$("#loading").show();
-			$("#loading").html("Accuracy is still not acceptable (" + position.coords.accuracy + "m). <br />If this error persists, please ensure that your GPS radio is on.");
+			$(".error").fadeIn();
+			$(".error").html("The accuracy reported by your device is not acceptable (" + position.coords.accuracy + "m). <br />If this error persists, please ensure that your GPS radio is on.");
 		}
 	}
 };
 
 // Start application
 $(document).ready(function() {
+	$(".error").hide();
 	map.initialize();
 });
