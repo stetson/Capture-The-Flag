@@ -170,6 +170,12 @@ var model = {
 	 * the locations of all the other players
 	 */
 	updateLocation: function(position) {
+		// Update your location, regardless of whether it's in strict accuracy requirements
+		if (position.coords.accuracy <= 300) {
+			model.player_markers[model.user_id].position = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+		}
+		
+		// Update the server if strict requirements have been met
 		if (position.coords.accuracy <= 30 && model.auth_token !== "") {
 			$("#loading").fadeOut('slow');
 			$.ajax({
@@ -193,7 +199,7 @@ var model = {
 		        	// Update the locations of each player
 		        	$.each(data, function(player_iterator, player) {
 		        		if (model.player_markers[player_iterator] == undefined) {
-		        			icon = player_iterator == model.auth_token ? "/css/images/star.png" : "/css/images/person.png";
+		        			icon = player_iterator == model.user_id ? "/css/images/star.png" : "/css/images/person.png";
 		        			model.player_markers[player_iterator] = new google.maps.Marker({
 								position: new google.maps.LatLng(player.latitude, player.longitude),
 								map: map.map,
@@ -206,8 +212,6 @@ var model = {
 		        	});
 		        }
 		    });
-		} else {
-			model.error("The accuracy reported by your device is not acceptable (" + position.coords.accuracy + "m). <br />If this error persists, please ensure that your GPS radio is on.");
 		}
 	}
 };
