@@ -98,7 +98,6 @@ var model = {
 				  model.login_successful(response);
 			  } else {
 				  // let user log in whenever they darn well please
-				  $("#guest-login").click(model.guest_login);
 			  }
 		});
 	},
@@ -113,6 +112,7 @@ var model = {
 		    return v.toString(16);
 		}).toUpperCase();
 		$("#loading").fadeOut();
+		return false;
 	},
 	
 	/**
@@ -185,9 +185,7 @@ var model = {
 	 */
 	updateLocation: function(position) {
 		// Update your location, regardless of whether it's in strict accuracy requirements
-		if (position.coords.accuracy <= 300) {
-			model.player_markers[model.user_id].position = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-		}
+		model.player_markers[model.user_id].position = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 		
 		// Update the server if strict requirements have been met
 		if (position.coords.accuracy <= 30 && model.auth_token !== "") {
@@ -233,6 +231,7 @@ var model = {
 // Start application
 $(document).ready(function() {
 	$(".error").hide();
+	$("#guest-login").click(model.guest_login);
 	
 	// Asynchronously load Facebook Connect js, then login
 	$.getScript("http://connect.facebook.net/en_US/all.js", function() {
