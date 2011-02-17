@@ -130,7 +130,7 @@ var model = {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			map.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
 		}, function() {}, {
-			maximumAge: 3000,
+			maximumAge: 500,
 			enableHighAccuracy: true
 		});
 	},
