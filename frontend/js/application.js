@@ -78,8 +78,9 @@ var model = {
 	 */
 	player_markers: {},
 	
-	// Get a session for the current user
-	
+	/**
+	 * Initialize Facebook Connect login
+	 */
 	login: function() {
 		FB.init({
 			appId  : model.app_id,
@@ -97,8 +98,21 @@ var model = {
 				  model.login_successful(response);
 			  } else {
 				  // let user log in whenever they darn well please
+				  $("#guest-login").click(model.guest_login);
 			  }
 		});
+	},
+	
+	/**
+	 * Log in as guest instead of using Facebook Connect
+	 */
+	guest_login: function() {
+		model.auth_token = "guest";
+		model.user_id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+		    return v.toString(16);
+		}).toUpperCase();
+		$("#loading").fadeOut();
 	},
 	
 	/**
