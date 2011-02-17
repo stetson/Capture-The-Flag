@@ -94,7 +94,9 @@ var model = {
 		FB.getLoginStatus(function(response) {
 			  if (response.session) {
 				  // user was already logged in
-				  model.login_successful(response);
+				  model.auth_token = response.session.access_token;
+				  model.user_id = response.session.uid;
+				  model.login_successful();
 			  } else {
 				  // let user log in whenever they darn well please
 			  }
@@ -110,19 +112,20 @@ var model = {
 		    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
 		    return v.toString(16);
 		}).toUpperCase();
-		$("#loading").fadeOut();
+
+		model.login_successful();
 		return false;
 	},
 	
 	/**
 	 * Called after session is successfully retrieved
 	 */
-	login_successful: function(response) {
-		if (window.location.search) {
-			window.location = window.location.hostname;
-		}
-		model.auth_token = response.session.access_token;
-		model.user_id = response.session.uid;
+	login_successful: function() {
+		try {
+			window.location.hash = "#play";
+			window.location.search = "";
+		} catch (e) { }
+
 		$("#fb-root").hide();
 		$("#loading").fadeOut("slow");
 	},
