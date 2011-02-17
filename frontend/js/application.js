@@ -87,7 +87,6 @@ var model = {
 			status : true, // check login status
 			cookie : true, // enable cookies to allow the server to access the session
 			xfbml  : true,  // parse XFBML
-			next   : window.location,
 			popup: false
 		});
 		
@@ -119,9 +118,9 @@ var model = {
 	 * Called after session is successfully retrieved
 	 */
 	login_successful: function(response) {
-		try {
-			window.location.hash = "#play";
-		} catch (e) { }
+		if (window.location.search) {
+			window.location = window.location.hostname;
+		}
 		model.auth_token = response.session.access_token;
 		model.user_id = response.session.uid;
 		$("#fb-root").hide();
