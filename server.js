@@ -38,7 +38,7 @@ http.use(express.bodyDecoder());
 	
 	/**
 	 * Static files for frontend <br />
-	 * <b>url: /*</b>
+	 * <b>url: /+</b>
 	 * 
 	 * @memberOf http
 	 * @name frontend 
@@ -47,7 +47,7 @@ http.use(express.bodyDecoder());
 	
 	/**
 	 * Documentation <br />
-	 * <b>url: /*</b>
+	 * <b>url: /+</b>
 	 * 
 	 * @memberOf http
 	 * @name docs 
