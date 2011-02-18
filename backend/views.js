@@ -30,7 +30,7 @@ players = {};
  * @name purge_players
  */
 purge_players = function() {
-	for (player_iterator in players) {
+	for (var player_iterator in players) {
 		// Purge players who haven't updated in over 15 seconds
 		if (new Date() - players[player_iterator].last_update > 15000) {
 			players[player_iterator].latitude = 0;
