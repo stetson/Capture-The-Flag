@@ -23,17 +23,17 @@ var models = require("./models.js");
  * @name purge_players
  */
 purge_players = function() {
-	for (iterator in players) {
+	for (player_iterator in players) {
 		// Purge players who haven't updated in over 15 seconds
-		if (new Date() - players[iterator].last_update > 15000) {
-			players[iterator].latitude = 0;
-			players[iterator].longitude = 0;
-			players[iterator].accuracy = 0;
+		if (new Date() - players[player_iterator].last_update > 15000) {
+			players[player_iterator].latitude = 0;
+			players[player_iterator].longitude = 0;
+			players[player_iterator].accuracy = 0;
 		}
 		
 		// Reclaim memory of players who haven't updated in 5 minutes
-		if (new Date() - players[iterator].last_update > 300000) {
-			delete players[iterator];
+		if (new Date() - players[player_iterator].last_update > 300000) {
+			delete players[player_iterator];
 		}
 	}
 };
@@ -41,7 +41,8 @@ purge_players = function() {
 /**
  * Stores all active players
  */
-var players = {};
+var players;
+players = {};
 setInterval(purge_players, 5000);
 //setInterval(persist_players, 60000);
 

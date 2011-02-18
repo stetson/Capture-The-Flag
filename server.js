@@ -74,4 +74,4 @@ try {
 	http.listen(80);
 } catch (e) {
 	http.listen(5555);
-};
+}
