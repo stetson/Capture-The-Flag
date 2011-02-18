@@ -17,6 +17,13 @@ var models = require("./models.js");
 //Global memory caches
 
 /**
+ * Stores all active players
+ */
+var players;
+players = {};
+//setInterval(persist_players, 60000);
+
+/**
  * Purge old players
  * 
  * @memberOf players
@@ -38,13 +45,7 @@ purge_players = function() {
 	}
 };
 
-/**
- * Stores all active players
- */
-var players;
-players = {};
 setInterval(purge_players, 5000);
-//setInterval(persist_players, 60000);
 
 /**
  * Stores all active games

@@ -1,9 +1,12 @@
+var model;
+var map;
+
 /**
  * Map object which handles geolocation and mapping
  * 
  * @namespace map
  */
-var map = {
+map = {
 	/**
 	 * Google maps object
 	 */
@@ -46,7 +49,6 @@ var map = {
  * 
  * @namespace model
  */
-var model;
 model = {
 		
 	/**
@@ -205,7 +207,7 @@ model = {
 		        },
 		        dataType: 'json',
 		        success: function(data) {
-		        	// Don't update if empty response from the server
+                    // Don't update if empty response from the server
 		        	if (!data) {
 		        		return;
 		        	}
