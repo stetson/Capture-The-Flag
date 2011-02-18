@@ -19,6 +19,18 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema, ObjectId = Schema.ObjectId;
 mongoose.connect(settings.mongodb_url);
 
+/**
+* Coordinate object, which holds a GPS coordinate,
+* and the accuracy in meters
+*
+* @memberOf models
+* @name Coordinate
+*/
+var Coordinate = new Schema({
+	latitude: Number,
+	longitude: Number,
+	accuracy: Number
+});
 
 /**
  * Player object, which holds all information related to the player
@@ -27,10 +39,21 @@ mongoose.connect(settings.mongodb_url);
  * @name Player
  */
 
-exports.Player = new Schema({
+var Player = new Schema({
 	id: ObjectId,
 	name: { type: String, validate: /[a-z]/ },
 	user_id: {type: String }
+});
+
+/**
+ * Team object, used for proper load balancing of players
+ * on teams
+ *
+ * @memberOf models
+ * @name Team
+ */
+var Team = new Schema({
+    players: [Player] 
 });
 
 /**
@@ -41,32 +64,14 @@ exports.Player = new Schema({
 * @name Game
 */
 
-exports.Game = new Schema({
+var Game = new Schema({
 	id: ObjectId,
     teams: [Team],
     initial_location: [Coordinate]
 });
 
-/**
- * Team object, used for proper load balancing of players
- * on teams
- *
- * @memberOf models
- * @name Team
- */
-exports.Team = new Schema({
-    players: [Player] 
-});
-
-/**
-* Coordinate object, which holds a GPS coordinate,
-* and the accuracy in meters
-*
-* @memberOf models
-* @name Coordinate
-*/
-exports.Coordinate = new Schema({
-	latitude: Number,
-	longitude: Number,
-	accuracy: Number
-});
+// Export
+exports.Coordinate = Coordinate;
+exports.Player = Player;
+exports.Team = Team;
+exports.Game = Game;
