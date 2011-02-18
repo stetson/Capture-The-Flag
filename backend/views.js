@@ -31,16 +31,18 @@ players = {};
  */
 purge_players = function() {
 	for (var player_iterator in players) {
-		// Purge players who haven't updated in over 15 seconds
-		if (new Date() - players[player_iterator].last_update > 15000) {
-			players[player_iterator].latitude = 0;
-			players[player_iterator].longitude = 0;
-			players[player_iterator].accuracy = 0;
-		}
-		
-		// Reclaim memory of players who haven't updated in 5 minutes
-		if (new Date() - players[player_iterator].last_update > 300000) {
-			delete players[player_iterator];
+		if (players.hasOwnProperty(player_iterator)) {
+			// Purge players who haven't updated in over 15 seconds
+			if (new Date() - players[player_iterator].last_update > 15000) {
+				players[player_iterator].latitude = 0;
+				players[player_iterator].longitude = 0;
+				players[player_iterator].accuracy = 0;
+			}
+			
+			// Reclaim memory of players who haven't updated in 5 minutes
+			if (new Date() - players[player_iterator].last_update > 300000) {
+				delete players[player_iterator];
+			}
 		}
 	}
 };
