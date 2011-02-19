@@ -68,17 +68,23 @@
 <span class='line'> 61</span> 	</span><span class="COMM">/**
 <span class='line'> 62</span> 	 * Calls views.update_location &lt;br />
 <span class='line'> 63</span> 	 * &lt;b>url: /location&lt;/b>&lt;br />
-<span class='line'> 64</span> 	 * methods: POST
+<span class='line'> 64</span> 	 * methods: GET, POST
 <span class='line'> 65</span> 	 * 
 <span class='line'> 66</span> 	 * @memberOf http
 <span class='line'> 67</span> 	 * @name location
 <span class='line'> 68</span> 	 * @link views.update_location 
 <span class='line'> 69</span> 	 **/</span><span class="WHIT">
-<span class='line'> 70</span> </span><span class="WHIT">	</span><span class="NAME">http.post</span><span class="PUNC">(</span><span class="STRN">'/location'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">views.update_location</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 71</span> 
-<span class='line'> 72</span> </span><span class="COMM">// Start listening</span><span class="WHIT">
-<span class='line'> 73</span> </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 74</span> </span><span class="WHIT">	</span><span class="NAME">http.listen</span><span class="PUNC">(</span><span class="NUMB">80</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 75</span> </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 76</span> </span><span class="WHIT">	</span><span class="NAME">http.listen</span><span class="PUNC">(</span><span class="NUMB">5555</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 77</span> </span><span class="PUNC">}</span></pre></body></html>
+<span class='line'> 70</span> </span><span class="WHIT">	</span><span class="NAME">http.post</span><span class="PUNC">(</span><span class="STRN">'/location'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">views.location</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"POST"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 71</span> </span><span class="WHIT">	</span><span class="NAME">http.get</span><span class="PUNC">(</span><span class="STRN">'/location'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">views.location</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"GET"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 72</span> </span><span class="WHIT">	
+<span class='line'> 73</span> 	</span><span class="COMM">// GET, POST /game views.game</span><span class="WHIT">
+<span class='line'> 74</span> </span><span class="WHIT">	</span><span class="COMM">// GET, POST /game/:game_id views.game_detail</span><span class="WHIT">
+<span class='line'> 75</span> 
+<span class='line'> 76</span> </span><span class="COMM">// Start listening</span><span class="WHIT">
+<span class='line'> 77</span> </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 78</span> </span><span class="WHIT">	</span><span class="NAME">http.listen</span><span class="PUNC">(</span><span class="NUMB">80</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 79</span> </span><span class="WHIT">	</span><span class="NAME">console.log</span><span class="PUNC">(</span><span class="STRN">"Listening on port 80"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 80</span> </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 81</span> </span><span class="WHIT">	</span><span class="NAME">http.listen</span><span class="PUNC">(</span><span class="NUMB">5555</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 82</span> </span><span class="WHIT">	</span><span class="NAME">console.log</span><span class="PUNC">(</span><span class="STRN">"Listening on port 5555"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 83</span> </span><span class="PUNC">}</span></pre></body></html>
