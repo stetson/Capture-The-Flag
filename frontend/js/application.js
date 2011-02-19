@@ -200,6 +200,7 @@ model = {
 		        type: 'POST',
 		        data: {
 					user_id: model.user_id,
+					game_id: 'only_game',
 					auth_token: model.auth_token,
 		            latitude: position.coords.latitude,
 		            longitude: position.coords.longitude,
