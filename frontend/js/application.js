@@ -126,7 +126,6 @@ model = {
 	login_successful: function() {
 		try {
 			window.location.hash = "#play";
-			window.location.search = "";
 		} catch (e) { }
 
 		model.load_games();
@@ -246,7 +245,7 @@ model = {
 		// Update your location, regardless of whether it's in strict accuracy requirements
 	    if (model.player_markers[model.user_id] === undefined) {
 	        model.player_markers[model.user_id] = new google.maps.Marker({
-                position: new google.maps.LatLng(player.latitude, player.longitude),
+                position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
                 map: map.map,
                 title: "You",
                 icon: "/css/images/star.png"
