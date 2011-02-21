@@ -140,6 +140,7 @@ model = {
 	    $.ajax({
 	        type: 'GET',
 	        url: '/game/',
+	        cache: false,
 	        success: function(data) {
 	            $("#content").html('');
 	            $.each(data, function(game_iterator, game) {
