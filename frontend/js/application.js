@@ -67,9 +67,9 @@ model = {
 	user_id: "",
 	
 	/**
-	 * Conditions have been met for gameplay
+	 * CTF game id
 	 */
-	game_in_progress: false,
+	game_id: '',
 	
 	/**
 	 * Array which holds the player objects
@@ -129,15 +129,69 @@ model = {
 			window.location.search = "";
 		} catch (e) { }
 
-		$("#fb-root").hide();
-		$("#loading").fadeOut("slow");
+		model.load_games();
+	},
+	
+	/**
+	 * Loads the list of games for the user to choose one
+	 */
+	load_games: function() {
+	    $("#content").html('Loading games...');
+	    var games = "";
+	    $.ajax({
+	        type: 'GET',
+	        url: '/game/',
+	        success: function(data) {
+	            $("#content").html('');
+	            $.each(data, function(game_iterator, game) {
+	                $("<a />").data('id', game)
+	                    .attr({'href': '#'})
+	                    .text(game)
+	                    .appendTo($("#content"));
+	                $("<br />").appendTo($("#content"));
+	            });
+	            $("#content a").click(function() {
+	                model.choose_game($(this).data('id'));
+	                return false;
+	            });
+	            $("<a />").text("Create new game")
+	                .attr({'href': '#'})
+	                .click(function() {
+	                    model.create_game();
+	                    return false;
+	                })
+	                .appendTo($("#content"));
+	        }
+	    });
+	},
+	
+	/**
+	 * Choose a game
+	 */
+	choose_game: function(game_id) {
+	    model.game_id = game_id;
+	    $("#content").html('');
+	    $("#overlay").fadeOut('slow');
+	},
+	
+	/**
+	 * Create a new game
+	 */
+	create_game: function() {
+        $.ajax({
+            type: 'POST',
+            url: '/game/',
+            success: function(data) {
+                model.choose_game(data);
+            }
+        });
 	},
 	
 	/**
 	 * Something isn't right
 	 */
 	error: function(message) {
-		$("#loading").fadeIn();
+		$("#overlay").fadeIn();
 		$(".error").show();
 		$(".error").html(message);	
 	},
@@ -190,11 +244,18 @@ model = {
 	 */
 	updateLocation: function(position) {
 		// Update your location, regardless of whether it's in strict accuracy requirements
+	    if (model.player_markers[model.user_id] === undefined) {
+	        model.player_markers[model.user_id] = new google.maps.Marker({
+                position: new google.maps.LatLng(player.latitude, player.longitude),
+                map: map.map,
+                title: "You",
+                icon: "/css/images/star.png"
+            });
+	    }
 		model.player_markers[model.user_id].position = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 		
 		// Update the server if strict requirements have been met
-		if (position.coords.accuracy <= 30 && model.auth_token !== "") {
-			$("#loading").fadeOut('slow');
+		if (position.coords.accuracy <= 30 && model.user_id !== "" && model.game_id !== "") {
 			$.ajax({
 		        url: '/location/',
 		        type: 'POST',
@@ -218,7 +279,7 @@ model = {
                     // Update the locations of each player
                     $.each(data, function(player_iterator, player) {
                         if (model.player_markers[player_iterator] === undefined) {
-                            icon = player_iterator == model.user_id ? "/css/images/star.png" : "/css/images/person.png";
+                            icon = "/css/images/person.png";
                             model.player_markers[player_iterator] = new google.maps.Marker({
                                 position: new google.maps.LatLng(player.latitude, player.longitude),
                                 map: map.map,

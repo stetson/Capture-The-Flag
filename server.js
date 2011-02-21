@@ -65,12 +65,33 @@ http.use(express.bodyDecoder());
 	 * 
 	 * @memberOf http
 	 * @name location
-	 * @link views.update_location 
+	 * @link views.location 
 	 **/
 	http.post('/location', views.location, "POST");
 	http.get('/location', views.location, "GET");
 	
-	// GET, POST /game views.game
+	/**
+	 * Returns a list of all games on this server<br />
+	 * <b>url: /game</b><br />
+	 * methods: GET
+	 * 
+	 * @memberOf http
+	 * @name get_games
+	 * @link views.get_games
+	 */
+	http.get('/game', views.get_games);
+	
+	/**
+     * Create a new game<br />
+     * <b>url: /game</b><br />
+     * methods: POST
+     * 
+     * @memberOf http
+     * @name create_game
+     * @link views.create_game
+     */
+    http.post('/game', views.create_game);
+	
 	// GET, POST /game/:game_id views.game_detail
 
 // Start listening

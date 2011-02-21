@@ -9,11 +9,7 @@
 /**
  * Global memory store for game data
  */
-var game_data = {
-	'only_game': {
-		'players': []
-	}
-};
+var game_data = {};
 
 /**
  * These are the models that will handle all of our
@@ -22,6 +18,9 @@ var game_data = {
  * @namespace models
  */
 var models = require("./models.js");
+
+//TODO - purge old users
+//TODO - purge old games
 
 /**
  * Optionally update the user's location, and fetch 
@@ -39,6 +38,7 @@ exports.location = function(request, response, method) {
 		// Record user's location
 		try {
 			game_id = request.body.game_id;
+			game_data[game_id].last_update = new Date();
 			game_data[game_id].players[request.body.user_id] = {
 				'latitude': request.body.latitude,
 				'longitude': request.body.longitude,
@@ -46,7 +46,9 @@ exports.location = function(request, response, method) {
 				'last_update': new Date(),
 				'auth_token': request.body.auth_token
 			};
-		} catch (e) { }
+		} catch (e) { 
+		    response.send({"error": "Could not save state"}, 404);
+		}
 	}
 	
 	// Send the players back to the client
@@ -64,8 +66,32 @@ exports.location = function(request, response, method) {
  * @memberOf views
  * @name game
  */
-exports.game = function(request, response) {
-	
+exports.get_games = function(request, response) {
+	response.send(Object.keys(game_data));
+};
+
+/**
+ * Create a new game, and return the id
+ */
+exports.create_game = function(request, response) {
+    // Generate a new game id
+    game_id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+    }).toUpperCase();
+    
+    // Create the skeleton of the game
+    game_data[game_id] = {
+        //origin: {
+        //    'latitude': request.body.latitude,
+        //    'longitude': request.body.longitude
+        //},
+        players: {
+            'request.body.user_id': {}
+        }
+    };
+    
+    response.send(game_id);
 };
 
 /**
