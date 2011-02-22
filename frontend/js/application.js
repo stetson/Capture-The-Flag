@@ -162,7 +162,7 @@ model = {
             data: model.user,
             success: function(data) {
                 $("#content").html('');
-                if (data) {
+                if (data.length > 0) {
                     $.each(data, function(game_iterator, game) {
                         $("<a />").data('id', game)
                             .attr({'href': '#'})
@@ -264,8 +264,8 @@ model = {
 				}, 
 				
 				// Failure
-				function() {
-					model.error("Your location was not available. Please ensure that you have given permissions for geolocation.");
+				function(error) {
+					model.error("Your location was not available: " + error.message);
 				},
 				
 				// Options
