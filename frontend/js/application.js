@@ -104,14 +104,10 @@ model = {
 				  model.user.user_id = response.session.uid;
 				  
 				  FB.api('/me', function(response) {
-				      if (!response || response.error) {
-				          model.user.name = prompt("What is your name? Facebook doesn't want to tell us...");
-				          model.login_successful();
-				      } else {
-				          model.user.name = response.name;
-				          model.login_successful();
-				      }
+				      model.user.name = response.name;
 				  });
+				  
+				  model.login_successful();
 			  } else {
 				  // let user log in whenever they darn well please
 			  }
@@ -216,9 +212,7 @@ model = {
         $.ajax({
             type: 'POST',
             url: '/game/',
-            data: {
-                'game_id': model.user.name
-            },
+            data: model.user,
             success: function(data) {
                 model.choose_game(model.user.name);
             }
@@ -350,7 +344,7 @@ model = {
 	    model.user.accuracy = position.coords.accuracy;
 		
 		// Update the server if strict requirements have been met
-		if (position.coords.accuracy <= 30 && model.user_id !== "" && model.game_id !== "") {
+		if (/*position.coords.accuracy <= 30 && */model.user_id !== "" && model.game_id !== "") {
 			$.ajax({
 		        url: '/location/',
 		        type: 'POST',

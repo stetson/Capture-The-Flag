@@ -38,20 +38,24 @@ exports.location = function(request, response, method) {
 	// Record user's location
 		try {
 			game_id = request.body.game_id;
-			game_data[game_id].last_update = new Date();
-			game_data[game_id].players[request.body.user_id] = request.body;
-			game_data[game_id].players[request.body.user_id]['last_update'] = new Date(),
-			
-			// Let the user know the operation was successful
-			response.send("OK");
-		} catch (e) { 
-		    response.send({"error": "Could not save state"}, 404);
-		}
+			user_id = request.body.user_id;
+			if (user_id) {
+    			game_data[game_id].last_update = new Date();
+    			game_data[game_id].players[user_id] = request.body;
+    			game_data[game_id].players[user_id]['last_update'] = new Date();
+    			
+    	         // Let the user know the operation was successful
+                response.send("OK");
+                return;
+			}
+		} catch (e) { } 
+		
+		response.send({"error": "Could not save state"}, 404);
 	} else {
    	// Send the players back to the client
 	    game_id = request.query.game_id;
     	if (game_id && game_data[game_id]) {
-    		response.send(game_data[game_id]);
+    		response.send(game_data[game_id].players);
     	} else {
     		response.send({"error": "Invalid game (" + game_id + ")"}, 404);
     	}
@@ -75,20 +79,20 @@ exports.get_games = function(request, response) {
  */
 exports.create_game = function(request, response) {
     // Generate a new game id
-    game_id = request.body.game_id;
+    game_id = request.body.name;
     
     // Create the skeleton of the game
     game_data[game_id] = {
-        //origin: {
-        //    'latitude': request.body.latitude,
-        //    'longitude': request.body.longitude
-        //},
-        players: {
-            'request.body.user_id': {}
-        }
+        origin: {
+            'latitude': request.body.latitude,
+            'longitude': request.body.longitude
+        },
+        last_update: new Date(),
+        players: {}
     };
     
-    response.send(game_id);
+    // Send confirmation back to client
+    response.send("OK");
 };
 
 /**
