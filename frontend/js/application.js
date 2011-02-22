@@ -105,7 +105,7 @@ model = {
 				  
 				  FB.api('/me', function(response) {
 				      model.user.name = response.name;
-				      model.user.login_successful();
+				      model.login_successful();
 				  });
 			  } else {
 				  // let user log in whenever they darn well please
