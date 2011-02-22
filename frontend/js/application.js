@@ -13,6 +13,11 @@ map = {
 	map: {},
 	
 	/**
+	 * Info window for displaying information to the user
+	 */
+	infowindow: {},
+	
+	/**
 	 * Map options
 	 */
 	options: {},
@@ -27,6 +32,9 @@ map = {
             disableDefaultUI: true,
 			mapTypeId: google.maps.MapTypeId.HYBRID
 		};
+		
+		// Build infowindow
+		map.infowindow = new google.maps.InfoWindow();
 		
 		// Check for geolocation support
 		if (navigator.geolocation) {
@@ -55,21 +63,11 @@ model = {
 	 * Facebook App ID
 	 */
 	app_id: 151829711542674,
-		
-	/**
-	 * Facebook Connect authentication token
-	 */
-	auth_token: "",
 	
 	/**
-	 * Facebook id
+	 * User information
 	 */
-	user_id: "",
-	
-	/**
-	 * CTF game id
-	 */
-	game_id: '',
+	user: {},
 	
 	/**
 	 * Array which holds the player objects
@@ -80,6 +78,11 @@ model = {
 	 * Array which holds the player markers
 	 */
 	player_markers: {},
+	
+	/**
+	 * Timer used for various polling activities
+	 */
+	timer: {},
 	
 	/**
 	 * Initialize Facebook Connect login
@@ -97,9 +100,13 @@ model = {
 		FB.getLoginStatus(function(response) {
 			  if (response.session) {
 				  // user was already logged in
-				  model.auth_token = response.session.access_token;
-				  model.user_id = response.session.uid;
-				  model.login_successful();
+				  model.user.auth_token = response.session.access_token;
+				  model.user.user_id = response.session.uid;
+				  
+				  FB.api('/me', function(response) {
+				      model.user.name = response.name;
+				      model.user.login_successful();
+				  });
 			  } else {
 				  // let user log in whenever they darn well please
 			  }
@@ -110,11 +117,13 @@ model = {
 	 * Log in as guest instead of using Facebook Connect
 	 */
 	guest_login: function() {
-		model.auth_token = "guest";
-		model.user_id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		model.user.auth_token = "guest";
+		model.user.user_id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
 		    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
 		    return v.toString(16);
 		}).toUpperCase();
+		
+		model.user.name = prompt("What is your name?");
 
 		model.login_successful();
 		return false;
@@ -137,39 +146,60 @@ model = {
 	load_games: function() {
 	    $("#content").html('Loading games...');
 	    var games = "";
-	    $.ajax({
-	        type: 'GET',
-	        url: '/game/',
-	        cache: false,
-	        success: function(data) {
-	            $("#content").html('');
-	            $.each(data, function(game_iterator, game) {
-	                $("<a />").data('id', game)
-	                    .attr({'href': '#'})
-	                    .text(game)
-	                    .appendTo($("#content"));
-	                $("<br />").appendTo($("#content"));
-	            });
-	            $("#content a").click(function() {
-	                model.choose_game($(this).data('id'));
-	                return false;
-	            });
-	            $("<a />").text("Create new game")
-	                .attr({'href': '#'})
-	                .click(function() {
-	                    model.create_game();
-	                    return false;
-	                })
-	                .appendTo($("#content"));
-	        }
-	    });
+	    model.fetch_games();
+	    model.timer = setInterval(model.fetch_games, 5000);
+	},
+	
+	/**
+	 * Fetch games and populate list
+	 */
+	fetch_games: function() {
+        $.ajax({
+            type: 'GET',
+            url: '/game/',
+            cache: false,
+            data: model.user,
+            success: function(data) {
+                $("#content").html('');
+                $.each(data, function(game_iterator, game) {
+                    $("<a />").data('id', game)
+                        .attr({'href': '#'})
+                        .text(game)
+                        .appendTo($("#content"));
+                    $("<br />").appendTo($("#content"));
+                });
+                $("#content a").click(function() {
+                    model.choose_game($(this).data('id'));
+                    return false;
+                });
+                
+                if (model.user.latitude && model.user.longitude) {
+                    $("<a />").text("Create new game")
+                        .attr({'href': '#'})
+                        .click(function() {
+                            model.create_game();
+                            return false;
+                        })
+                        .appendTo($("#content"));
+                }
+            }
+        });
 	},
 	
 	/**
 	 * Choose a game
 	 */
 	choose_game: function(game_id) {
-	    model.game_id = game_id;
+	    // Stop refreshing game list
+	    clearInterval(model.timer);
+	    
+	    // Choose game to join
+	    model.user.game_id = game_id;
+	    
+	    // Watch the locations of the other players
+        model.watchPlayers();
+        
+        // Clear overlay so gameplay can begin
 	    $("#content").html('');
 	    $("#overlay").fadeOut('slow');
 	},
@@ -181,8 +211,11 @@ model = {
         $.ajax({
             type: 'POST',
             url: '/game/',
+            data: {
+                'game_id': model.user.name
+            },
             success: function(data) {
-                model.choose_game(data);
+                model.choose_game(model.user.name);
             }
         });
 	},
@@ -239,58 +272,85 @@ model = {
 	},
 	
 	/**
-	 * Server call which updates your current location and gets
-	 * the locations of all the other players
+	 * Get the locations of the other players
+	 */
+	watchPlayers: function() {
+	    model.timer = setInterval(function() {
+            $.ajax({
+                url: '/location/',
+                type: 'GET',
+                data: {
+                    game_id: model.user.game_id
+                },
+                cache: false,
+                dataType: 'json',
+                success: function(data) {
+                    // Don't update if empty response from the server
+                    if (!data) {
+                        return;
+                    }
+         
+                    // Copy the players array and delete your own coordinates
+                    model.players = data;
+                    del model.players[model.user.user_id];
+                    
+                    // Update the locations of each player
+                    $.each(model.players, function(player_iterator, player) {
+                        if (model.player_markers[player_iterator] === undefined) {
+                            icon = "/css/images/person.png";
+                            model.player_markers[player_iterator] = new google.maps.Marker({
+                                position: new google.maps.LatLng(player.latitude, player.longitude),
+                                map: map.map,
+                                title: player.name,
+                                icon: icon
+                            });
+                            
+                            google.maps.event.addListener(model.player_markers[player_iterator], 'click', function() {
+                                map.infowindow.content = this.title;
+                                map.infowindow.open(map.map, this);
+                            });
+                        } else {
+                            model.player_markers[player_iterator].position = new google.maps.LatLng(player.latitude, player.longitude);
+                        }
+                    });
+                }
+            });
+	    }, 3000);
+	},
+	
+	/**
+	 * Server call which updates your current location
 	 */
 	updateLocation: function(position) {
 		// Update your location, regardless of whether it's in strict accuracy requirements
-	    if (model.player_markers[model.user_id] === undefined) {
-	        model.player_markers[model.user_id] = new google.maps.Marker({
+	    if (model.player_markers[model.user.user_id] === undefined) {
+	        model.player_markers[model.user.user_id] = new google.maps.Marker({
                 position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
                 map: map.map,
                 title: "You",
                 icon: "/css/images/star.png"
             });
+	        
+            google.maps.event.addListener(model.player_markers[model.user.user_id], 'click', function() {
+                map.infowindow.content = this.title;
+                map.infowindow.open(map.map, this);
+            });
+	    } else {
+	        model.player_markers[model.user_id].position = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 	    }
-		model.player_markers[model.user_id].position = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+	    
+	    // Update the user's information
+	    model.user.latitude = position.coords.latitude;
+	    model.user.longitude = position.coords.longitude;
+	    model.user.accuracy = position.coords.accuracy;
 		
 		// Update the server if strict requirements have been met
 		if (position.coords.accuracy <= 30 && model.user_id !== "" && model.game_id !== "") {
 			$.ajax({
 		        url: '/location/',
 		        type: 'POST',
-		        data: {
-					user_id: model.user_id,
-					game_id: 'only_game',
-					auth_token: model.auth_token,
-		            latitude: position.coords.latitude,
-		            longitude: position.coords.longitude,
-		            accuracy: position.coords.accuracy
-		        },
-		        dataType: 'json',
-		        success: function(data) {
-                    // Don't update if empty response from the server
-                    if (!data) {
-                        return;
-                    }
-
-                    model.players = data;
-
-                    // Update the locations of each player
-                    $.each(data, function(player_iterator, player) {
-                        if (model.player_markers[player_iterator] === undefined) {
-                            icon = "/css/images/person.png";
-                            model.player_markers[player_iterator] = new google.maps.Marker({
-                                position: new google.maps.LatLng(player.latitude, player.longitude),
-                                map: map.map,
-                                title: "Player " + player_iterator,
-                                icon: icon
-                            });
-                        } else {
-                            model.player_markers[player_iterator].position = new google.maps.LatLng(player.latitude, player.longitude);
-                        }
-                    });
-		        }
+		        data: model.user,
+		        dataType: 'json'
 		    });
 		}
 	}

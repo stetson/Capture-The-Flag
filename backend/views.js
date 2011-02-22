@@ -23,7 +23,7 @@ var models = require("./models.js");
 //TODO - purge old games
 
 /**
- * Optionally update the user's location, and fetch 
+ * Update the user's location, or fetch 
  * the locations of the other players
  * 
  * @memberOf views
@@ -35,28 +35,27 @@ var models = require("./models.js");
  */
 exports.location = function(request, response, method) {	
 	if (method === "POST") {
-		// Record user's location
+	// Record user's location
 		try {
 			game_id = request.body.game_id;
 			game_data[game_id].last_update = new Date();
-			game_data[game_id].players[request.body.user_id] = {
-				'latitude': request.body.latitude,
-				'longitude': request.body.longitude,
-				'accuracy': request.body.accuracy,
-				'last_update': new Date(),
-				'auth_token': request.body.auth_token
-			};
+			game_data[game_id].players[request.body.user_id] = request.body;
+			game_data[game_id].players[request.body.user_id]['last_update'] = new Date(),
+			
+			// Let the user know the operation was successful
+			response.send("OK");
 		} catch (e) { 
 		    response.send({"error": "Could not save state"}, 404);
 		}
-	}
-	
-	// Send the players back to the client
-	if (game_id && game_data[game_id]) {
-		response.send(game_data[game_id]);
 	} else {
-		response.send({"error": "Invalid game"}, 404);
-	}	
+   	// Send the players back to the client
+	    game_id = request.query.game_id;
+    	if (game_id && game_data[game_id]) {
+    		response.send(game_data[game_id]);
+    	} else {
+    		response.send({"error": "Invalid game (" + game_id + ")"}, 404);
+    	}
+	}
 };
 
 /**
@@ -67,6 +66,7 @@ exports.location = function(request, response, method) {
  * @name game
  */
 exports.get_games = function(request, response) {
+    // TODO - limit to a geographic area around the user (using request.body.latitude and request.body.longitude)
 	response.send(Object.keys(game_data));
 };
 
@@ -75,10 +75,7 @@ exports.get_games = function(request, response) {
  */
 exports.create_game = function(request, response) {
     // Generate a new game id
-    game_id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-        return v.toString(16);
-    }).toUpperCase();
+    game_id = request.body.game_id;
     
     // Create the skeleton of the game
     game_data[game_id] = {
