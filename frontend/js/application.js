@@ -292,7 +292,7 @@ model = {
          
                     // Copy the players array and delete your own coordinates
                     model.players = data;
-                    del model.players[model.user.user_id];
+                    delete model.players[model.user.user_id];
                     
                     // Update the locations of each player
                     $.each(model.players, function(player_iterator, player) {
