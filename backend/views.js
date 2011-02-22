@@ -42,7 +42,7 @@ exports.location = function(request, response, method) {
 			if (user_id) {
     			game_data[game_id].last_update = new Date();
     			game_data[game_id].players[user_id] = request.body;
-    			game_data[game_id].players[user_id]['last_update'] = new Date();
+    			game_data[game_id].players[user_id].last_update = new Date();
     			
     	         // Let the user know the operation was successful
                 response.send("OK");
