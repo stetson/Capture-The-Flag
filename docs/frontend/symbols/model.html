@@ -271,26 +271,6 @@ ul.inheritsList
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								model.<b><a href="../symbols/model.html#.auth_token">auth_token</a></b>
-								</div>
-								<div class="description">Facebook Connect authentication token</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								model.<b><a href="../symbols/model.html#.game_id">game_id</a></b>
-								</div>
-								<div class="description">CTF game id</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
 								model.<b><a href="../symbols/model.html#.player_markers">player_markers</a></b>
 								</div>
 								<div class="description">Array which holds the player markers</div>
@@ -311,9 +291,19 @@ ul.inheritsList
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								model.<b><a href="../symbols/model.html#.user_id">user_id</a></b>
+								model.<b><a href="../symbols/model.html#.timer">timer</a></b>
 								</div>
-								<div class="description">Facebook id</div>
+								<div class="description">Timer used for various polling activities</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								model.<b><a href="../symbols/model.html#.user">user</a></b>
+								</div>
+								<div class="description">User information</div>
 							</td>
 						</tr>
 					
@@ -377,6 +367,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">model.<b><a href="../symbols/model.html#.fetch_games">fetch_games</a></b>()
+								</div>
+								<div class="description">Fetch games and populate list</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">model.<b><a href="../symbols/model.html#.guest_login">guest_login</a></b>()
 								</div>
 								<div class="description">Log in as guest instead of using Facebook Connect</div>
@@ -415,8 +414,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont">model.<b><a href="../symbols/model.html#.updateLocation">updateLocation</a></b>(position)
 								</div>
-								<div class="description">Server call which updates your current location and gets
-the locations of all the other players</div>
+								<div class="description">Server call which updates your current location</div>
 							</td>
 						</tr>
 					
@@ -426,6 +424,15 @@ the locations of all the other players</div>
 								<div class="fixedFont">model.<b><a href="../symbols/model.html#.watchLocation">watchLocation</a></b>()
 								</div>
 								<div class="description">Center the user on their own location, and set up location listener</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">model.<b><a href="../symbols/model.html#.watchPlayers">watchPlayers</a></b>()
+								</div>
+								<div class="description">Get the locations of the other players</div>
 							</td>
 						</tr>
 					
@@ -496,50 +503,6 @@ the locations of all the other players</div>
 
 					<hr />
 				
-					<a name=".auth_token"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">model.</span><b>auth_token</b>
-					
-					</div>
-					<div class="description">
-						Facebook Connect authentication token
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".game_id"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">model.</span><b>game_id</b>
-					
-					</div>
-					<div class="description">
-						CTF game id
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
 					<a name=".player_markers"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -584,15 +547,37 @@ the locations of all the other players</div>
 
 					<hr />
 				
-					<a name=".user_id"> </a>
+					<a name=".timer"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">model.</span><b>user_id</b>
+					<span class="light">model.</span><b>timer</b>
 					
 					</div>
 					<div class="description">
-						Facebook id
+						Timer used for various polling activities
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".user"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">model.</span><b>user</b>
+					
+					</div>
+					<div class="description">
+						User information
 						
 						
 					</div>
@@ -736,6 +721,31 @@ the locations of all the other players</div>
 
 					<hr />
 				
+					<a name=".fetch_games"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">model.</span><b>fetch_games</b>()
+					
+					</div>
+					<div class="description">
+						Fetch games and populate list
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name=".guest_login"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -844,8 +854,7 @@ the locations of all the other players</div>
 					
 					</div>
 					<div class="description">
-						Server call which updates your current location and gets
-the locations of all the other players
+						Server call which updates your current location
 						
 						
 					</div>
@@ -896,6 +905,31 @@ the locations of all the other players
 						
 						
 
+					<hr />
+				
+					<a name=".watchPlayers"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">model.</span><b>watchPlayers</b>()
+					
+					</div>
+					<div class="description">
+						Get the locations of the other players
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
 					
 				
 			
@@ -910,7 +944,7 @@ the locations of all the other players
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2 on Mon Feb 21 2011 20:02:28 GMT-0000 (GMT)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2 on Tue Feb 22 2011 16:49:55 GMT-0000 (GMT)
 		</div>
 	</body>
 </html>
