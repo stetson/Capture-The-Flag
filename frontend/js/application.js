@@ -162,17 +162,23 @@ model = {
             data: model.user,
             success: function(data) {
                 $("#content").html('');
-                $.each(data, function(game_iterator, game) {
-                    $("<a />").data('id', game)
-                        .attr({'href': '#'})
-                        .text(game)
-                        .appendTo($("#content"));
-                    $("<br />").appendTo($("#content"));
-                });
-                $("#content a").click(function() {
-                    model.choose_game($(this).data('id'));
-                    return false;
-                });
+                if (data) {
+                    $.each(data, function(game_iterator, game) {
+                        $("<a />").data('id', game)
+                            .attr({'href': '#'})
+                            .text(game)
+                            .appendTo($("#content"));
+                        $("<br />").appendTo($("#content"));
+                    });
+                    $("#content a").click(function() {
+                        model.choose_game($(this).data('id'));
+                        return false;
+                    });
+                } else {
+                    $("<p />")
+                        .text("There are no active games at the moment.")
+                        .appendTo($("#content"));            
+                }
                 
                 if (model.user.latitude && model.user.longitude) {
                     $("<a />").text("Create new game")
@@ -181,6 +187,10 @@ model = {
                             model.create_game();
                             return false;
                         })
+                        .appendTo($("#content"));
+                } else {
+                    $("<p />")
+                        .text("Once we can determine your location, you'll be able to create a game.")
                         .appendTo($("#content"));
                 }
             }
