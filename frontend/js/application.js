@@ -104,8 +104,13 @@ model = {
 				  model.user.user_id = response.session.uid;
 				  
 				  FB.api('/me', function(response) {
-				      model.user.name = response.name;
-				      model.login_successful();
+				      if (!response || response.error) {
+				          model.user.name = prompt("What is your name? Facebook doesn't want to tell us...");
+				          model.login_successful();
+				      } else {
+				          model.user.name = response.name;
+				          model.login_successful();
+				      }
 				  });
 			  } else {
 				  // let user log in whenever they darn well please
