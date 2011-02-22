@@ -40,26 +40,26 @@ exports.location = function(request, response, method) {
 			game_id = request.body.game_id;
 			user_id = request.body.user_id;
 			if (user_id) {
-    			game_data[game_id].last_update = new Date();
-    			game_data[game_id].players[user_id] = request.body;
-    			game_data[game_id].players[user_id].last_update = new Date();
-    			
-    	         // Let the user know the operation was successful
+                game_data[game_id].last_update = new Date();
+                game_data[game_id].players[user_id] = request.body;
+                game_data[game_id].players[user_id].last_update = new Date();
+
+                //Let the user know the operation was successful
                 response.send("OK");
                 return;
 			}
 		} catch (e) { } 
 		
 		response.send({"error": "Could not save state"}, 404);
-	} else {
-   	// Send the players back to the client
-	    game_id = request.query.game_id;
-    	if (game_id && game_data[game_id]) {
-    		response.send(game_data[game_id].players);
-    	} else {
-    		response.send({"error": "Invalid game (" + game_id + ")"}, 404);
-    	}
-	}
+    } else {
+    // Send the players back to the client
+        game_id = request.query.game_id;
+        if (game_id && game_data[game_id]) {
+            response.send(game_data[game_id].players);
+        } else {
+            response.send({"error": "Invalid game (" + game_id + ")"}, 404);
+        }
+    }
 };
 
 /**
