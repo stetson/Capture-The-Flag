@@ -354,7 +354,7 @@ model = {
 	    model.user.accuracy = position.coords.accuracy;
 		
 		// Update the server if strict requirements have been met
-		if (/*position.coords.accuracy <= 30 && */model.user_id !== "" && model.game_id !== "") {
+		if (/*position.coords.accuracy <= 30 && */model.user.user_id !== "" && model.user.game_id !== "") {
 			$.ajax({
 		        url: '/location/',
 		        type: 'POST',

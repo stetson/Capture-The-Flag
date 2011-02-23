@@ -67,8 +67,8 @@ http.use(express.bodyDecoder());
 	 * @name location
 	 * @link views.location 
 	 **/
-	http.post('/location', views.location, "POST");
-	http.get('/location', views.location, "GET");
+	http.post('/location', views.update_location);
+	http.get('/location', views.get_location);
 	
 	/**
 	 * Returns a list of all games on this server<br />

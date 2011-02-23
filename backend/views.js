@@ -11,6 +11,15 @@
  */
 var game_data = {};
 
+game_data['test'] = {
+        origin: {
+            'latitude': 0,
+            'longitude': 0
+        },
+        last_update: new Date(),
+        players: {}
+};
+
 /**
  * These are the models that will handle all of our
  * database access
@@ -33,32 +42,35 @@ var models = require("./models.js");
  * @param longitude {Number} The user's current longitude
  * @param accuracy {Number} The accuracy of the location in meters
  */
-exports.location = function(request, response, method) {	
-	if (method === "POST") {
+exports.update_location = function(request, response) {
 	// Record user's location
-		try {
-			game_id = request.body.game_id;
-			user_id = request.body.user_id;
-			if (user_id) {
-                game_data[game_id].last_update = new Date();
-                game_data[game_id].players[user_id] = request.body;
-                game_data[game_id].players[user_id].last_update = new Date();
-
-                //Let the user know the operation was successful
-                response.send("OK");
-                return;
-			}
-		} catch (e) { } 
+	console.log(request.body);
+	try {
+		game_id = request.body.game_id;
+		user_id = request.body.user_id;
 		
-		response.send({"error": "Could not save state"}, 404);
-    } else {
+		if (user_id) {
+            game_data[game_id].last_update = new Date();
+            game_data[game_id].players[user_id] = request.body;
+            game_data[game_id].players[user_id].last_update = new Date();
+
+            //Let the user know the operation was successful
+            response.send("OK");
+            return;
+		}
+	} catch (e) { } 
+	
+	response.send({"error": "Could not save state"}, 404);
+};
+
+exports.get_location = function(request, response) {
     // Send the players back to the client
-        game_id = request.query.game_id;
-        if (game_id && game_data[game_id]) {
-            response.send(game_data[game_id].players);
-        } else {
-            response.send({"error": "Invalid game (" + game_id + ")"}, 404);
-        }
+    game_id = request.query.game_id;
+    if (game_id && game_data[game_id]) {
+        response.send(game_data[game_id].players);
+        //console.log(game_data[game_id]);
+    } else {
+        response.send({"error": "Invalid game (" + game_id + ")"}, 404);
     }
 };
 
