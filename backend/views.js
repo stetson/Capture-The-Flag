@@ -11,15 +11,6 @@
  */
 var game_data = {};
 
-game_data['test'] = {
-        origin: {
-            'latitude': 0,
-            'longitude': 0
-        },
-        last_update: new Date(),
-        players: {}
-};
-
 /**
  * These are the models that will handle all of our
  * database access
