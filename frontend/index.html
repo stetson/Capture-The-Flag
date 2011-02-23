@@ -21,14 +21,21 @@
 				<li><a href="#center_on_red_flag"></a></li>
 			</ul>
 		</div>
+<<<<<<< HEAD
 		<div id="map_canvas;">Hello</div>
         <div id="loading;">
+=======
+		<div id="map_canvas"></div>
+        <div id="overlay">
+>>>>>>> 970cb313891557367de46de9df89f6bf7af7c0c5
         	<h3>Welcome to Capture the Flag!</h3>
         	<p>The current iteration of the game simply shows you who else is logged into the system. A good test of the game is to play the traditional game of sardines.</p>
         	<p class="error"></p>
-        	<a href='#' onClick='window.location="https://m.facebook.com/dialog/oauth?client_id=" + model.app_id + "&redirect_uri=" + window.location + "&response_type=token"; return false;'><img src='/css/images/facebook_connect.jpg' alt='Login with Facebook' style='border:0' /></a><br />
-        	<a href='#' id="guest-login">or log in as guest</a>
-        	<div id="fb-root"></div>
+        	<div id="content">
+	        	<a href='#' onClick='window.location="https://m.facebook.com/dialog/oauth?client_id=" + model.app_id + "&redirect_uri=" + window.location + "&response_type=token"; return false;'><img src='/css/images/facebook_connect.jpg' alt='Login with Facebook' style='border:0' /></a><br />
+	        	<a href='#' id="guest-login">Login as guest</a>
+	        	<div id="fb-root"></div>
+	        </div>
         </div>
 	</body>
 </html>

@@ -3,11 +3,11 @@
 ## Installing
 
 First, make sure you install all of CTF's dependencies:   
-[http://nodejs.org/](Node.js)   
-[http://npmjs.org/](npm)   
-[http://expressjs.com/](Express)   
-[http://mongoosejs.com/](Mongoose ORM)   
-[http://www.mongodb.org/](MongoDB)   
+[Node.js](http://nodejs.org/)   
+[npm](http://npmjs.org/)   
+[Express](http://expressjs.com/)   
+[Mongoose ORM](http://mongoosejs.com/)   
+[MongoDB](http://www.mongodb.org/)   
 
 Then, clone the latest code:
 

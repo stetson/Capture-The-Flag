@@ -7,6 +7,11 @@
  */
 
 /**
+ * Global memory store for game data
+ */
+var game_data = {};
+
+/**
  * These are the models that will handle all of our
  * database access
  * 
@@ -14,71 +19,88 @@
  */
 var models = require("./models.js");
 
-//Global memory caches
+//TODO - purge old users
+//TODO - purge old games
 
 /**
- * Stores all active players
- */
-var players;
-players = {};
-//setInterval(persist_players, 60000);
-
-/**
- * Purge old players
- * 
- * @memberOf players
- * @name purge_players
- */
-purge_players = function() {
-	for (var player_iterator in players) {
-		if (players.hasOwnProperty(player_iterator)) {
-			// Purge players who haven't updated in over 15 seconds
-			if (new Date() - players[player_iterator].last_update > 15000) {
-				players[player_iterator].latitude = 0;
-				players[player_iterator].longitude = 0;
-				players[player_iterator].accuracy = 0;
-			}
-			
-			// Reclaim memory of players who haven't updated in 5 minutes
-			if (new Date() - players[player_iterator].last_update > 300000) {
-				delete players[player_iterator];
-			}
-		}
-	}
-};
-
-setInterval(purge_players, 5000);
-
-/**
- * Stores all active games
- */
-var games = {};
-//setInterval(persist_games, 60000);
-
-/**
- * Update the user's location, and fetch the locations of
- * the other players
+ * Update the user's location, or fetch 
+ * the locations of the other players
  * 
  * @memberOf views
- * @name update_location
+ * @name location 
  * @param id {Number} The user's id
  * @param latitude {Number}	The user's current latitude
  * @param longitude {Number} The user's current longitude
  * @param accuracy {Number} The accuracy of the location in meters
  */
-exports.update_location = function(request, response) {	
+exports.location = function(request, response, method) {	
+	if (method === "POST") {
 	// Record user's location
-	try {
-		players[request.body.user_id] = {
-			'latitude': request.body.latitude,
-			'longitude': request.body.longitude,
-			'accuracy': request.body.accuracy,
-			'last_update': new Date(),
-			'auth_token': request.body.auth_token
-		};
-	} catch (e) { }
+		try {
+			game_id = request.body.game_id;
+			user_id = request.body.user_id;
+			if (user_id) {
+                game_data[game_id].last_update = new Date();
+                game_data[game_id].players[user_id] = request.body;
+                game_data[game_id].players[user_id].last_update = new Date();
+
+                //Let the user know the operation was successful
+                response.send("OK");
+                return;
+			}
+		} catch (e) { } 
+		
+		response.send({"error": "Could not save state"}, 404);
+    } else {
+    // Send the players back to the client
+        game_id = request.query.game_id;
+        if (game_id && game_data[game_id]) {
+            response.send(game_data[game_id].players);
+        } else {
+            response.send({"error": "Invalid game (" + game_id + ")"}, 404);
+        }
+    }
+};
+
+/**
+ * Game resource, which lists all games and allows users
+ * to create a new game
+ * 
+ * @memberOf views
+ * @name game
+ */
+exports.get_games = function(request, response) {
+    // TODO - limit to a geographic area around the user (using request.body.latitude and request.body.longitude)
+	response.send(Object.keys(game_data));
+};
+
+/**
+ * Create a new game, and return the id
+ */
+exports.create_game = function(request, response) {
+    // Generate a new game id
+    game_id = request.body.name;
+    
+    // Create the skeleton of the game
+    game_data[game_id] = {
+        origin: {
+            'latitude': request.body.latitude,
+            'longitude': request.body.longitude
+        },
+        last_update: new Date(),
+        players: {}
+    };
+    
+    // Send confirmation back to client
+    response.send("OK");
+};
+
+/**
+ * View details about a single game, or join a game
+ * 
+ * @memberOf views
+ * @name game
+ */
+exports.game_detail = function(request, response) {
 	
-	// Send the players back to the client
-	console.log(request.connection.remoteAddress + ' updated their location');
-	response.send(players);
 };

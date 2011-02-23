@@ -61,17 +61,44 @@ http.use(express.bodyDecoder());
 	/**
 	 * Calls views.update_location <br />
 	 * <b>url: /location</b><br />
-	 * methods: POST
+	 * methods: GET, POST
 	 * 
 	 * @memberOf http
 	 * @name location
-	 * @link views.update_location 
+	 * @link views.location 
 	 **/
-	http.post('/location', views.update_location);
+	http.post('/location', views.location, "POST");
+	http.get('/location', views.location, "GET");
+	
+	/**
+	 * Returns a list of all games on this server<br />
+	 * <b>url: /game</b><br />
+	 * methods: GET
+	 * 
+	 * @memberOf http
+	 * @name get_games
+	 * @link views.get_games
+	 */
+	http.get('/game', views.get_games);
+	
+	/**
+     * Create a new game<br />
+     * <b>url: /game</b><br />
+     * methods: POST
+     * 
+     * @memberOf http
+     * @name create_game
+     * @link views.create_game
+     */
+    http.post('/game', views.create_game);
+	
+	// GET, POST /game/:game_id views.game_detail
 
 // Start listening
 try {
 	http.listen(80);
+	console.log("Listening on port 80");
 } catch (e) {
 	http.listen(5555);
+	console.log("Listening on port 5555");
 }
