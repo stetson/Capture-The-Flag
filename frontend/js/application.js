@@ -29,7 +29,7 @@ map = {
 		// Make street level map with no UI controls
 		map.options = {
 			zoom: 18,
-            disableDefaultUI: true,
+            disableDefaultUI: false,
 			mapTypeId: google.maps.MapTypeId.HYBRID
 		};
 		
