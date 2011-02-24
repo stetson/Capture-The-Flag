@@ -14,18 +14,22 @@ var game_data = {};
 // Purge old users
 setInterval(function() {
     for (var game_iterator in game_data) {
+        if (game_data.hasOwnProperty(game_iterator)) {
         for (var player_iterator in game_data[game_iterator].players) {
-            // Purge players who haven't updated in over 1 minute
-            if (new Date() - game_data[game_iterator].players[player_iterator].last_update >= 1*60*1000) {
-                game_data[game_iterator].players[player_iterator].latitude = 0;
-                game_data[game_iterator].players[player_iterator].longitude = 0;
-                game_data[game_iterator].players[player_iterator].accuracy = 0;
+            if (game_data[game_iterator].players.hasOwnProperty(player_iterator)) {
+                // Purge players who haven't updated in over 1 minute
+                if (new Date() - game_data[game_iterator].players[player_iterator].last_update >= 1*60*1000) {
+                    game_data[game_iterator].players[player_iterator].latitude = 0;
+                    game_data[game_iterator].players[player_iterator].longitude = 0;
+                    game_data[game_iterator].players[player_iterator].accuracy = 0;
+                }
+                
+                // Reclaim memory of players who haven't updated in 5 minutes
+                if (new Date() - game_data[game_iterator].players[player_iterator].last_update >= 5*60*1000) {
+                    delete game_data[game_iterator].players[player_iterator];
+                }
             }
-            
-            // Reclaim memory of players who haven't updated in 5 minutes
-            if (new Date() - game_data[game_iterator].players[player_iterator].last_update >= 5*60*1000) {
-                delete game_data[game_iterator].players[player_iterator];
-            }
+        }
         }
     }
 }, 1*60*1000);
@@ -33,10 +37,12 @@ setInterval(function() {
 // Purge old games
 setInterval(function() {
     for (var game_iterator in game_data) {
-        // Delete games that haven't been played on in over 20 minutes
-        if (new Date() - game_data[game_iterator].last_update >= 20*60*1000) {
-            delete game_data[game_iterator];
-        }            
+            if (game_data.hasOwnProperty(game_iterator)) {
+            // Delete games that haven't been played on in over 20 minutes
+            if (new Date() - game_data[game_iterator].last_update >= 20*60*1000) {
+                delete game_data[game_iterator];
+            }
+        }
     }
 }, 20*60*1000);
 
