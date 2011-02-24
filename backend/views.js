@@ -11,8 +11,34 @@
  */
 var game_data = {};
 
-//TODO - purge old users
-//TODO - purge old games
+// Purge old users
+setInterval(function() {
+    for (game_iterator in game_data) {
+        for (var player_iterator in game_data[game_iterator].players) {
+            // Purge players who haven't updated in over 1 minute
+            if (new Date() - game_data[game_iterator].players[iterator].last_update >= 1*60*1000) {
+                game_data[game_iterator].players[iterator].latitude = 0;
+                game_data[game_iterator].players[iterator].longitude = 0;
+                game_data[game_iterator].players[iterator].accuracy = 0;
+            }
+            
+            // Reclaim memory of players who haven't updated in 5 minutes
+            if (new Date() - game_data[game_iterator].players[iterator].last_update >= 5*60*1000) {
+                delete game_data[game_iterator].players[iterator];
+            }
+        }
+    }
+}, 1*60*1000);
+
+// Purge old games
+setInterval(function() {
+    for (game_iterator in game_data) {
+        // Delete games that haven't been played on in over 20 minutes
+        if (new Date() - game_data[game_iterator].last_update >= 20*60*1000) {
+            delete game_data[game_iterator];
+        }            
+    }
+}, 20*60*1000);
 
 /**
  * Update the user's location
