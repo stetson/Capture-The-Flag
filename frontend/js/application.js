@@ -29,7 +29,7 @@ map = {
 		// Make street level map with no UI controls
 		map.options = {
 			zoom: 18,
-            disableDefaultUI: true,
+            disableDefaultUI: false,
 			mapTypeId: google.maps.MapTypeId.HYBRID
 		};
 		
@@ -244,6 +244,8 @@ model = {
 	centerMap: function() {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			map.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+			model.user.latitude = position.coords.latitude;
+			model.user.longitude = position.coords.longitude;
 		}, function() {}, {
 			maximumAge: 500,
 			enableHighAccuracy: true
@@ -299,14 +301,13 @@ model = {
                         return;
                     }
          
-                    // Copy the players array and delete your own coordinates
+                    // Copy the players array
                     model.players = data;
-                    delete model.players[model.user.user_id];
                     
                     // Update the locations of each player
                     $.each(model.players, function(player_iterator, player) {
                         if (model.player_markers[player_iterator] === undefined) {
-                            icon = "/css/images/person.png";
+                            icon = player_iterator == mode.user.user_id ? "/css/images/star.png" : "/css/images/person_red.png";
                             model.player_markers[player_iterator] = new google.maps.Marker({
                                 position: new google.maps.LatLng(player.latitude, player.longitude),
                                 map: map.map,
@@ -331,20 +332,13 @@ model = {
 	 * Server call which updates your current location
 	 */
 	updateLocation: function(position) {
+	    // Reject bad data
+	    if (position.coords.accuracy > 30) {
+	        return;
+	    }
+	    
 		// Update your location, regardless of whether it's in strict accuracy requirements
-	    if (model.player_markers[model.user.user_id] === undefined) {
-	        model.player_markers[model.user.user_id] = new google.maps.Marker({
-                position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-                map: map.map,
-                title: "You",
-                icon: "/css/images/star.png"
-            });
-	        
-            google.maps.event.addListener(model.player_markers[model.user.user_id], 'click', function() {
-                map.infowindow.content = this.title;
-                map.infowindow.open(map.map, this);
-            });
-	    } else {
+	    if (model.player_markers[model.user.user_id] !== undefined) {
 	        model.player_markers[model.user_id].position = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 	    }
 	    
@@ -354,7 +348,7 @@ model = {
 	    model.user.accuracy = position.coords.accuracy;
 		
 		// Update the server if strict requirements have been met
-		if (/*position.coords.accuracy <= 30 && */model.user_id !== "" && model.game_id !== "") {
+		if (model.user.user_id !== "" && model.user.game_id !== "") {
 			$.ajax({
 		        url: '/location/',
 		        type: 'POST',

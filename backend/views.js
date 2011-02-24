@@ -11,54 +11,84 @@
  */
 var game_data = {};
 
-/**
- * These are the models that will handle all of our
- * database access
- * 
- * @namespace models
- */
-var models = require("./models.js");
+// Purge old users
+setInterval(function() {
+    for (var game_iterator in game_data) {
+        if (game_data.hasOwnProperty(game_iterator)) {
+        for (var player_iterator in game_data[game_iterator].players) {
+            if (game_data[game_iterator].players.hasOwnProperty(player_iterator)) {
+                // Purge players who haven't updated in over 1 minute
+                if (new Date() - game_data[game_iterator].players[player_iterator].last_update >= 1*60*1000) {
+                    game_data[game_iterator].players[player_iterator].latitude = 0;
+                    game_data[game_iterator].players[player_iterator].longitude = 0;
+                    game_data[game_iterator].players[player_iterator].accuracy = 0;
+                }
+                
+                // Reclaim memory of players who haven't updated in 5 minutes
+                if (new Date() - game_data[game_iterator].players[player_iterator].last_update >= 5*60*1000) {
+                    delete game_data[game_iterator].players[player_iterator];
+                }
+            }
+        }
+        }
+    }
+}, 1*60*1000);
 
-//TODO - purge old users
-//TODO - purge old games
+// Purge old games
+setInterval(function() {
+    for (var game_iterator in game_data) {
+            if (game_data.hasOwnProperty(game_iterator)) {
+            // Delete games that haven't been played on in over 20 minutes
+            if (new Date() - game_data[game_iterator].last_update >= 20*60*1000) {
+                delete game_data[game_iterator];
+            }
+        }
+    }
+}, 20*60*1000);
 
 /**
- * Update the user's location, or fetch 
- * the locations of the other players
+ * Update the user's location
  * 
  * @memberOf views
- * @name location 
- * @param id {Number} The user's id
- * @param latitude {Number}	The user's current latitude
- * @param longitude {Number} The user's current longitude
- * @param accuracy {Number} The accuracy of the location in meters
+ * @name update_location
  */
-exports.location = function(request, response, method) {	
-	if (method === "POST") {
-	// Record user's location
-		try {
-			game_id = request.body.game_id;
-			user_id = request.body.user_id;
-			if (user_id) {
-                game_data[game_id].last_update = new Date();
-                game_data[game_id].players[user_id] = request.body;
-                game_data[game_id].players[user_id].last_update = new Date();
-
-                //Let the user know the operation was successful
-                response.send("OK");
-                return;
-			}
-		} catch (e) { } 
+exports.update_location = function(request, response) {
+    // Log incoming information for debugging purposes
+    console.log(request.body);
+    
+    // Record user's location
+	try {
+		game_id = request.body.game_id;
+		user_id = request.body.user_id;
 		
-		response.send({"error": "Could not save state"}, 404);
-    } else {
+		if (user_id) {
+            game_data[game_id].last_update = new Date();
+            game_data[game_id].players[user_id] = request.body;
+            game_data[game_id].players[user_id].last_update = new Date();
+
+            //Let the user know the operation was successful
+            response.send("OK");
+            return;
+		}
+	} catch (e) { } 
+	
+	response.send({"error": "Could not save state"}, 404);
+};
+
+/**
+ * Get the locations of the other players
+ * 
+ * @memberOf views
+ * @name get_location 
+ */
+exports.get_location = function(request, response) {
     // Send the players back to the client
-        game_id = request.query.game_id;
-        if (game_id && game_data[game_id]) {
-            response.send(game_data[game_id].players);
-        } else {
-            response.send({"error": "Invalid game (" + game_id + ")"}, 404);
-        }
+    game_id = request.query.game_id;
+    if (game_id && game_data[game_id]) {
+        response.send(game_data[game_id].players);
+        //console.log(game_data[game_id]);
+    } else {
+        response.send({"error": "Invalid game (" + game_id + ")"}, 404);
     }
 };
 
