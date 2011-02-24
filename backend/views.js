@@ -15,19 +15,16 @@ var game_data = {};
 //TODO - purge old games
 
 /**
- * Update the user's location, or fetch 
- * the locations of the other players
+ * Update the user's location
  * 
  * @memberOf views
- * @name location 
- * @param id {Number} The user's id
- * @param latitude {Number}	The user's current latitude
- * @param longitude {Number} The user's current longitude
- * @param accuracy {Number} The accuracy of the location in meters
+ * @name update_location
  */
 exports.update_location = function(request, response) {
-	// Record user's location
-	console.log(request.body);
+    // Log incoming information for debugging purposes
+    console.log(request.body);
+    
+    // Record user's location
 	try {
 		game_id = request.body.game_id;
 		user_id = request.body.user_id;
@@ -46,6 +43,12 @@ exports.update_location = function(request, response) {
 	response.send({"error": "Could not save state"}, 404);
 };
 
+/**
+ * Get the locations of the other players
+ * 
+ * @memberOf views
+ * @name get_location 
+ */
 exports.get_location = function(request, response) {
     // Send the players back to the client
     game_id = request.query.game_id;
