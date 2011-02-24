@@ -11,14 +11,6 @@
  */
 var game_data = {};
 
-/**
- * These are the models that will handle all of our
- * database access
- * 
- * @namespace models
- */
-var models = require("./models.js");
-
 //TODO - purge old users
 //TODO - purge old games
 
