@@ -30,8 +30,8 @@
 <span class='line'> 23</span> </span><span class="WHIT">                    </span><span class="NAME">game_data</span><span class="PUNC">[</span><span class="NAME">game_iterator</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">players</span><span class="PUNC">[</span><span class="NAME">player_iterator</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">longitude</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 24</span> </span><span class="WHIT">                    </span><span class="NAME">game_data</span><span class="PUNC">[</span><span class="NAME">game_iterator</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">players</span><span class="PUNC">[</span><span class="NAME">player_iterator</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">accuracy</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 25</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 26</span> </span><span class="WHIT">                
-<span class='line'> 27</span>                 </span><span class="COMM">// Reclaim memory of players who haven't updated in 5 minutes</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="WHIT">                </span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="WHIT">                </span><span class="COMM">// Reclaim memory of players who haven't updated in 5 minutes</span><span class="WHIT">
 <span class='line'> 28</span> </span><span class="WHIT">                </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">game_data</span><span class="PUNC">[</span><span class="NAME">game_iterator</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">players</span><span class="PUNC">[</span><span class="NAME">player_iterator</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">last_update</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NUMB">5</span><span class="PUNC">*</span><span class="NUMB">60</span><span class="PUNC">*</span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 29</span> </span><span class="WHIT">                    </span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">game_data</span><span class="PUNC">[</span><span class="NAME">game_iterator</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">players</span><span class="PUNC">[</span><span class="NAME">player_iterator</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 30</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="WHIT">
@@ -62,13 +62,13 @@
 <span class='line'> 55</span> </span><span class="NAME">exports.update_location</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">request</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 56</span> </span><span class="WHIT">    </span><span class="COMM">// Log incoming information for debugging purposes</span><span class="WHIT">
 <span class='line'> 57</span> </span><span class="WHIT">    </span><span class="NAME">console.log</span><span class="PUNC">(</span><span class="NAME">request.body</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 58</span> </span><span class="WHIT">    
-<span class='line'> 59</span>     </span><span class="COMM">// Record user's location</span><span class="WHIT">
+<span class='line'> 58</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'> 59</span> </span><span class="WHIT">    </span><span class="COMM">// Record user's location</span><span class="WHIT">
 <span class='line'> 60</span> </span><span class="WHIT">	</span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 61</span> </span><span class="WHIT">		</span><span class="NAME">game_id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">request.body.game_id</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 62</span> </span><span class="WHIT">		</span><span class="NAME">user_id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">request.body.user_id</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 63</span> </span><span class="WHIT">		
-<span class='line'> 64</span> 		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">user_id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 63</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'> 64</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">user_id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 65</span> </span><span class="WHIT">            </span><span class="NAME">game_data</span><span class="PUNC">[</span><span class="NAME">game_id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">last_update</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 66</span> </span><span class="WHIT">            </span><span class="NAME">game_data</span><span class="PUNC">[</span><span class="NAME">game_id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">players</span><span class="PUNC">[</span><span class="NAME">user_id</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">request.body</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 67</span> </span><span class="WHIT">            </span><span class="NAME">game_data</span><span class="PUNC">[</span><span class="NAME">game_id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">players</span><span class="PUNC">[</span><span class="NAME">user_id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">last_update</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
@@ -77,9 +77,9 @@
 <span class='line'> 70</span> </span><span class="WHIT">            </span><span class="NAME">response.send</span><span class="PUNC">(</span><span class="STRN">"OK"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 71</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 72</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 73</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT"> 
-<span class='line'> 74</span> 	
-<span class='line'> 75</span> 	</span><span class="NAME">response.send</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">"error"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"Could not save state"</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">404</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 73</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'> 74</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'> 75</span> </span><span class="WHIT">	</span><span class="NAME">response.send</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">"error"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"Could not save state"</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">404</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 76</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 77</span> 
 <span class='line'> 78</span> </span><span class="COMM">/**
@@ -117,8 +117,8 @@
 <span class='line'>110</span> </span><span class="NAME">exports.create_game</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">request</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>111</span> </span><span class="WHIT">    </span><span class="COMM">// Generate a new game id</span><span class="WHIT">
 <span class='line'>112</span> </span><span class="WHIT">    </span><span class="NAME">game_id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">request.body.name</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>113</span> </span><span class="WHIT">    
-<span class='line'>114</span>     </span><span class="COMM">// Create the skeleton of the game</span><span class="WHIT">
+<span class='line'>113</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'>114</span> </span><span class="WHIT">    </span><span class="COMM">// Create the skeleton of the game</span><span class="WHIT">
 <span class='line'>115</span> </span><span class="WHIT">    </span><span class="NAME">game_data</span><span class="PUNC">[</span><span class="NAME">game_id</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>116</span> </span><span class="WHIT">        </span><span class="NAME">origin</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>117</span> </span><span class="WHIT">            </span><span class="STRN">'latitude'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">request.body.latitude</span><span class="PUNC">,</span><span class="WHIT">
@@ -127,8 +127,8 @@
 <span class='line'>120</span> </span><span class="WHIT">        </span><span class="NAME">last_update</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>121</span> </span><span class="WHIT">        </span><span class="NAME">players</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>122</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>123</span> </span><span class="WHIT">    
-<span class='line'>124</span>     </span><span class="COMM">// Send confirmation back to client</span><span class="WHIT">
+<span class='line'>123</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'>124</span> </span><span class="WHIT">    </span><span class="COMM">// Send confirmation back to client</span><span class="WHIT">
 <span class='line'>125</span> </span><span class="WHIT">    </span><span class="NAME">response.send</span><span class="PUNC">(</span><span class="STRN">"OK"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>126</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>127</span> 
@@ -139,5 +139,21 @@
 <span class='line'>132</span>  * @name game
 <span class='line'>133</span>  */</span><span class="WHIT">
 <span class='line'>134</span> </span><span class="NAME">exports.game_detail</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">request</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>135</span> </span><span class="WHIT">	
-<span class='line'>136</span> </span><span class="PUNC">}</span><span class="PUNC">;</span></pre></body></html>
+<span class='line'>135</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>137</span> 
+<span class='line'>138</span> </span><span class="COMM">/**
+<span class='line'>139</span>  * Create or read a save file on backend that
+<span class='line'>140</span>  * contains a copy of the main Game object
+<span class='line'>141</span>  * at start of serverm
+<span class='line'>142</span>  * 
+<span class='line'>143</span>  * @name writeToFile 
+<span class='line'>144</span>  */</span><span class="WHIT">
+<span class='line'>145</span> </span><span class="COMM">//Check for file existence</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="COMM">//	If file exists</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="COMM">//		Copy contents as current Game object</span><span class="WHIT">
+<span class='line'>148</span> </span><span class="COMM">//			exit</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="COMM">//	If file does not exist</span><span class="WHIT">
+<span class='line'>150</span> </span><span class="COMM">//		Create file</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="COMM">//			Write Game object to file</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="COMM">//				exit</span></pre></body></html>

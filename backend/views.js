@@ -134,3 +134,19 @@ exports.create_game = function(request, response) {
 exports.game_detail = function(request, response) {
 	
 };
+
+/**
+ * Create or read a save file on backend that
+ * contains a copy of the main Game object
+ * at start of serverm
+ * 
+ * @name writeToFile 
+ */
+//Check for file existence
+//	If file exists
+//		Copy contents as current Game object
+//			exit
+//	If file does not exist
+//		Create file
+//			Write Game object to file
+//				exit
