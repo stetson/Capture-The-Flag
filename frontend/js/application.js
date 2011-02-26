@@ -333,9 +333,9 @@ model = {
 	 */
 	updateLocation: function(position) {
 	    // Reject bad data
-	    if (position.coords.accuracy > 30) {
-	        return;
-	    }
+	    //if (position.coords.accuracy > 30) {
+	    //    return;
+	    //}
 	    
 		// Update your location, regardless of whether it's in strict accuracy requirements
 	    if (model.player_markers[model.user.user_id] !== undefined) {
