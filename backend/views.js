@@ -142,7 +142,7 @@ exports.game_detail = function(request, response) {
  * 
  * @name writeToFile 
  */
-//Check for file existance
+//Check for file existence
 //	If file exists
 //		Copy contents as current Game object
 //			exit
