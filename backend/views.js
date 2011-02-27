@@ -144,7 +144,8 @@ exports.game_detail = function(request, response) {
  */
  //			Write Game object to file
 //				exit
-//fs.writeFile('\Capture-The-Flag\backend\game_data.txt', 'game_data', function (err) {
+
+//fs.writeFile('\Capture-The-Flag\backend\game_data.txt', JSON.stringify(game_data), function (err) {
  // if (err) throw err;
   //console.log('It\'s saved!');
 });
