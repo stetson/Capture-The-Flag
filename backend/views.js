@@ -142,11 +142,10 @@ exports.game_detail = function(request, response) {
  * 
  * @name writeToFile 
  */
-//Check for file existence
-//	If file exists
-//		Copy contents as current Game object
-//			exit
-//	If file does not exist
-//		Create file
-//			Write Game object to file
+ //			Write Game object to file
 //				exit
+//fs.writeFile('\Capture-The-Flag\backend\game_data.txt', 'game_data', function (err) {
+ // if (err) throw err;
+  //console.log('It\'s saved!');
+});
+			exit
