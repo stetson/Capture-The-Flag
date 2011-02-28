@@ -1,12 +1,20 @@
-//Algorithms.js File
-//Laura Seletos
-//Trying to follow the google tutorial on javascript api and adjust it to limiting a game's lat and long.
+/**
+ * Algorithms.js
+ * 
+ * Trying to follow the google tutorial on javascript api and adjust it to limiting a game's lat and long.
+ * 
+ * @author Laura Seletos
+ */
 
 
-//function that limits the map's latitude and longitude based on the user's gps corrdinates 
+/**
+* Function that limits the map's latitude and longitude based on the user's gps corrdinates 
+*/
 function distance(user_latitude, user_longitude) {
   
-  //creating new geo location limited to the user's lat and long
+  /** 
+  * Creating new geo location limited to the user's lat and long
+  */
   var playersLatLong = new google.maps.LatLng(user_latitude, user_longitude);
 
   var myOptions = {
