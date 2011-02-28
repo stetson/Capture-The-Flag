@@ -320,7 +320,7 @@ model = {
                                 map.infowindow.open(map.map, this);
                             });
                         } else {
-                            model.player_markers[player_iterator].position = new google.maps.LatLng(player.latitude, player.longitude);
+                            model.player_markers[player_iterator]setPosition( new google.maps.LatLng(player.latitude, player.longitude) );
                         }
                     });
                 }
@@ -339,7 +339,7 @@ model = {
 	    
 		// Update your location, regardless of whether it's in strict accuracy requirements
 	    if (model.player_markers[model.user.user_id] !== undefined) {
-	        model.player_markers[model.user_id].position = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+	        model.player_markers[model.user_id].setPosition( new google.maps.LatLng(position.coords.latitude, position.coords.longitude) );
 	    }
 	    
 	    // Update the user's information
