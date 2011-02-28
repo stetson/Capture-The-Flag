@@ -134,7 +134,7 @@ exports.get_location = function(request, response) {
  */
  
 exports.get_games = function(request, response) {
-	user_latitude = request.body.latitude;
+	/*user_latitude = request.body.latitude;
 	user_longitude = request.body.longitude;
 
 	for (var game_iterator in game_data) {
@@ -145,7 +145,7 @@ exports.get_games = function(request, response) {
 				response.write(get_games);
 			}
 		}
-	}
+	}*/
 	response.send(Object.keys(game_data));
 };
 
