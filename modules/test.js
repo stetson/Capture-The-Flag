@@ -8,6 +8,7 @@ var logic = new modLogic.Logic();
 console.log("[Algorithms.cc]")
 console.log("  add(10) => " + algo.add(10));
 console.log("  diff(13, 7) => " + algo.diff(13, 7));
+console.log(" distance(data.distance(60,1.849444,52.204444,0.140555)\n" + algo.distance(60,1.849444,52.204444,0.140555)+ " km");
 
 // Testing business logic
 console.log("[Logic.cc]")

@@ -1,6 +1,7 @@
 #include <v8.h>
 #include <node.h>
 #include <sstream>
+#include <math.h>
 using namespace node;
 using namespace v8;
 
@@ -27,6 +28,7 @@ public:
 	// Brings the functions to the JS namespace via "Algorithms" (below)
     NODE_SET_PROTOTYPE_METHOD(s_ct, "add", add);
 	NODE_SET_PROTOTYPE_METHOD(s_ct, "diff", diff);
+  NODE_SET_PROTOTYPE_METHOD(s_ct, "distance", distance);
 
 	// Brings the Algorithms object toe the JS namespace
     target->Set(String::NewSymbol("Algorithms"), s_ct->GetFunction());
@@ -61,6 +63,37 @@ public:
     //Local<String> result = String::New("Hello World");
     return scope.Close(result);
   }
+
+static Handle<Value> distance(const Arguments& args)
+  {
+    HandleScope scope;
+    Algorithms* hw = ObjectWrap::Unwrap<Algorithms>(args.This());
+    
+    Local<Value> arg0 = args[0];
+    Local<Value> arg1 = args[1];
+    Local<Value> arg2 = args[2];
+    Local<Value> arg3 = args[3];
+
+    double nLat1 = arg0->NumberValue();
+    double nLon1 = arg1->NumberValue();
+    double nLat2 = arg2->NumberValue();
+    double nLon2 = arg3->NumberValue();
+
+    double nRadius = 6371; // Earth's radius in Kilometers
+    // Get the difference between our two points
+    // then convert the difference into radians
+ 
+    double nDLat = (nLat2 - nLat1) * (3.1415926535 / 180);
+    double nDLon = (nLon2 - nLon1) * (3.1415926535 / 180);
+
+    double nA = pow ( sin(nDLat/2), 2 ) + cos(nLat1) * cos(nLat2) * pow ( sin(nDLon/2), 2 );
+ 
+    double nC = 2 * atan2( sqrt(nA), sqrt( 1 - nA ));
+    double nD = nRadius * nC;
+    Local<Number> result = Number::New(nD);
+    return scope.Close(result);
+  }
+
 
   /*
     Sample function. Gets the difference of two integers.
