@@ -21,6 +21,18 @@ var fs = require('fs');
  */
 var algorithms = require("./Algorithms.js");
 
+/**
+ * Global variables for time
+ */
+var one_minute = 1*60*1000;
+var five_minutes = 5*60*1000;
+var twenty_minutes = 20*60*1000;
+ 
+/**
+ * Global variables for distance
+ */
+var miles_of_distance = 5;
+ 
 // Periodically backup data
 setInterval(function() {
     fs.writeFile('game_data.dat', JSON.stringify(game_data));
@@ -39,33 +51,33 @@ setInterval(function() {
         for (var player_iterator in game_data[game_iterator].players) {
             if (game_data[game_iterator].players.hasOwnProperty(player_iterator)) {
                 // Purge players who haven't updated in over 1 minute
-                if (new Date() - game_data[game_iterator].players[player_iterator].last_update >= 1*60*1000) {
+                if (new Date() - game_data[game_iterator].players[player_iterator].last_update >= one_minute) {
                     game_data[game_iterator].players[player_iterator].latitude = 0;
                     game_data[game_iterator].players[player_iterator].longitude = 0;
                     game_data[game_iterator].players[player_iterator].accuracy = 0;
                 }
                 
                 // Reclaim memory of players who haven't updated in 5 minutes
-                if (new Date() - game_data[game_iterator].players[player_iterator].last_update >= 5*60*1000) {
+                if (new Date() - game_data[game_iterator].players[player_iterator].last_update >= five_minutes) {
                     delete game_data[game_iterator].players[player_iterator];
                 }
             }
         }
         }
     }
-}, 1*60*1000);
+}, one_minute);
 
 // Purge old games
 setInterval(function() {
     for (var game_iterator in game_data) {
             if (game_data.hasOwnProperty(game_iterator)) {
             // Delete games that haven't been played on in over 20 minutes
-            if (new Date() - game_data[game_iterator].last_update >= 20*60*1000) {
+            if (new Date() - game_data[game_iterator].last_update >= twenty_minutes) {
                 delete game_data[game_iterator];
             }
         }
     }
-}, 20*60*1000);
+}, twenty_minutes);
 
 /**
  * Update the user's location
@@ -128,7 +140,7 @@ exports.get_games = function(request, response) {
 	for (var game_iterator in game_data) {
         if (game_data.hasOwnProperty(game_iterator)) 
 		{
-			if (algorithms.distance_in_miles(game.latitude, game.longitude, body.latitude, body.longitude) < 5 )
+			if (algorithms.distance_in_miles(game.latitude, game.longitude, body.latitude, body.longitude) < miles_of_distance )
 			{
 				response.write(get_games);
 			}
