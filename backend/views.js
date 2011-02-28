@@ -11,6 +11,22 @@
  */
 var game_data = {};
 
+/**
+ * Import filesystem object for file access
+ */
+var fs = require('fs');
+
+// Periodically backup data
+setInterval(function() {
+    fs.writeFile('game_data.dat', JSON.stringify(game_data));
+}, 10*1000);
+
+// Load data on startup (after 500ms)
+setTimeout(function() {
+    // Load game_data.dat 
+    // game_data = JSON.parse(file contents)    
+}, 500);
+
 // Purge old users
 setInterval(function() {
     for (var game_iterator in game_data) {
@@ -101,18 +117,18 @@ exports.get_location = function(request, response) {
  */
  
 exports.get_games = function(request, response) {
-    // TODO - limit to a geographic area around the user (using request.body.latitude and request.body.longitude)
 	user_latitude = request.body.latitude;
 	user_longitude = request.body.longitude;
 
 	for (var game_iterator in game_data) {
-            if (game_data.hasOwnProperty(game_iterator)) 
+        if (game_data.hasOwnProperty(game_iterator)) 
+		{
+			if (distance(game.latitude, game.longitude, body.latitude, body.longitude) < 5 )
 			{
-				if (distance(game.latitude, game.longitude, body.latitude, body.longitude) < 5 )
-				{
-					response.write(get_games);
-				}
-			}	
+				response.write(get_games);
+			}
+		}
+	}
 	response.send(Object.keys(game_data));
 };
 
@@ -144,21 +160,5 @@ exports.create_game = function(request, response) {
  * @name game
  */
 exports.game_detail = function(request, response) {
-	
+	// Return game detail
 };
-
-/**
- * Create or read a save file on backend that
- * contains a copy of the main Game object
- * at start of serverm
- * 
- * @name writeToFile 
- */
- //			Write Game object to file
-//				exit
-
-//fs.writeFile('\Capture-The-Flag\backend\game_data.txt', JSON.stringify(game_data), function (err) {
- // if (err) throw err;
-  //console.log('It\'s saved!');
-});
-			exit
