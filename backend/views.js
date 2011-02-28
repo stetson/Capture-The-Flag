@@ -19,7 +19,7 @@ var fs = require('fs');
 /**
  * Algorithms for various geospatial math
  */
-var algorithms = require("Algorithms.js");
+var algorithms = require("./Algorithms.js");
 
 // Periodically backup data
 setInterval(function() {

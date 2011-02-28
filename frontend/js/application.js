@@ -320,7 +320,7 @@ model = {
                                 map.infowindow.open(map.map, this);
                             });
                         } else {
-                            model.player_markers[player_iterator]setPosition( new google.maps.LatLng(player.latitude, player.longitude) );
+                            model.player_markers[player_iterator].setPosition( new google.maps.LatLng(player.latitude, player.longitude) );
                         }
                     });
                 }
