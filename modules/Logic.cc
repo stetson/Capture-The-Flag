@@ -26,7 +26,7 @@ public:
     s_ct->InstanceTemplate()->SetInternalFieldCount(1);
     s_ct->SetClassName(String::NewSymbol("Logic"));
 
-    NODE_SET_PROTOTYPE_METHOD(s_ct, "getworld", getWorld);
+    NODE_SET_PROTOTYPE_METHOD(s_ct, "getWorld", getWorld);
 
     target->Set(String::NewSymbol("Logic"),
                 s_ct->GetFunction());

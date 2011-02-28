@@ -1,7 +1,3 @@
-/* This code is PUBLIC DOMAIN, and is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND. See the accompanying 
- * LICENSE file.
- */
 #include <v8.h>
 #include <node.h>
 #include <sstream>
@@ -10,11 +6,14 @@ using namespace v8;
 
 class Algorithms: ObjectWrap
 {
+
 private:
   int m_count;
+  
 public:
 
   static Persistent<FunctionTemplate> s_ct;
+
   static void Init(Handle<Object> target)
   {
     HandleScope scope;
@@ -25,18 +24,18 @@ public:
     s_ct->InstanceTemplate()->SetInternalFieldCount(1);
     s_ct->SetClassName(String::NewSymbol("Algorithms"));
 
+	// Brings the functions to the JS namespace via "Algorithms" (below)
     NODE_SET_PROTOTYPE_METHOD(s_ct, "add", add);
+	NODE_SET_PROTOTYPE_METHOD(s_ct, "diff", diff);
 
-    target->Set(String::NewSymbol("Algorithms"),
-                s_ct->GetFunction());
+	// Brings the Algorithms object toe the JS namespace
+    target->Set(String::NewSymbol("Algorithms"), s_ct->GetFunction());
+	
   }
 
+  // Constructor
   Algorithms() :
     m_count(0)
-  {
-  }
-
-  ~Algorithms()
   {
   }
 
@@ -63,10 +62,37 @@ public:
     return scope.Close(result);
   }
 
+  /*
+    Sample function. Gets the difference of two integers.
+	Use		diff(int, int)
+	Return	the difference between the first and second integer
+  */  
+  static Handle<Value> diff(const Arguments& args)
+  {
+  
+    // Setting up the use of params
+    HandleScope scope;
+	std::stringstream out;
+	
+	// Grabbing our first two params (integers) and determining the type in c++
+    Local<Value> first = args[0];
+	Local<Value> second = args[1];
+	int a = first->Int32Value();
+	int b = second->Int32Value();
+	
+	// Computations
+	int difference = a - b;
+	
+	// Returning the result
+	out << difference;
+    Local<String> result = String::New(out.str().c_str());
+    return scope.Close(result);
+  }
 };
 
 Persistent<FunctionTemplate> Algorithms::s_ct;
 
+// Initalizes and creates the Algorithms module
 extern "C" {
   static void init (Handle<Object> target)
   {
