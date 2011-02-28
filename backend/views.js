@@ -24,14 +24,14 @@ var algorithms = require("./Algorithms.js");
 /**
  * Global variables for time
  */
-var one_minute = 1*60*1000;
-var five_minutes = 5*60*1000;
-var twenty_minutes = 20*60*1000;
+const one_minute = 1*60*1000;
+const five_minutes = 5*60*1000;
+const twenty_minutes = 20*60*1000;
  
 /**
  * Global variables for distance
  */
-var miles_of_distance = 5;
+const miles_of_distance = 5;
  
 // Periodically backup data
 setInterval(function() {
