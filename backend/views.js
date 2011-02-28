@@ -16,6 +16,11 @@ var game_data = {};
  */
 var fs = require('fs');
 
+/**
+ * Algorithms for various geospatial math
+ */
+var algorithms = require("Algorithms.js");
+
 // Periodically backup data
 setInterval(function() {
     fs.writeFile('game_data.dat', JSON.stringify(game_data));
@@ -123,7 +128,7 @@ exports.get_games = function(request, response) {
 	for (var game_iterator in game_data) {
         if (game_data.hasOwnProperty(game_iterator)) 
 		{
-			if (distance(game.latitude, game.longitude, body.latitude, body.longitude) < 5 )
+			if (algorithms.distance_in_miles(game.latitude, game.longitude, body.latitude, body.longitude) < 5 )
 			{
 				response.write(get_games);
 			}
