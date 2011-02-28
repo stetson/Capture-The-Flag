@@ -108,6 +108,11 @@ model = {
 				  });
 				  
 				  model.login_successful();
+				  
+				  $("#toolbar").click(function(){
+					  model[$(this).attr('href').replace('#','')]();
+				      });
+				  
 			  } else {
 				  // let user log in whenever they darn well please
 			  }
