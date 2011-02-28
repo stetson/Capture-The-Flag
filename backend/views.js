@@ -99,8 +99,20 @@ exports.get_location = function(request, response) {
  * @memberOf views
  * @name game
  */
+ 
 exports.get_games = function(request, response) {
     // TODO - limit to a geographic area around the user (using request.body.latitude and request.body.longitude)
+	user_latitude = request.body.latitude;
+	user_longitude = request.body.longitude;
+
+	for (var game_iterator in game_data) {
+            if (game_data.hasOwnProperty(game_iterator)) 
+			{
+				if (distance(game.latitude, game.longitude, body.latitude, body.longitude) < 5 )
+				{
+					response.write(get_games);
+				}
+			}	
 	response.send(Object.keys(game_data));
 };
 
