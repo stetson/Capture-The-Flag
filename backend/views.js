@@ -12,6 +12,14 @@
 var game_data = {};
 
 /**
+ * Constants for use in the program
+ */
+var constants = {
+	MINUTE: 60*1000,
+	SECOND: 1000
+};
+
+/**
  * Import filesystem object for file access
  */
 var fs = require('fs');
@@ -21,13 +29,6 @@ var fs = require('fs');
  */
 algorithms_class = require("../modules/build/default/Algorithms.node");
 var algorithms = new algorithms_class.Algorithms();
-
-/**
- * Global variables for time
- */
-const one_minute = 1*60*1000;
-const five_minutes = 5*60*1000;
-const twenty_minutes = 20*60*1000;
  
 /**
  * Global variables for distance
@@ -37,7 +38,7 @@ const miles_of_distance = 5;
 // Periodically backup data
 setInterval(function() {
     fs.writeFile('game_data.dat', JSON.stringify(game_data));
-}, 10*1000);
+}, 10 * constants.SECOND);
 
 // Load data on startup (after 500ms)
 setTimeout(function() {
@@ -45,7 +46,7 @@ setTimeout(function() {
 	fs.readFile('game_data.dat', function(err, data) {
 		game_data = JSON.parse(data);    
 	});
-}, 500);
+}, .5 * constants.SECOND);
 
 // Purge old users
 setInterval(function() {
@@ -68,7 +69,7 @@ setInterval(function() {
         }
         }
     }
-}, one_minute);
+}, constants.MINUTE);
 
 // Purge old games
 setInterval(function() {
@@ -80,7 +81,7 @@ setInterval(function() {
             }
         }
     }
-}, twenty_minutes);
+}, 20 * constants.MINUTE);
 
 /**
  * Update the user's location
