@@ -40,8 +40,8 @@ setInterval(function() {
 
 // Load data on startup (after 500ms)
 setTimeout(function() {
-    // Load game_data.dat 
-    // game_data = JSON.parse(file contents)    
+    // Load game_data.dat 	
+	fs.readFile('game_data.dat', game_data = JSON.parse(data));    
 }, 500);
 
 // Purge old users
