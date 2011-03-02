@@ -149,15 +149,21 @@ model = {
 	},
 	
 	center_on_self: function() {
-	    
+	    // latitude = ?
+	    // longitude = ?
+	    // map.map.setCenter(new google.maps.LatLng(latitude, longitude));
 	},
 	
 	center_on_blue_flag: function() {
-	    
+	    // latitude = ?
+        // longitude = ?
+        // map.map.setCenter(new google.maps.LatLng(latitude, longitude));
 	},
 	
 	center_on_red_flag: function() {
-	    
+	    // latitude = ?
+        // longitude = ?
+        // map.map.setCenter(new google.maps.LatLng(latitude, longitude));
 	},
 	
 	/**
