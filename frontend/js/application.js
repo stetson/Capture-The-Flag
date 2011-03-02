@@ -109,10 +109,6 @@ model = {
 				  
 				  model.login_successful();
 				  
-				  $("#toolbar").click(function(){
-					  model[$(this).attr('href').replace('#','')]();
-				      });
-				  
 			  } else {
 				  // let user log in whenever they darn well please
 			  }
@@ -142,8 +138,38 @@ model = {
 		try {
 			window.location.hash = "#play";
 		} catch (e) { }
+		
+		$("#toolbar").click(function(){
+		    try {
+                model[$(this).attr('href').replace('#','')]();
+		    } catch (e) { }
+        });
 
 		model.load_games();
+	},
+	
+	center_on_self: function() {
+	    // latitude = ?
+	    // longitude = ?
+	    // map.map.setCenter(new google.maps.LatLng(latitude, longitude));
+	},
+	
+	center_on_blue_flag: function() {
+	    // latitude = ?
+        // longitude = ?
+        // map.map.setCenter(new google.maps.LatLng(latitude, longitude));
+	},
+	
+	center_on_red_flag: function() {
+	    // latitude = ?
+        // longitude = ?
+        // map.map.setCenter(new google.maps.LatLng(latitude, longitude));
+	},
+	
+	show_signal_strength: function(accuracy) {
+	    // Determine which level accuracy falls within
+	    // Change image on $("#signal_strength").css(backgroundImage: '');
+	    // http://stackoverflow.com/questions/253689/switching-div-background-image-with-jquery
 	},
 	
 	/**
@@ -267,6 +293,7 @@ model = {
 			navigator.geolocation.watchPosition(
 				// Success
 				function(position) {
+				    model.show_signal_strength(position.coords.accuracy);
 					model.updateLocation(position);
 				}, 
 				
