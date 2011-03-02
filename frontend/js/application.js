@@ -140,10 +140,24 @@ model = {
 		} catch (e) { }
 		
 		$("#toolbar").click(function(){
-            model[$(this).attr('href').replace('#','')]();
+		    try {
+                model[$(this).attr('href').replace('#','')]();
+		    } catch (e) { }
         });
 
 		model.load_games();
+	},
+	
+	center_on_self: function() {
+	    
+	},
+	
+	center_on_blue_flag: function() {
+	    
+	},
+	
+	center_on_red_flag: function() {
+	    
 	},
 	
 	/**
