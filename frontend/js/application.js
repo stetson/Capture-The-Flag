@@ -109,10 +109,6 @@ model = {
 				  
 				  model.login_successful();
 				  
-				  $("#toolbar").click(function(){
-					  model[$(this).attr('href').replace('#','')]();
-				      });
-				  
 			  } else {
 				  // let user log in whenever they darn well please
 			  }
@@ -142,6 +138,10 @@ model = {
 		try {
 			window.location.hash = "#play";
 		} catch (e) { }
+		
+		$("#toolbar").click(function(){
+            model[$(this).attr('href').replace('#','')]();
+        });
 
 		model.load_games();
 	},
