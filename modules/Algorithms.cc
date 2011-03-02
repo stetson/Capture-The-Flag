@@ -74,6 +74,7 @@ static Handle<Value> distance(const Arguments& args)
  
     double nC = 2 * atan2( sqrt(nA), sqrt( 1 - nA ));
     double nD = nRadius * nC;
+    nD = (nD * 0.621371192);
     Local<Number> result = Number::New(nD);
     return scope.Close(result);
   }
