@@ -143,7 +143,7 @@ exports.get_games = function(request, response) {
 	for (var game_iterator in game_data) {
         if (game_data.hasOwnProperty(game_iterator)) 
 		{
-			if (algorithms.distance_in_miles(game_data[game_iterator].latitude, game_data[game_iterator].longitude, user_latitude, user_longitude) < miles_of_distance )
+			if (algorithms.distance(game_data[game_iterator].latitude, game_data[game_iterator].longitude, user_latitude, user_longitude) < miles_of_distance )
 			{
 				response.write(get_games);
 			}
