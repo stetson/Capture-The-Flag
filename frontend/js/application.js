@@ -166,6 +166,12 @@ model = {
         // map.map.setCenter(new google.maps.LatLng(latitude, longitude));
 	},
 	
+	show_signal_strength: function(accuracy) {
+	    // Determine which level accuracy falls within
+	    // Change image on $("#signal_strength").css(backgroundImage: '');
+	    // http://stackoverflow.com/questions/253689/switching-div-background-image-with-jquery
+	},
+	
 	/**
 	 * Loads the list of games for the user to choose one
 	 */
@@ -287,6 +293,7 @@ model = {
 			navigator.geolocation.watchPosition(
 				// Success
 				function(position) {
+				    model.show_signal_strength(position.coords.accuracy);
 					model.updateLocation(position);
 				}, 
 				
