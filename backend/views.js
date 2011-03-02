@@ -19,7 +19,8 @@ var fs = require('fs');
 /**
  * Algorithms for various geospatial math
  */
-var algorithms = require("./Algorithms.js");
+algorithms_class = require("../modules/build/default/Algorithms.node");
+var algorithms = new algorithms_class.Algorithms();
 
 /**
  * Global variables for time
@@ -40,8 +41,10 @@ setInterval(function() {
 
 // Load data on startup (after 500ms)
 setTimeout(function() {
-    // Load game_data.dat 
-    // game_data = JSON.parse(file contents)    
+    // Load game_data.dat 	
+	fs.readFile('game_data.dat', function(err, data) {
+		game_data = JSON.parse(data);    
+	});
 }, 500);
 
 // Purge old users
@@ -140,7 +143,7 @@ exports.get_games = function(request, response) {
 	for (var game_iterator in game_data) {
         if (game_data.hasOwnProperty(game_iterator)) 
 		{
-			if (algorithms.distance_in_miles(game.latitude, game.longitude, body.latitude, body.longitude) < miles_of_distance )
+			if (algorithms.distance(game_data[game_iterator].latitude, game_data[game_iterator].longitude, user_latitude, user_longitude) < miles_of_distance )
 			{
 				response.write(get_games);
 			}
