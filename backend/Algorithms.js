@@ -17,15 +17,8 @@
 *  @param c2_longitude {Number} The longitude of the second coordinate
 */
 exports.distance_in_miles = function(c1_latitude, c1_longitude, c2_latitude, c2_longitude) {
-
-	var R = 6371; // km
-	var dLat = (c2_latitude-c1_latitude).toRad();
-	var dLon = (c2_longitude-c1_longitude).toRad(); 
-	var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-			Math.cos(c1_latitude.toRad()) * Math.cos(c2_latitude.toRad()) * 
-			Math.sin(dLon/2) * Math.sin(dLon/2); 
-	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-	var d = R * c;
-	
-    return 0;
+        var modAlgorithms = require('../modules/build/default/Algorithms.node');
+        var algo = new modAlgorithms.Algorithms();
+        var d = algo.distance(c1_latitude,c1_longitude,c2_latitude,c2_longitude);	
+    return d;
 };
