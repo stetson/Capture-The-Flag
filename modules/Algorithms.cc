@@ -26,7 +26,7 @@ public:
     s_ct->SetClassName(String::NewSymbol("Algorithms"));
 
     // Brings the functions to the JS namespace via "Algorithms" (below)
-    NODE_SET_PROTOTYPE_METHOD(s_ct, "distance", distance);
+    NODE_SET_PROTOTYPE_METHOD(s_ct, "distance_in_miles", distance_in_miles);
     NODE_SET_PROTOTYPE_METHOD(s_ct, "in_rectangle", in_rectangle);
 
     // Brings the Algorithms object toe the JS namespace
@@ -48,7 +48,7 @@ public:
     return args.This();
   }
 
-static Handle<Value> distance(const Arguments& args)
+static Handle<Value> distance_in_miles(const Arguments& args)
   {
     HandleScope scope;
     //Algorithms* hw = ObjectWrap::Unwrap<Algorithms>(args.This());
