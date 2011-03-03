@@ -16,7 +16,8 @@ var game_data = {};
  */
 var constants = {
 	MINUTE: 60*1000,
-	SECOND: 1000
+	SECOND: 1000,
+	GAME_RADIUS: 5 // Fetch games within this many miles of the user 
 };
 
 /**
@@ -29,11 +30,6 @@ var fs = require('fs');
  */
 algorithms_class = require("../modules/build/default/Algorithms.node");
 var algorithms = new algorithms_class.Algorithms();
- 
-/**
- * Global variables for distance
- */
-const miles_of_distance = 5;
  
 // Periodically backup data
 setInterval(function() {
@@ -135,22 +131,23 @@ exports.get_location = function(request, response) {
  * 
  * @memberOf views
  * @name game
- */
- 
+ */ 
 exports.get_games = function(request, response) {
-	/*user_latitude = request.body.latitude;
+	user_latitude = request.body.latitude;
 	user_longitude = request.body.longitude;
+	
+	var games_in_radius = [];
 
 	for (var game_iterator in game_data) {
         if (game_data.hasOwnProperty(game_iterator)) 
 		{
-			if (algorithms.distance(game_data[game_iterator].latitude, game_data[game_iterator].longitude, user_latitude, user_longitude) < miles_of_distance )
+			if (algorithms.distance_in_miles(game_data[game_iterator].latitude, game_data[game_iterator].longitude, user_latitude, user_longitude) < constants.GAMES_RADIUS )
 			{
-				response.write(get_games);
+				games_in_radius.push( game_iterator );
 			}
 		}
-	}*/
-	response.send(Object.keys(game_data));
+	}
+	response.send( games_in_radius );
 };
 
 /**
