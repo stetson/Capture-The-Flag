@@ -17,6 +17,9 @@ var game_data = {};
 var constants = {
 	MINUTE: 60*1000,
 	SECOND: 1000,
+	DISABLE_USER_INTERVAL: 1, // Disable users which have not reported their location in this period of time (in minutes)
+	PURGE_USER_INTERVAL: 5, // Purge users which have not reported their location in this period of time (in minutes)
+	PURGE_GAMES_INTERVAL: 20, // Purge games which have not been updated in this period of time (in minutes)
 	GAME_RADIUS: 5 // Fetch games within this many miles of the user 
 };
 
@@ -38,11 +41,11 @@ setInterval(function() {
 
 // Load data on startup (after 500ms)
 setTimeout(function() {
-    // Load game_data.dat 	
-	fs.readFile('game_data.dat', function(err, data) {
-		game_data = JSON.parse(data);    
-	});
-}, .5 * constants.SECOND);
+    // Load game_data.dat
+    fs.readFile('game_data.dat', function(err, data) {
+        game_data = JSON.parse(data);    
+    });
+}, 0.5 * constants.SECOND);
 
 // Purge old users
 setInterval(function() {
@@ -51,33 +54,33 @@ setInterval(function() {
         for (var player_iterator in game_data[game_iterator].players) {
             if (game_data[game_iterator].players.hasOwnProperty(player_iterator)) {
                 // Purge players who haven't updated in over 1 minute
-                if (new Date() - game_data[game_iterator].players[player_iterator].last_update >= one_minute) {
+                if (new Date() - game_data[game_iterator].players[player_iterator].last_update >= constants.DISABLE_USER_INTERVAL * constants.MINUTE) {
                     game_data[game_iterator].players[player_iterator].latitude = 0;
                     game_data[game_iterator].players[player_iterator].longitude = 0;
                     game_data[game_iterator].players[player_iterator].accuracy = 0;
                 }
                 
                 // Reclaim memory of players who haven't updated in 5 minutes
-                if (new Date() - game_data[game_iterator].players[player_iterator].last_update >= five_minutes) {
+                if (new Date() - game_data[game_iterator].players[player_iterator].last_update >= constants.PURGE_USER_INTERVAL * constants.MINUTE) {
                     delete game_data[game_iterator].players[player_iterator];
                 }
             }
         }
         }
     }
-}, constants.MINUTE);
+}, constants.DISABLE_USER_INTERVAL * constants.MINUTE);
 
 // Purge old games
 setInterval(function() {
     for (var game_iterator in game_data) {
             if (game_data.hasOwnProperty(game_iterator)) {
             // Delete games that haven't been played on in over 20 minutes
-            if (new Date() - game_data[game_iterator].last_update >= twenty_minutes) {
+            if (new Date() - game_data[game_iterator].last_update >= PURGE_GAMES_INTERVAL * constants.MINUTE) {
                 delete game_data[game_iterator];
             }
         }
     }
-}, 20 * constants.MINUTE);
+}, PURGE_GAMES_INTERVAL * constants.MINUTE);
 
 /**
  * Update the user's location
