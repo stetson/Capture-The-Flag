@@ -8,6 +8,6 @@ body { height: 100%; margin: 0px; padding: 0px; font: 9pt sans-serif; overflow: 
 #overlay a { display: block; padding: 10px; border: 1px solid #ccc; background-color: #ddd; color: #000; text-decoration: none; }
 .error { border: 1px solid #900; background-color: #F99; padding: 2px; }
 #signal_strength { height: 32px; width: 32px; background-image: url("images/0Bar.png") top left no-repeat; }
-#center_blue { height: 32px; width: 32px; background-image: url("images/BlueFlag.png") top left no-repeat; }
-#center_red { height: 32px; width: 32px; background-image: url("images/RedFlag.png") top left no-repeat; }
-#center_self { height: 32px; width: 32px; background-image: url("images/CenterSelf.png") top left no-repeat; }
+#center_on_blue { height: 32px; width: 32px; background-image: url("images/BlueFlag.png") top left no-repeat; }
+#center_on_red { height: 32px; width: 32px; background-image: url("images/RedFlag.png") top left no-repeat; }
+#center_on_self { height: 32px; width: 32px; background-image: url("images/CenterSelf.png") top left no-repeat; }
