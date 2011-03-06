@@ -92,7 +92,7 @@ setInterval(function() {
     for (var game_iterator in game_data) {
             if (game_data.hasOwnProperty(game_iterator)) {
             // Delete games that haven't been played on in over 20 minutes
-            if (new Date() - game_data[game_iterator].last_update >= PURGE_GAMES_INTERVAL * constants.MINUTE) {
+            if (new Date() - game_data[game_iterator].last_update >= constants.PURGE_GAMES_INTERVAL * constants.MINUTE) {
                 delete game_data[game_iterator];
             }
         }

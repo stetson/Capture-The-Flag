@@ -302,7 +302,25 @@ model = {
 			map.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
 			model.user.latitude = position.coords.latitude;
 			model.user.longitude = position.coords.longitude;
-		}, function() {}, {
+		}, function() {
+			model.error("GPS didn't work. Falling back to triangulation.");
+			navigator.geolocation.getCurrentPosition(function(position) {
+				map.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+				model.user.latitude = position.coords.latitude;
+				model.user.longitude = position.coords.longitude;
+			}, function() {
+				model.error("Triangulation didn't work. Falling back to IP lookup.");
+				$.getScript("http://j.maxmind.com/app/geoip.js", function() {
+					try {
+						map.map.setCenter(new google.maps.LatLng(geoip_latitude(), geoip_longitude()));
+						model.user.latitude = geoip_latitude();
+						model.user.longitude = geoip_longitude();
+					} catch(e) {
+						model.error("No known methods of geolocation worked for your device.");
+					}
+				});
+			});
+		}, {
 			maximumAge: 500,
 			enableHighAccuracy: true
 		});
@@ -323,9 +341,7 @@ model = {
 				}, 
 				
 				// Failure
-				function(error) {
-					model.error("Your location was not available: " + error.message);
-				},
+				function(error) { },
 				
 				// Options
 				{
@@ -382,7 +398,7 @@ model = {
                     });
                 }
             });
-	    }, 3000);
+	    }, 1000);
 	},
 	
 	/**
