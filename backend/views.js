@@ -9,7 +9,22 @@
 /**
  * Global memory store for game data
  */
-var game_data = {};
+global.game_data = {};
+
+/**
+ * Sprites for testing
+ */
+var sprites = require('./sprites.js');
+game_data['test_game'] = {
+        origin: {
+            'latitude': 29.034559,
+            'longitude': -81.302669
+        },
+        last_update: new Date(),
+        players: {}
+};
+sprites.generate_sprites('test_game', 5);
+
 
 /**
  * Constants for use in the program
@@ -43,7 +58,9 @@ setInterval(function() {
 setTimeout(function() {
     // Load game_data.dat
     fs.readFile('game_data.dat', function(err, data) {
-        game_data = JSON.parse(data);    
+    	try {
+        	game_data = JSON.parse(data);
+    	} catch(e) { }
     });
 }, 0.5 * constants.SECOND);
 
@@ -80,7 +97,7 @@ setInterval(function() {
             }
         }
     }
-}, PURGE_GAMES_INTERVAL * constants.MINUTE);
+}, constants.PURGE_GAMES_INTERVAL * constants.MINUTE);
 
 /**
  * Update the user's location
@@ -150,7 +167,7 @@ exports.get_games = function(request, response) {
 			}
 		}
 	}
-	response.send( games_in_radius );
+	response.send( Object.keys(game_data) );
 };
 
 /**
