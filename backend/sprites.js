@@ -29,10 +29,6 @@ exports.generate_sprites = function(number_of_sprites) {
 		};
 	}
 	
-	console.log("double rainbow!");
-	console.log("SPRITE " + sprite_game);
-	console.log(game_data);
-	
 	setInterval(function() {
 		for (var x = 0; x < number_of_sprites; x++) {
 			user_id = "Sprite " + x;
