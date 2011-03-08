@@ -7,23 +7,16 @@
  */
 
 /**
- * Global memory store for game data
+ * Filesystem object for file access
  */
-global.game_data = {};
+var fs = require('fs');
 
 /**
  * Sprites for testing
  */
 var sprites = require('./sprites.js');
-game_data.test_game = {
-        origin: {
-            'latitude': 29.034559,
-            'longitude': -81.302669
-        },
-        last_update: new Date(),
-        players: {}
-};
-sprites.generate_sprites('test_game', 5);
+global.sprite_game = "test_game";
+sprites.generate_sprites(sprite_game, 5);
 
 
 /**
@@ -39,11 +32,6 @@ var constants = {
 };
 
 /**
- * Import filesystem object for file access
- */
-var fs = require('fs');
-
-/**
  * Algorithms for various geospatial math
  */
 algorithms_class = require("../modules/build/default/Algorithms.node");
@@ -53,16 +41,6 @@ var algorithms = new algorithms_class.Algorithms();
 setInterval(function() {
     fs.writeFile('game_data.dat', JSON.stringify(game_data));
 }, 10 * constants.SECOND);
-
-// Load data on startup (after 500ms)
-setTimeout(function() {
-    // Load game_data.dat
-    fs.readFile('game_data.dat', function(err, data) {
-        try {
-            game_data = JSON.parse(data);
-        } catch(e) { }
-    });
-}, 0.5 * constants.SECOND);
 
 // Purge old users
 setInterval(function() {

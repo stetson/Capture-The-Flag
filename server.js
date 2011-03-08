@@ -15,22 +15,40 @@
 var express = require("express");
 
 /**
- * The views which will handle incoming requests
- * and return the necessary JSON
- * 
- * @namespace views
+ * Filesystem object for file access
  */
-var views = require("./backend/views.js");
+var fs = require('fs');
 
-/** 
- * The server object which controls all routes
- * 
- * @namespace http
+/**
+ * Global memory store for game data
  */
-var http = express.createServer();
-http.use(express.bodyDecoder());
+global.game_data = {};
 
-// Routes
+// Load game_data.dat
+fs.readFile('game_data.dat', function(err, data) {
+    if (! err) {
+        try {
+            game_data = JSON.parse(data);
+        } catch(e) { }
+    }
+    
+    /**
+     * The views which will handle incoming requests
+     * and return the necessary JSON
+     * 
+     * @namespace views
+     */
+    var views = require("./backend/views.js");
+    
+    /** 
+     * The server object which controls all routes
+     * 
+     * @namespace http
+     */
+    var http = express.createServer();
+    http.use(express.bodyDecoder());
+    
+    // Routes
 
 	//
 	// Static routes
@@ -93,12 +111,13 @@ http.use(express.bodyDecoder());
     http.post('/game', views.create_game);
 	
 	// GET, POST /game/:game_id views.game_detail
-
-// Start listening
-try {
-	http.listen(80);
-	console.log("Listening on port 80");
-} catch (e) {
-	http.listen(5555);
-	console.log("Listening on port 5555");
-}
+    
+    // Start listening
+    try {
+        http.listen(80);
+        console.log("Listening on port 80");
+    } catch (e) {
+        http.listen(5555);
+        console.log("Listening on port 5555");
+    }
+});
