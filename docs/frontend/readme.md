@@ -1,0 +1,1 @@
+To build this documentation, run /vender/jsdoc-toolkit/update_frontend_documentation.sh
