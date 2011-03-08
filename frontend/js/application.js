@@ -30,6 +30,7 @@ map = {
 		map.options = {
 			zoom: 18,
             disableDefaultUI: false,
+            zoomControl: false,
 			mapTypeId: google.maps.MapTypeId.HYBRID
 		};
 		

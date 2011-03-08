@@ -16,7 +16,7 @@ var fs = require('fs');
  */
 var sprites = require('./sprites.js');
 global.sprite_game = "test_game";
-sprites.generate_sprites(sprite_game, 5);
+sprites.generate_sprites(5);
 
 
 /**
