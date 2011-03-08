@@ -15,7 +15,7 @@ global.game_data = {};
  * Sprites for testing
  */
 var sprites = require('./sprites.js');
-game_data['test_game'] = {
+game_data.test_game = {
         origin: {
             'latitude': 29.034559,
             'longitude': -81.302669
@@ -58,9 +58,9 @@ setInterval(function() {
 setTimeout(function() {
     // Load game_data.dat
     fs.readFile('game_data.dat', function(err, data) {
-    	try {
-        	game_data = JSON.parse(data);
-    	} catch(e) { }
+        try {
+            game_data = JSON.parse(data);
+        } catch(e) { }
     });
 }, 0.5 * constants.SECOND);
 

@@ -3,9 +3,9 @@ function change_location(game_id, user_id) {
 	offset2 = (Math.random() - 0.5) / 10000;
     game_data[game_id].last_update = new Date();
     game_data[game_id].players[user_id] = {
-    	user_id: user_id,
-    	latitude: game_data[game_id].players[user_id].latitude + offset1,
-    	longitude: game_data[game_id].players[user_id].longitude + offset2
+        user_id: user_id,
+        latitude: game_data[game_id].players[user_id].latitude + offset1,
+        longitude: game_data[game_id].players[user_id].longitude + offset2
     };
     game_data[game_id].players[user_id].last_update = new Date();
 }
