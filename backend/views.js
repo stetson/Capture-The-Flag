@@ -84,9 +84,6 @@ setInterval(function() {
  * @name update_location
  */
 exports.update_location = function(request, response) {
-    // Log incoming information for debugging purposes
-    console.log(request.body);
-    
     // Record user's location
 	try {
 		game_id = request.body.game_id;
@@ -117,7 +114,6 @@ exports.get_location = function(request, response) {
     game_id = request.query.game_id;
     if (game_id && game_data[game_id]) {
         response.send(game_data[game_id].players);
-        //console.log(game_data[game_id]);
     } else {
         response.send({"error": "Invalid game (" + game_id + ")"}, 404);
     }
@@ -131,21 +127,26 @@ exports.get_location = function(request, response) {
  * @name game
  */ 
 exports.get_games = function(request, response) {
-	user_latitude = request.body.latitude;
-	user_longitude = request.body.longitude;
+	var user_latitude = request.query.latitude;
+	var user_longitude = request.query.longitude;
 	
 	var games_in_radius = [];
 
 	for (var game_iterator in game_data) {
         if (game_data.hasOwnProperty(game_iterator)) 
 		{
-			if (algorithms.distance_in_miles(game_data[game_iterator].latitude, game_data[game_iterator].longitude, user_latitude, user_longitude) < constants.GAMES_RADIUS )
+        	var distance = algorithms.distance_in_miles(
+        			game_data[game_iterator].origin.latitude, 
+        			game_data[game_iterator].origin.longitude, 
+        			user_latitude, 
+        			user_longitude);
+			if (distance < constants.GAME_RADIUS || ! user_latitude || ! user_longitude)
 			{
 				games_in_radius.push( game_iterator );
 			}
 		}
 	}
-	response.send( Object.keys(game_data) );
+	response.send( games_in_radius );
 };
 
 /**
