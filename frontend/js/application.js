@@ -319,13 +319,13 @@ model = {
 			model.user.latitude = position.coords.latitude;
 			model.user.longitude = position.coords.longitude;
 		}, function() {
-			model.error("GPS didn't work. Falling back to triangulation.");
+			model.error("GPS didn't work. Falling back to triangulation. <a href='/help/#signal_strength'>What does this mean?</a>");
 			navigator.geolocation.getCurrentPosition(function(position) {
 				map.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
 				model.user.latitude = position.coords.latitude;
 				model.user.longitude = position.coords.longitude;
 			}, function() {
-				model.error("Triangulation didn't work. Falling back to IP lookup.");
+				model.error("Triangulation didn't work. Falling back to IP lookup. <a href='/help/#signal_strength'>What does this mean?</a>");
 				$.getScript("http://j.maxmind.com/app/geoip.js", function() {
 					try {
 						map.map.setCenter(new google.maps.LatLng(geoip_latitude(), geoip_longitude()));
@@ -333,7 +333,7 @@ model = {
 						model.user.longitude = geoip_longitude();
 						model.clear_error();
 					} catch(e) {
-						model.error("No known methods of geolocation worked for your device.");
+						model.error("No known methods of geolocation worked for your device. <a href='/help/#signal_strength'>What does this mean?</a>");
 					}
 				});
 			});
