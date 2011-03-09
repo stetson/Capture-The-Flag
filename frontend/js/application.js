@@ -276,20 +276,38 @@ model = {
                 // Clear overlay so gameplay can begin
                 $("#content").html('');
                 $("#overlay").fadeOut('slow');
-	       }
+            }
 	    });
 	},
 	
 	/**
 	 * Create a new game
 	 */
-	create_game: function() {
+	create_game: function(game_id) {
+	    var post_data = {
+	        latitude: model.user.latitude,
+	        longitude: model.user.longitude,
+	        name: model.user.name
+	    };
+	    
+	    if (game_id) {
+	        post_data.game_id = game_id;
+	    }
+	    
+	    console.log(post_data);
+	    
         $.ajax({
             type: 'POST',
             url: '/game/',
-            data: model.user,
+            data: post_data,
             success: function(data) {
                 model.choose_game(model.user.name);
+            },
+            error: function() {
+                var new_name = prompt("A game with your name is already reserved. Please enter a new name:");
+                if (new_name) {
+                    model.create_game(new_name);
+                }
             }
         });
 	},

@@ -64,12 +64,16 @@ exports.get_games = function(request, response) {
  */
 exports.create_game = function(request, response) {
     // Generate a new game id
-    var game_id = request.body.name;
+    if (request.body.game_id) {
+        var game_id = request.body.game_id;
+    } else {
+        var game_id = request.body.name;         
+    }
     var latitude = request.body.latitude;
     var longitude = request.body.longitude;
     
     // Create the skeleton of the game
-    if (controller.create_game(game_id)) {
+    if (controller.create_game(game_id, latitude, longitude)) {
         response.send({"response": "OK"});
     } else {
         response.send({"error": "Game already exists"}, 409);

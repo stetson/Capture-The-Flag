@@ -65,7 +65,7 @@ exports.get_games = function(user_latitude, user_longitude) {
  * @param game_id
  */
 exports.create_game = function(game_id, latitude, longitude) {
-    if (ctf.game_data[game_id] === undefined) {
+    if (ctf.game_data[game_id] === undefined && latitude && longitude) {
         ctf.game_data[game_id] = {
             origin: {
                 'latitude': latitude,
