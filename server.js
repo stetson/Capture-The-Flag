@@ -7,6 +7,20 @@
  * @author Allen Carroll
  */
 
+//////////Imports
+
+/**
+ * The express framework and HTTP middleware
+ */
+var express = require("express");
+
+/**
+ * Filesystem object for file access
+ */
+var fs = require('fs');
+
+////////// Global data
+
 /**
  * The global object used for storing application data
  */
@@ -26,19 +40,42 @@ ctf.constants = {
 };
 
 /**
- * The express framework and HTTP middleware
+ * Utility functions for garbage collection
+ * 
+ * @namespace utils
  */
-var express = require("express");
+var utils = require("./backend/utils.js");
 
 /**
- * Filesystem object for file access
+ * The views which will handle incoming requests
+ * and return the necessary JSON
+ * 
+ * @namespace views
  */
-var fs = require('fs');
+var views = require("./backend/views.js");
 
 /**
- * Global memory store for game data
+ * Algorithms for various geospatial math
  */
-ctf.game_data = {};
+algorithms_class = require("./modules/build/default/Algorithms.node");
+ctf.algorithms = new algorithms_class.Algorithms();
+
+/**
+ * Purge old users
+ */
+setInterval(utils.purge_players, ctf.constants.DISABLE_USER_INTERVAL * ctf.constants.MINUTE);
+
+/**
+ * Purge old games
+ */
+setInterval(utils.purge_games, ctf.constants.PURGE_GAMES_INTERVAL * ctf.constants.MINUTE);
+
+/**
+ * Periodically backup data
+ */
+setInterval(utils.backup_game_data, 10 * ctf.constants.SECOND);
+
+////////// Routes
 
 fs.readFile('game_data.dat', function(err, data) {
     // Load game_data.dat
@@ -47,15 +84,7 @@ fs.readFile('game_data.dat', function(err, data) {
             ctf.game_data = JSON.parse(data);
         } catch(e) { }
     }
-    
-    /**
-     * The views which will handle incoming requests
-     * and return the necessary JSON
-     * 
-     * @namespace views
-     */
-    var views = require("./backend/views.js");
-    
+        
     /** 
      * The server object which controls all routes
      * 
@@ -63,12 +92,6 @@ fs.readFile('game_data.dat', function(err, data) {
      */
     ctf.http = express.createServer();
     ctf.http.use(express.bodyDecoder());
-    
-    // Routes
-
-	//
-	// Static routes
-	//
 	
 	/**
 	 * Static files for frontend <br />
@@ -87,10 +110,6 @@ fs.readFile('game_data.dat', function(err, data) {
 	 * @name docs 
 	 **/
 	ctf.http.use(express.staticProvider('./docs/'));
-	
-	//
-	// Capture the flag routes
-	//	
 	
 	/**
 	 * Calls views.update_location <br />
