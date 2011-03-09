@@ -160,7 +160,7 @@ fs.readFile('game_data.dat', function(err, data) {
     try {
         ctf.http.listen(80);
         console.log("Listening on port 80");
-    } catch (e) {
+    } catch (f) {
         ctf.http.listen(5555);
         console.log("Listening on port 5555");
     }
