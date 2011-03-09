@@ -12,62 +12,56 @@
 var fs = require('fs');
 
 /**
- * Constants for use in the program
- */
-var constants = {
-	MINUTE: 60*1000,
-	SECOND: 1000,
-	DISABLE_USER_INTERVAL: 1, // Disable users which have not reported their location in this period of time (in minutes)
-	PURGE_USER_INTERVAL: 5, // Purge users which have not reported their location in this period of time (in minutes)
-	PURGE_GAMES_INTERVAL: 20, // Purge games which have not been updated in this period of time (in minutes)
-	GAME_RADIUS: 5 // Fetch games within this many miles of the user 
-};
-
-/**
  * Algorithms for various geospatial math
  */
 algorithms_class = require("../modules/build/default/Algorithms.node");
-var algorithms = new algorithms_class.Algorithms();
+ctf.algorithms = new algorithms_class.Algorithms();
  
 // Periodically backup data
 setInterval(function() {
-    fs.writeFile('game_data.dat', JSON.stringify(game_data));
-}, 10 * constants.SECOND);
+    fs.writeFile('game_data.dat', JSON.stringify(ctf.game_data));
+}, 10 * ctf.constants.SECOND);
 
 // Purge old users
 setInterval(function() {
-    for (var game_iterator in game_data) {
-        if (game_data.hasOwnProperty(game_iterator)) {
-        for (var player_iterator in game_data[game_iterator].players) {
-            if (game_data[game_iterator].players.hasOwnProperty(player_iterator)) {
+    for (var game_iterator in ctf.game_data) {
+        if (ctf.game_data.hasOwnProperty(game_iterator)) {
+        for (var player_iterator in ctf.game_data[game_iterator].players) {
+            if (ctf.game_data[game_iterator].players.hasOwnProperty(player_iterator)) {
+                // Calculate time since last update
+                var time_since_last_update = new Date() - ctf.game_data[game_iterator].players[player_iterator].last_update;
+                
                 // Purge players who haven't updated in over 1 minute
-                if (new Date() - game_data[game_iterator].players[player_iterator].last_update >= constants.DISABLE_USER_INTERVAL * constants.MINUTE) {
-                    game_data[game_iterator].players[player_iterator].latitude = 0;
-                    game_data[game_iterator].players[player_iterator].longitude = 0;
-                    game_data[game_iterator].players[player_iterator].accuracy = 0;
+                if (time_since_last_update >= ctf.constants.DISABLE_USER_INTERVAL * ctf.constants.MINUTE) {
+                    ctf.game_data[game_iterator].players[player_iterator].latitude = 0;
+                    ctf.game_data[game_iterator].players[player_iterator].longitude = 0;
+                    ctf.game_data[game_iterator].players[player_iterator].accuracy = 0;
                 }
                 
                 // Reclaim memory of players who haven't updated in 5 minutes
-                if (new Date() - game_data[game_iterator].players[player_iterator].last_update >= constants.PURGE_USER_INTERVAL * constants.MINUTE) {
-                    delete game_data[game_iterator].players[player_iterator];
+                if (time_since_last_update >= constants.PURGE_USER_INTERVAL * constants.MINUTE) {
+                    delete ctf.game_data[game_iterator].players[player_iterator];
                 }
             }
         }
         }
     }
-}, constants.DISABLE_USER_INTERVAL * constants.MINUTE);
+}, ctf.constants.DISABLE_USER_INTERVAL * ctf.constants.MINUTE);
 
 // Purge old games
 setInterval(function() {
-    for (var game_iterator in game_data) {
-            if (game_data.hasOwnProperty(game_iterator)) {
+    for (var game_iterator in ctf.game_data) {
+        if (ctf.game_data.hasOwnProperty(game_iterator)) {
+            // Calculate time since last update
+            var time_since_last_update = new Date() - ctf.game_data[game_iterator].last_update;
+            
             // Delete games that haven't been played on in over 20 minutes
-            if (new Date() - game_data[game_iterator].last_update >= constants.PURGE_GAMES_INTERVAL * constants.MINUTE) {
-                delete game_data[game_iterator];
+            if (time_since_last_update >= ctf.constants.PURGE_GAMES_INTERVAL * ctf.constants.MINUTE) {
+                delete ctf.game_data[game_iterator];
             }
         }
     }
-}, constants.PURGE_GAMES_INTERVAL * constants.MINUTE);
+}, ctf.constants.PURGE_GAMES_INTERVAL * ctf.constants.MINUTE);
 
 /**
  * Update the user's location
@@ -78,21 +72,21 @@ setInterval(function() {
 exports.update_location = function(request, response) {
     // Record user's location
 	try {
-		game_id = request.body.game_id;
-		user_id = request.body.user_id;
+		var game_id = request.body.game_id;
+		var user_id = request.body.user_id;
 		
-		if (user_id) {
-            game_data[game_id].last_update = new Date();
-            game_data[game_id].players[user_id] = request.body;
-            game_data[game_id].players[user_id].last_update = new Date();
+		if (user_id && ctf.game_data[game_id].players[user_id] !== undefined) {
+            ctf.game_data[game_id].last_update = new Date();
+            ctf.game_data[game_id].players[user_id] = request.body;
+            ctf.game_data[game_id].players[user_id].last_update = new Date();
 
             //Let the user know the operation was successful
-            response.send("OK");
+            response.send({"response": "OK"});
             return;
 		}
 	} catch (e) { } 
 	
-	response.send({"error": "Could not save state"}, 404);
+	response.send({"error": "Invalid user"}, 404);
 };
 
 /**
@@ -103,11 +97,12 @@ exports.update_location = function(request, response) {
  */
 exports.get_location = function(request, response) {
     // Send the players back to the client
-    game_id = request.query.game_id;
-    if (game_id && game_data[game_id]) {
-        response.send(game_data[game_id].players);
+    var game_id = request.query.game_id;
+    
+    if (game_id && ctf.game_data[game_id]) {
+        response.send(ctf.game_data[game_id].players);
     } else {
-        response.send({"error": "Invalid game (" + game_id + ")"}, 404);
+        response.send({"error": "Invalid game"}, 404);
     }
 };
 
@@ -124,15 +119,15 @@ exports.get_games = function(request, response) {
 	
 	var games_in_radius = [];
 
-	for (var game_iterator in game_data) {
-        if (game_data.hasOwnProperty(game_iterator)) 
+	for (var game_iterator in ctf.game_data) {
+        if (ctf.game_data.hasOwnProperty(game_iterator)) 
 		{
-        	var distance = algorithms.distance_in_miles(
-        			game_data[game_iterator].origin.latitude, 
-        			game_data[game_iterator].origin.longitude, 
+        	var distance = ctf.algorithms.distance_in_miles(
+        			ctf.game_data[game_iterator].origin.latitude, 
+        			ctf.game_data[game_iterator].origin.longitude, 
         			user_latitude, 
         			user_longitude);
-			if (distance < constants.GAME_RADIUS || ! user_latitude || ! user_longitude)
+			if (distance < ctf.constants.GAME_RADIUS || ! user_latitude || ! user_longitude)
 			{
 				games_in_radius.push( game_iterator );
 			}
@@ -149,7 +144,7 @@ exports.create_game = function(request, response) {
     game_id = request.body.name;
     
     // Create the skeleton of the game
-    game_data[game_id] = {
+    ctf.game_data[game_id] = {
         origin: {
             'latitude': request.body.latitude,
             'longitude': request.body.longitude
@@ -159,7 +154,7 @@ exports.create_game = function(request, response) {
     };
     
     // Send confirmation back to client
-    response.send("OK");
+    response.send({"response": "OK"});
 };
 
 /**
@@ -170,5 +165,10 @@ exports.create_game = function(request, response) {
  * @param game_id
  */
 exports.join_game = function(request, response) {
-	
+    if (ctf.game_data[request.params.game_id] !== undefined) {
+        ctf.game_data[request.params.game_id].players[request.query.user_id] = request.query;
+        response.send({"response": "OK"});
+    }  else {
+        response.send({"error": "Invalid game"}, 404);
+    }
 };

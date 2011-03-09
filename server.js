@@ -7,7 +7,23 @@
  * @author Allen Carroll
  */
 
-// Imports
+/**
+ * The global object used for storing application data
+ */
+global.ctf = {};
+ctf.game_data = {};
+
+/**
+ * Constants for use in the program
+ */
+ctf.constants = {
+    MINUTE: 60*1000,
+    SECOND: 1000,
+    DISABLE_USER_INTERVAL: 1, // Disable users which have not reported their location in this period of time (in minutes)
+    PURGE_USER_INTERVAL: 5, // Purge users which have not reported their location in this period of time (in minutes)
+    PURGE_GAMES_INTERVAL: 20, // Purge games which have not been updated in this period of time (in minutes)
+    GAME_RADIUS: 5 // Fetch games within this many miles of the user 
+};
 
 /**
  * The express framework and HTTP middleware
@@ -22,13 +38,13 @@ var fs = require('fs');
 /**
  * Global memory store for game data
  */
-global.game_data = {};
+ctf.game_data = {};
 
-// Load game_data.dat
 fs.readFile('game_data.dat', function(err, data) {
+    // Load game_data.dat
     if (! err) {
         try {
-            game_data = JSON.parse(data);
+            ctf.game_data = JSON.parse(data);
         } catch(e) { }
     }
     
@@ -45,8 +61,8 @@ fs.readFile('game_data.dat', function(err, data) {
      * 
      * @namespace http
      */
-    var http = express.createServer();
-    http.use(express.bodyDecoder());
+    ctf.http = express.createServer();
+    ctf.http.use(express.bodyDecoder());
     
     // Routes
 
@@ -61,7 +77,7 @@ fs.readFile('game_data.dat', function(err, data) {
 	 * @memberOf http
 	 * @name frontend 
 	 **/
-	http.use(express.staticProvider('./frontend/'));
+	ctf.http.use(express.staticProvider('./frontend/'));
 	
 	/**
 	 * Documentation <br />
@@ -70,7 +86,7 @@ fs.readFile('game_data.dat', function(err, data) {
 	 * @memberOf http
 	 * @name docs 
 	 **/
-	http.use(express.staticProvider('./docs/'));
+	ctf.http.use(express.staticProvider('./docs/'));
 	
 	//
 	// Capture the flag routes
@@ -85,8 +101,8 @@ fs.readFile('game_data.dat', function(err, data) {
 	 * @name location
 	 * @link views.location 
 	 **/
-	http.post('/location', views.update_location);
-	http.get('/location', views.get_location);
+	ctf.http.post('/location', views.update_location);
+	ctf.http.get('/location', views.get_location);
 	
 	/**
 	 * Returns a list of all games on this server<br />
@@ -97,7 +113,7 @@ fs.readFile('game_data.dat', function(err, data) {
 	 * @name get_games
 	 * @link views.get_games
 	 */
-	http.get('/game', views.get_games);
+	ctf.http.get('/game', views.get_games);
 	
 	/**
      * Create a new game<br />
@@ -108,16 +124,25 @@ fs.readFile('game_data.dat', function(err, data) {
      * @name create_game
      * @link views.create_game
      */
-    http.post('/game', views.create_game);
+	ctf.http.post('/game', views.create_game);
 	
-	// GET, POST /game/:game_id views.game_detail
+	/**
+     * Join a game<br />
+     * <b>url: /game/:game_id</b><br />
+     * methods: POST
+     * 
+     * @memberOf http
+     * @name create_game
+     * @link views.create_game
+     */
+    ctf.http.post('/game/:game_id', views.join_game);
     
     // Start listening
     try {
-        http.listen(80);
+        ctf.http.listen(80);
         console.log("Listening on port 80");
     } catch (e) {
-        http.listen(5555);
+        ctf.http.listen(5555);
         console.log("Listening on port 5555");
     }
 });
