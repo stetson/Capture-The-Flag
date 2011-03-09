@@ -22,7 +22,6 @@ exports.generate_sprites = function(number_of_sprites) {
     
 	for (var x = 0; x < number_of_sprites; x++) {
 		var user_id = "Sprite " + x;
-		console.log("populating " + user_id);
 		game_data[sprite_game].players[user_id] = {
             latitude: 29.034559,
             longitude: -81.302669
