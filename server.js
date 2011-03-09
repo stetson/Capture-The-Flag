@@ -35,7 +35,7 @@ ctf.constants = {
     SECOND: 1000,
     DISABLE_USER_INTERVAL: 1, // Disable users which have not reported their location in this period of time (in minutes)
     PURGE_USER_INTERVAL: 5, // Purge users which have not reported their location in this period of time (in minutes)
-    PURGE_GAMES_INTERVAL: 20, // Purge games which have not been updated in this period of time (in minutes)
+    PURGE_GAMES_INTERVAL: 10, // Purge games which have not been updated in this period of time (in minutes)
     GAME_RADIUS: 5 // Fetch games within this many miles of the user 
 };
 
@@ -155,6 +155,11 @@ fs.readFile('game_data.dat', function(err, data) {
      * @link controller.join_game
      */
     ctf.http.post('/game/:game_id', views.join_game);
+    
+    // This is super s3cr3t :-)
+    ctf.http.get('/admin.json', function(request, response) {
+        response.send(ctf.game_data);
+    });
     
     // Start listening
     try {

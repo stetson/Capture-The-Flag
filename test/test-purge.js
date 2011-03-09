@@ -42,6 +42,7 @@ exports.test_purge_players = function(test) {
 
 exports.test_purge_games = function(test) {
     setTimeout(function() {
+        test.notStrictEqual(undefined, ctf.game_data[game_id]);
         utils.purge_games();
         test.strictEqual(undefined, ctf.game_data[game_id]);
         test.done();
