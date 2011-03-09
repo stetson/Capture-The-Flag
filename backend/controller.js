@@ -4,10 +4,10 @@
  * @memberOf controller
  * @name update_location
  */
-exports.update_location = function(game_id, user_id) {
+exports.update_location = function(game_id, user_id, user) {
     if (user_id && ctf.game_data[game_id] && ctf.game_data[game_id].players[user_id] !== undefined) {
         ctf.game_data[game_id].last_update = new Date();
-        ctf.game_data[game_id].players[user_id] = request.body;
+        ctf.game_data[game_id].players[user_id] = user;
         ctf.game_data[game_id].players[user_id].last_update = new Date();
         return true;
     }
@@ -64,16 +64,17 @@ exports.get_games = function(user_latitude, user_longitude) {
  * @name create_game
  * @param game_id
  */
-exports.create_game = function(game_id) {
+exports.create_game = function(game_id, latitude, longitude) {
     if (ctf.game_data[game_id] === undefined) {
         ctf.game_data[game_id] = {
             origin: {
-                'latitude': request.body.latitude,
-                'longitude': request.body.longitude
+                'latitude': latitude,
+                'longitude': longitude
             },
             last_update: new Date(),
             players: {}
         };
+        return true;
     } else {
         return false;
     }

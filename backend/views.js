@@ -21,6 +21,7 @@ exports.update_location = function(request, response) {
     // Record user's location
 	var game_id = request.body.game_id;
 	var user_id = request.body.user_id;
+	var user = request.body;
 	
 	if (controller.update_location(game_id, user_id)) {
         //Let the user know the operation was successful
@@ -63,7 +64,9 @@ exports.get_games = function(request, response) {
  */
 exports.create_game = function(request, response) {
     // Generate a new game id
-    game_id = request.body.name;
+    var game_id = request.body.name;
+    var latitude = request.body.latitude;
+    var longitude = request.body.longitude;
     
     // Create the skeleton of the game
     if (controller.create_game(game_id)) {
