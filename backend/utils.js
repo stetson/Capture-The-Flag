@@ -34,7 +34,7 @@ exports.purge_games = function() {
             // Calculate time since last update
             var time_since_last_update = new Date() - ctf.game_data[game_iterator].last_update;
             
-            // Delete games that haven't been played on in over 20 minutes
+            // Delete games that haven't been played on in a while
             if (time_since_last_update >= ctf.constants.PURGE_GAMES_INTERVAL * ctf.constants.MINUTE) {
                 delete ctf.game_data[game_iterator];
             }
