@@ -6,7 +6,7 @@ body { height: 100%; margin: 0px; padding: 0px; font: 9pt sans-serif; overflow: 
 #overlay { position: absolute; top: 0; left: 0; width: 96%; height: 96%; z-index: 999; padding: 2%; border: 1px solid #000; background: #fff;}
 #overlay a { display: block; padding: 10px; border: 1px solid #ccc; background-color: #ddd; color: #000; text-decoration: none; }
 .error { border: 1px solid #900; background-color: #F99; padding: 2px; }
-#signal_strength { background: url("images/0Bar.png") top left no-repeat; }
+#signal_strength { background: url("images/1Bar.png") top left no-repeat; }
 #center_on_blue { background: url("images/BlueFlag.png") top left no-repeat; }
 #center_on_red { background: url("images/RedFlag.png") top left no-repeat; }
 #center_on_self { background: url("images/CenterSelf.png") top left no-repeat; }

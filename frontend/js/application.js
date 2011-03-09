@@ -184,20 +184,17 @@ model = {
 	    // Determine which level accuracy falls within
 	    // Change image on $("#signal_strength").css(backgroundImage: '');
 	    // http://stackoverflow.com/questions/253689/switching-div-background-image-with-jquery
-		if(accuracy < 6) {
-			$('#signal_strength').css("background-image", "/css/images/0Bar.png");
+		if(accuracy < 10){
+			$('#signal_strength').css("background-image", "/css/images/4bar.png");
 		}
-		else if(accuracy < 11 && accuracy > 5){
-			$('#signal_strength').css("background-image", "/css/images/1bar.png");
-		}
-		else if(accuracy < 16 && accuracy > 10){ 
-			$('#signal_strength').css("background-image", "/css/images/2Bar.png");
-		}
-		else if(accuracy < 21 && accuracy > 15){ 
+		else if(accuracy <= 30){ 
 			$('#signal_strength').css("background-image", "/css/images/3Bar.png");
 		}
+		else if(accuracy <= 200){ 
+			$('#signal_strength').css("background-image", "/css/images/2Bar.png");
+		}
 		else { 
-			$('#signal_strength').css("background-image", "/css/images/4Bar.png");
+			$('#signal_strength').css("background-image", "/css/images/1Bar.png");
 		}
 	},
 	
