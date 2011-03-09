@@ -303,6 +303,13 @@ model = {
 	},
 	
 	/**
+	 * Clear error
+	 */
+	clear_error: function() {
+        $('.error').hide();	    
+	},
+	
+	/**
 	 * Center map after the first load
 	 */
 	centerMap: function() {
@@ -323,6 +330,7 @@ model = {
 						map.map.setCenter(new google.maps.LatLng(geoip_latitude(), geoip_longitude()));
 						model.user.latitude = geoip_latitude();
 						model.user.longitude = geoip_longitude();
+						model.clear_error();
 					} catch(e) {
 						model.error("No known methods of geolocation worked for your device.");
 					}
