@@ -261,6 +261,7 @@ model = {
 	    $.ajax({
 	        url: '/game/' + game_id,
 	        type: 'POST',
+	        data: model.user,
 	        success: function() {
         	    // Stop refreshing game list
         	    clearInterval(model.timer);

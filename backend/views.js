@@ -39,7 +39,7 @@ setInterval(function() {
                 }
                 
                 // Reclaim memory of players who haven't updated in 5 minutes
-                if (time_since_last_update >= constants.PURGE_USER_INTERVAL * constants.MINUTE) {
+                if (time_since_last_update >= ctf.constants.PURGE_USER_INTERVAL * ctf.constants.MINUTE) {
                     delete ctf.game_data[game_iterator].players[player_iterator];
                 }
             }
@@ -165,10 +165,12 @@ exports.create_game = function(request, response) {
  * @param game_id
  */
 exports.join_game = function(request, response) {
-    if (ctf.game_data[request.params.game_id] !== undefined) {
-        ctf.game_data[request.params.game_id].players[request.query.user_id] = request.query;
-        response.send({"response": "OK"});
-    }  else {
+    if (! request.body.user_id) {
+        response.send({"error": "Invalid user"}, 404);
+    } else if (! ctf.game_data[request.params.game_id]) {
         response.send({"error": "Invalid game"}, 404);
+    } else {
+        ctf.game_data[request.params.game_id].players[request.body.user_id] = request.body;
+        response.send({"response": "OK"});
     }
 };
