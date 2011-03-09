@@ -262,12 +262,13 @@ model = {
 	        url: '/game/' + game_id,
 	        type: 'POST',
 	        data: model.user,
-	        success: function() {
+	        success: function(data) {
                 // Stop refreshing game list
                 clearInterval(model.timer);
 
                 // Choose game to join
                 model.user.game_id = game_id;
+                model.user.team = data.team;
 
                 // Watch the locations of the other players
                 model.watchPlayers();
@@ -396,7 +397,7 @@ model = {
                     // Update the locations of each player
                     $.each(model.players, function(player_iterator, player) {
                         if (model.player_markers[player_iterator] === undefined) {
-                            icon = player_iterator == model.user.user_id ? "/css/images/star.png" : "/css/images/person_red.png";
+                            icon = player_iterator == model.user.user_id ? "/css/images/star.png" : "/css/images/person_" + player.team + ".png";
                             model.player_markers[player_iterator] = new google.maps.Marker({
                                 position: new google.maps.LatLng(player.latitude, player.longitude),
                                 map: map.map,

@@ -84,7 +84,7 @@ exports.join_game = function(request, response) {
     game_id = request.params.game_id;
     user = request.body;
     if (controller.join_game(game_id, user_id, user)) {
-        response.send({"response": "OK"});
+        response.send({"team": ctf.game_data[game_id].players[user_id].team});
     } else {
         response.send({"error": "Could not join game"}, 404);
     }

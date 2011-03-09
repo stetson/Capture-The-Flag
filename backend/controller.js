@@ -72,7 +72,9 @@ exports.create_game = function(game_id, latitude, longitude) {
                 'longitude': longitude
             },
             last_update: new Date(),
-            players: {}
+            players: {},
+            red: 0,
+            blue: 0
         };
         return true;
     } else {
@@ -92,6 +94,8 @@ exports.join_game = function(game_id, user_id, user) {
         return false;
     } else {
         ctf.game_data[game_id].players[user_id] = user;
+        ctf.game_data[game_id].players[user_id].team = ctf.game_data[game_id].red > ctf.game_data[game_id].blue ? 'blue' : 'red';
+        ctf.game_data[game_id][ctf.game_data[game_id].players[user_id].team] += 1;
         return true;
     }
 };
