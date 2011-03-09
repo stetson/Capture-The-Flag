@@ -12,14 +12,6 @@
 var fs = require('fs');
 
 /**
- * Sprites for testing
- */
-var sprites = require('./sprites.js');
-global.sprite_game = "test_game";
-sprites.generate_sprites(5);
-
-
-/**
  * Constants for use in the program
  */
 var constants = {
@@ -171,11 +163,12 @@ exports.create_game = function(request, response) {
 };
 
 /**
- * View details about a single game, or join a game
+ * Join a game
  * 
  * @memberOf views
  * @name game
+ * @param game_id
  */
-exports.game_detail = function(request, response) {
-	// Return game detail
+exports.join_game = function(request, response) {
+	
 };
