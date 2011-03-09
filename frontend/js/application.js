@@ -141,10 +141,12 @@ model = {
 			window.location.hash = "#play";
 		} catch (e) { }
 		
-		$("#toolbar").click(function(){
+		$("#toolbar a").click(function(){
 		    try {
                 model[$(this).attr('href').replace('#','')]();
 		    } catch (e) { }
+		    
+		    return false;
         });
 
 		model.load_games();
