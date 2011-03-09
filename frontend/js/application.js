@@ -261,18 +261,24 @@ model = {
 	 * Choose a game
 	 */
 	choose_game: function(game_id) {
-	    // Stop refreshing game list
-	    clearInterval(model.timer);
-	    
-	    // Choose game to join
-	    model.user.game_id = game_id;
-	    
-	    // Watch the locations of the other players
-        model.watchPlayers();
-        
-        // Clear overlay so gameplay can begin
-	    $("#content").html('');
-	    $("#overlay").fadeOut('slow');
+	    $.ajax({
+	        url: '/game/' + game_id,
+	        type: 'POST',
+	        success: function() {
+        	    // Stop refreshing game list
+        	    clearInterval(model.timer);
+        	    
+        	    // Choose game to join
+        	    model.user.game_id = game_id;
+        	    
+        	    // Watch the locations of the other players
+                model.watchPlayers();
+                
+                // Clear overlay so gameplay can begin
+        	    $("#content").html('');
+        	    $("#overlay").fadeOut('slow');
+	       }
+	    });
 	},
 	
 	/**
