@@ -156,9 +156,9 @@ model = {
 	 * Is a button that when clicked should center on the user playing
 	 */
 	center_on_self: function() {
-	    // latitude = ?
-	    // longitude = ?
-	    // map.map.setCenter(new google.maps.LatLng(latitude, longitude));
+	    try {
+	       map.map.setCenter(new google.maps.LatLng(model.user.latitude, model.user.longitude));
+	    } catch (e) { }
 	},
 	
 	/**
