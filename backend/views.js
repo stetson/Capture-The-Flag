@@ -16,9 +16,6 @@ var controller = require("../backend/controller.js");
 
 /**
  * Update the user's location
- * 
- * @memberOf views
- * @name update_location
  */
 exports.update_location = function(request, response) {
     // Record user's location
@@ -36,9 +33,6 @@ exports.update_location = function(request, response) {
 
 /**
  * Get the locations of the other players
- * 
- * @memberOf views
- * @name get_location 
  */
 exports.get_location = function(request, response) {
     // Send the players back to the client
@@ -55,9 +49,6 @@ exports.get_location = function(request, response) {
 /**
  * Game resource, which lists all games and allows users
  * to create a new game
- * 
- * @memberOf views
- * @name get_games
  */ 
 exports.get_games = function(request, response) {
 	var user_latitude = request.query.latitude;
@@ -69,10 +60,6 @@ exports.get_games = function(request, response) {
 
 /**
  * Create a new game, and return the id
- * 
- * @memberOf views
- * @name create_game
- * @param game_id
  */
 exports.create_game = function(request, response) {
     // Generate a new game id
@@ -88,10 +75,6 @@ exports.create_game = function(request, response) {
 
 /**
  * Join a game
- * 
- * @memberOf views
- * @name join_game
- * @param game_id
  */
 exports.join_game = function(request, response) {
     user_id = request.body.user_id;

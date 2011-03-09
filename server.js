@@ -118,7 +118,7 @@ fs.readFile('game_data.dat', function(err, data) {
 	 * 
 	 * @memberOf http
 	 * @name location
-	 * @link views.location 
+	 * @link controller.location 
 	 **/
 	ctf.http.post('/location', views.update_location);
 	ctf.http.get('/location', views.get_location);
@@ -130,7 +130,7 @@ fs.readFile('game_data.dat', function(err, data) {
 	 * 
 	 * @memberOf http
 	 * @name get_games
-	 * @link views.get_games
+	 * @link controller.get_games
 	 */
 	ctf.http.get('/game', views.get_games);
 	
@@ -141,7 +141,7 @@ fs.readFile('game_data.dat', function(err, data) {
      * 
      * @memberOf http
      * @name create_game
-     * @link views.create_game
+     * @link controller.create_game
      */
 	ctf.http.post('/game', views.create_game);
 	
@@ -151,8 +151,8 @@ fs.readFile('game_data.dat', function(err, data) {
      * methods: POST
      * 
      * @memberOf http
-     * @name create_game
-     * @link views.create_game
+     * @name join_game
+     * @link controller.join_game
      */
     ctf.http.post('/game/:game_id', views.join_game);
     
