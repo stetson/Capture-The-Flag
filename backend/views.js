@@ -85,11 +85,18 @@ exports.create_game = function(request, response) {
  * Join a game
  */
 exports.join_game = function(request, response) {
-    user_id = request.body.user_id;
-    game_id = request.params.game_id;
-    user = request.body;
+    var user_id = request.body.user_id;
+    var game_id = request.params.game_id;
+    var user = request.body;
     if (controller.join_game(game_id, user_id, user)) {
-        response.send({"team": ctf.game_data[game_id].players[user_id].team});
+        var game = {
+            team: ctf.game_data[game_id].players[user_id].team,
+            red_flag: ctf.game_data[game_id].red_flag,
+            blue_flag: ctf.game_data[game_id].blue_flag,
+            red_bounds: ctf.game_data[game_id].red_bounds,
+            blue_bounds: ctf.game_data[game_id].blue_bounds
+        };
+        response.send(game);
     } else {
         response.send({"error": "Could not join game"}, 404);
     }

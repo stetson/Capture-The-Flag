@@ -64,11 +64,13 @@ ctf.algorithms = new algorithms_class.Algorithms();
  * Purge old users
  */
 setInterval(utils.purge_players, ctf.constants.DISABLE_USER_INTERVAL * ctf.constants.MINUTE);
+utils.purge_players();
 
 /**
  * Purge old games
  */
 setInterval(utils.purge_games, ctf.constants.PURGE_GAMES_INTERVAL * ctf.constants.MINUTE);
+utils.purge_games();
 
 /**
  * Periodically backup data

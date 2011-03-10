@@ -72,6 +72,11 @@ model = {
 	user: {},
 	
 	/**
+	 * Game information
+	 */
+	game: {},
+	
+	/**
 	 * Array which holds the player objects
 	 */
 	players: {},
@@ -268,7 +273,45 @@ model = {
 
                 // Choose game to join
                 model.user.game_id = game_id;
-                model.user.team = data.team;
+                model.game = data;
+                
+                // Create markers for flags and draw bounds
+                model.game.red_marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(data.red_flag.latitude, data.red_flag.longitude),
+                    map: map.map,
+                    title: "Red flag",
+                    icon: "/css/images/RedFlag.png"
+                });
+                model.game.blue_marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(data.blue_flag.latitude, data.blue_flag.longitude),
+                    map: map.map,
+                    title: "Blue flag",
+                    icon: "/css/images/BlueFlag.png"
+                });
+                model.game.red_territory = new google.maps.Polygon({
+                    paths: [
+                        new google.maps.LatLng(model.game.red_bounds.top_left.latitude, model.game.red_bounds.top_left.longitude),
+                        new google.maps.LatLng(model.game.red_bounds.top_left.latitude, model.game.red_bounds.bottom_right.longitude),
+                        new google.maps.LatLng(model.game.red_bounds.bottom_right.latitude, model.game.red_bounds.bottom_right.longitude),
+                        new google.maps.LatLng(model.game.red_bounds.bottom_right.latitude, model.game.red_bounds.top_left.longitude),
+                    ],
+                    strokeColor: "#FF0000",
+                    strokeOpacity: .5,
+                    fillColor: "#FF0000",
+                    fillOpacity: .2
+                }).setMap(map.map);
+                model.game.blue_territory = new google.maps.Polygon({
+                    paths: [
+                        new google.maps.LatLng(model.game.blue_bounds.top_left.latitude, model.game.blue_bounds.top_left.longitude),
+                        new google.maps.LatLng(model.game.blue_bounds.top_left.latitude, model.game.blue_bounds.bottom_right.longitude),
+                        new google.maps.LatLng(model.game.blue_bounds.bottom_right.latitude, model.game.blue_bounds.bottom_right.longitude),
+                        new google.maps.LatLng(model.game.blue_bounds.bottom_right.latitude, model.game.blue_bounds.top_left.longitude),
+                    ],
+                    strokeColor: "#0000FF",
+                    strokeOpacity: .5,
+                    fillColor: "#0000FF",
+                    fillOpacity: .2
+                }).setMap(map.map);
 
                 // Watch the locations of the other players
                 model.watchPlayers();

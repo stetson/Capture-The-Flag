@@ -71,6 +71,16 @@ exports.create_game = function(game_id, latitude, longitude) {
                 'latitude': latitude,
                 'longitude': longitude
             },
+            red_flag: ctf.algorithms.add_miles_to_coordinate(latitude, longitude, -0.4, 0),
+            blue_flag: ctf.algorithms.add_miles_to_coordinate(latitude, longitude, 0.4, 0),
+            red_bounds: {
+                top_left: ctf.algorithms.add_miles_to_coordinate(latitude, longitude, -0.5, -0.5),
+                bottom_right: ctf.algorithms.add_miles_to_coordinate(latitude, longitude, 0, 0.5)
+            },
+            blue_bounds: {
+                top_left: ctf.algorithms.add_miles_to_coordinate(latitude, longitude, 0.5, 0.5),
+                bottom_right: ctf.algorithms.add_miles_to_coordinate(latitude, longitude, 0, -0.5)
+            },
             last_update: new Date(),
             players: {},
             red: 0,
