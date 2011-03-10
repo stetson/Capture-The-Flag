@@ -28,6 +28,8 @@ var point4 = {
     longitude: -81.305394
 };
 
+var tolerance = 0.0018; // 3m is more than sufficient
+
 /**
  * Test that distance calculations are within required range
  */
@@ -44,11 +46,28 @@ exports.test_distance = function(test) {
  * not points are contained
  */
 exports.test_in_rectangle = function(test) {
-    test.deepEqual(false, algorithms.in_rectangle(point4.latitude, point4.longitude,
+    test.strictEqual(false, algorithms.in_rectangle(point4.latitude, point4.longitude,
             point2.latitude, point1.longitude,
             point1.latitude, point2.longitude));
-    test.deepEqual(true, algorithms.in_rectangle(point3.latitude, point3.longitude,
+    test.strictEqual(true, algorithms.in_rectangle(point3.latitude, point3.longitude,
                                                   point2.latitude, point1.longitude,
                                                   point1.latitude, point2.longitude));
     test.done();
+};
+
+/**
+ * Test that adding distance to a coordinate returns points
+ * where we expect them
+ */
+exports.test_add_miles = function(test) {
+	// Adding nothing should return the same point
+	point5 = algorithms.add_miles_to_coordinate(point1.latitude, point1.longitude, 0, 0);
+	test.equal(point1.latitude, point5[0]);
+	test.equal(point1.longitude, point5[1]);
+	
+	point6 = algorithms.add_miles_to_coordinate(point1.latitude, point1.longitude, -0.5, 0.5);
+	test.ok(Math.abs(29.027483 - point6[0]) < tolerance, "Latitude not within tolerance: " + Math.abs(29.026481 - point6[0]) + " is greater than " + tolerance);
+	test.ok(Math.abs(-81.312074 - point6[1]) < tolerance, "Longitude not within tolerance: " + Math.abs(-81.311974 - point6[1]) + " is greater than " + tolerance);
+	
+	test.done();
 };
