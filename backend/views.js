@@ -64,10 +64,11 @@ exports.get_games = function(request, response) {
  */
 exports.create_game = function(request, response) {
     // Generate a new game id
+    var game_id = "";
     if (request.body.game_id) {
-        var game_id = request.body.game_id;
+        game_id = request.body.game_id;
     } else {
-        var game_id = request.body.name;         
+        game_id = request.body.name;         
     }
     var latitude = request.body.latitude;
     var longitude = request.body.longitude;
