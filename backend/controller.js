@@ -1,3 +1,6 @@
+algorithms_class = require("../modules/build/default/Algorithms.node");
+var algorithms = new algorithms_class.Algorithms();
+
 /**
  * Update the user's location
  * 
@@ -42,7 +45,7 @@ exports.get_games = function(user_latitude, user_longitude) {
     for (var game_iterator in ctf.game_data) {
         if (ctf.game_data.hasOwnProperty(game_iterator)) 
         {
-            var distance = ctf.algorithms.distance_in_miles(
+            var distance = algorithms.distance_in_miles(
                     ctf.game_data[game_iterator].origin.latitude, 
                     ctf.game_data[game_iterator].origin.longitude, 
                     user_latitude, 
@@ -71,15 +74,15 @@ exports.create_game = function(game_id, latitude, longitude) {
                 'latitude': latitude,
                 'longitude': longitude
             },
-            red_flag: ctf.algorithms.add_miles_to_coordinate(latitude, longitude, -0.4, 0),
-            blue_flag: ctf.algorithms.add_miles_to_coordinate(latitude, longitude, 0.4, 0),
+            red_flag: algorithms.add_miles_to_coordinate(latitude, longitude, -0.4, 0),
+            blue_flag: algorithms.add_miles_to_coordinate(latitude, longitude, 0.4, 0),
             red_bounds: {
-                top_left: ctf.algorithms.add_miles_to_coordinate(latitude, longitude, -0.5, -0.5),
-                bottom_right: ctf.algorithms.add_miles_to_coordinate(latitude, longitude, 0, 0.5)
+                top_left: algorithms.add_miles_to_coordinate(latitude, longitude, -0.5, -0.5),
+                bottom_right: algorithms.add_miles_to_coordinate(latitude, longitude, 0, 0.5)
             },
             blue_bounds: {
-                top_left: ctf.algorithms.add_miles_to_coordinate(latitude, longitude, 0.5, 0.5),
-                bottom_right: ctf.algorithms.add_miles_to_coordinate(latitude, longitude, 0, -0.5)
+                top_left: algorithms.add_miles_to_coordinate(latitude, longitude, 0.5, 0.5),
+                bottom_right: algorithms.add_miles_to_coordinate(latitude, longitude, 0, -0.5)
             },
             last_update: new Date(),
             players: {},

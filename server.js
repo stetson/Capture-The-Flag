@@ -55,12 +55,6 @@ var utils = require("./backend/utils.js");
 var views = require("./backend/views.js");
 
 /**
- * Algorithms for various geospatial math
- */
-algorithms_class = require("./modules/build/default/Algorithms.node");
-ctf.algorithms = new algorithms_class.Algorithms();
-
-/**
  * Purge old users
  */
 setInterval(utils.purge_players, ctf.constants.DISABLE_USER_INTERVAL * ctf.constants.MINUTE);
