@@ -170,19 +170,14 @@ model = {
 	 * Is a button that when clicked should center on the blue flag
 	 */
 	center_on_blue_flag: function() {
-	    // latitude = ?
-        // longitude = ?
-        // map.map.setCenter(new google.maps.LatLng(latitude, longitude));
+	    map.map.setCenter(new google.maps.LatLng(model.game.blue_flag.latitude, model.game.blue_flag.longitude));
 	},
 	
 	/**
 	 * Is a button that when clicked should center on the red flag
 	 */
 	center_on_red_flag: function() {
-		
-	    // latitude = ?
-        // longitude = ?
-        // map.map.setCenter(new google.maps.LatLng(latitude, longitude));
+        map.map.setCenter(new google.maps.LatLng(model.game.red_flag.latitude, model.game.red_flag.longitude));
 	},
 	
 	show_signal_strength: function(accuracy) {
@@ -335,6 +330,8 @@ model = {
 	    
 	    if (game_id) {
 	        post_data.game_id = game_id;
+	    } else {
+	        post_data.game_id = model.user.name;
 	    }
 	    
 	    console.log(post_data);
@@ -344,7 +341,7 @@ model = {
             url: '/game/',
             data: post_data,
             success: function(data) {
-                model.choose_game(model.user.name);
+                model.choose_game(post_data.game_id);
             },
             error: function() {
                 var new_name = prompt("A game with your name is already reserved. Please enter a new name:");
