@@ -62,12 +62,12 @@ exports.test_in_rectangle = function(test) {
 exports.test_add_miles = function(test) {
 	// Adding nothing should return the same point
 	point5 = algorithms.add_miles_to_coordinate(point1.latitude, point1.longitude, 0, 0);
-	test.equal(point1.latitude, point5[0]);
-	test.equal(point1.longitude, point5[1]);
+	test.equal(point1.latitude, point5.latitude);
+	test.equal(point1.longitude, point5.longitude);
 	
 	point6 = algorithms.add_miles_to_coordinate(point1.latitude, point1.longitude, -0.5, 0.5);
-	test.ok(Math.abs(29.027483 - point6[0]) < tolerance, "Latitude not within tolerance: " + Math.abs(29.026481 - point6[0]) + " is greater than " + tolerance);
-	test.ok(Math.abs(-81.312074 - point6[1]) < tolerance, "Longitude not within tolerance: " + Math.abs(-81.311974 - point6[1]) + " is greater than " + tolerance);
+	test.ok(Math.abs(29.027483 - point6.latitude) < tolerance, "Latitude not within tolerance: " + Math.abs(29.026481 - point6.latitude) + " is greater than " + tolerance);
+	test.ok(Math.abs(-81.312074 - point6.longitude) < tolerance, "Longitude not within tolerance: " + Math.abs(-81.311974 - point6.longitude) + " is greater than " + tolerance);
 	
 	test.done();
 };

@@ -178,10 +178,9 @@ public:
     new_longitude = longitude + (180 / PI) * (offset_long / EARTH_RADIUS) / cos(latitude);
 
     // Return value
-    //double coordinate[] = {, };
-    Local<Array> coordinate = Array::New(2);
-    coordinate->Set(Number::New(0), Number::New(new_latitude));
-    coordinate->Set(Number::New(1), Number::New(new_longitude));
+    Local<Object> coordinate = Object::New();
+    coordinate->Set(String::New("latitude"), Number::New(new_latitude));
+    coordinate->Set(String::New("longitude"), Number::New(new_longitude));
     return scope.Close(coordinate);
   }
 };
