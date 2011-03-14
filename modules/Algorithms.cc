@@ -164,8 +164,8 @@ public:
    *
    * @param latitude
    * @param longitude
-   * @param offset_lat
-   * @param offset_long
+   * @param offset
+   * @param bearing
    */
   static Handle<Value> add_miles_to_coordinate(const Arguments& args)
   {
@@ -175,39 +175,14 @@ public:
     // Declare some variables we'll use for the calculation
     double new_latitude;
     double new_longitude;
-    double offset;
-    double bearing;
-    double angular_distance;
-    int sign_lat;
-    int sign_long;
 
     // Grab function parameters
     double latitude = args[0]->NumberValue();
     double longitude = args[1]->NumberValue();
 
     // Convert offsets to kilometers
-    double offset_lat = args[2]->NumberValue() / MILES_PER_KILOMETER;
-    double offset_long = args[3]->NumberValue() / MILES_PER_KILOMETER;
-
-    // Use Pythagorean theorem to calculate distance
-    offset = sqrt( pow(offset_lat, 2) + pow(offset_long, 2));
-    sign_lat = (offset_lat / fabs(offset_long)) / fabs(offset_lat / offset_long);
-    sign_long = (fabs(offset_lat) / offset_long) / fabs(offset_lat / offset_long);
-
-    // Calculate bearing and angular distance in radians
-    if (offset > 0) {
-    	bearing = atan(offset_long / offset_lat);
-
-    	// Put it in the correct quadrant
-    	if (offset_lat < 0) {
-    		bearing = bearing + PI;
-    	} else 	if (offset_long < 0) {
-    		bearing = bearing + (2 * PI);
-    	}
-    } else {
-    	bearing = 0;
-    }
-    angular_distance = (offset / EARTH_RADIUS);
+    double offset = args[2]->NumberValue() / MILES_PER_KILOMETER;
+    double bearing = toRad(args[3]->NumberValue());
 
     // Calculate new coordinate
     new_latitude = toDeg(
