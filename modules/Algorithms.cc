@@ -188,17 +188,17 @@ public:
     new_latitude = toDeg(
       asin(
         (
-          sin(toRad(latitude)) * cos(sign_lat * angular_distance)
+          sin(toRad(latitude)) * cos(offset / EARTH_RADIUS)
         ) + (
-          cos(toRad(latitude)) * sin(sign_lat * angular_distance) * cos(bearing)
+          cos(toRad(latitude)) * sin(offset / EARTH_RADIUS) * cos(bearing)
         )
       )
     );
     new_longitude =
       toRad(longitude) +
       atan2(
-        sin(bearing) * sin(sign_long * angular_distance) * cos(latitude),
-        cos(sign_long * angular_distance) - (sin(toRad(latitude)) * sin(toRad(new_latitude)))
+        sin(bearing) * sin(offset / EARTH_RADIUS) * cos(latitude),
+        cos(offset / EARTH_RADIUS) - (sin(toRad(latitude)) * sin(toRad(new_latitude)))
       );
 
     // Normalize longitude
@@ -209,9 +209,6 @@ public:
     Local<Object> coordinate = Object::New();
     coordinate->Set(String::New("latitude"), Number::New(new_latitude));
     coordinate->Set(String::New("longitude"), Number::New(new_longitude));
-    coordinate->Set(String::New("angular_distance"), Number::New(angular_distance));
-    coordinate->Set(String::New("bearing"), Number::New(bearing));
-    coordinate->Set(String::New("offset"), Number::New(offset));
     return scope.Close(coordinate);
   }
 };
