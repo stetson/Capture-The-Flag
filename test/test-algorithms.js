@@ -28,16 +28,13 @@ var point4 = {
     longitude: -81.305394
 };
 
-var tolerance = 0.0018; // 3m is more than sufficient
-
 /**
  * Test that distance calculations are within required range
  */
 exports.test_distance = function(test) {    
     var distance = algorithms.distance_in_miles(point1.latitude, point1.longitude, point2.latitude, point2.longitude);
     
-    test.ok(distance > 0.14, "Distance not within required range (" + distance + ")");
-    test.ok(distance < 0.16, "Distance not within required range (" + distance + ")");
+    test.ok(distance.toFixed(4) - 0.1532, "Distance calculation not within tolerance (" + Math.abs(distance - 0.153230136) + "mi off)");
     test.done();
 };
 
@@ -62,12 +59,33 @@ exports.test_in_rectangle = function(test) {
 exports.test_add_miles = function(test) {
 	// Adding nothing should return the same point
 	point5 = algorithms.add_miles_to_coordinate(point1.latitude, point1.longitude, 0, 0);
-	test.equal(point1.latitude, point5.latitude);
-	test.equal(point1.longitude, point5.longitude);
+	test.equal(point1.latitude.toFixed(4), point5.latitude.toFixed(4));
+	test.equal(point1.longitude.toFixed(4), point5.longitude.toFixed(4));
 	
-	point6 = algorithms.add_miles_to_coordinate(point1.latitude, point1.longitude, -0.5, 0.5);
-	test.ok(Math.abs(29.027483 - point6.latitude) < tolerance, "Latitude not within tolerance: " + Math.abs(29.026481 - point6.latitude) + " is greater than " + tolerance);
-	test.ok(Math.abs(-81.312074 - point6.longitude) < tolerance, "Longitude not within tolerance: " + Math.abs(-81.311974 - point6.longitude) + " is greater than " + tolerance);
-	
+    point_NE = algorithms.add_miles_to_coordinate(point1.latitude, point1.longitude, 0.5, 0.5);
+	test.equal('29.0419', point_NE.latitude.toFixed(4), "NE Latitude not within tolerance: " + Math.abs(29.0419 - point_NE.latitude));
+	test.equal('-81.2956', point_NE.longitude.toFixed(4), "NE Longitude not within tolerance: " + Math.abs(-81.2956 - point_NE.longitude));
+
+    point_NW = algorithms.add_miles_to_coordinate(point1.latitude, point1.longitude, 0.5, -0.5);
+    test.equal('29.0419', point_NW.latitude.toFixed(4), "NW Latitude not within tolerance: " + Math.abs(29.0419 - point_NW.latitude));
+    test.equal('-81.3119', point_NW.longitude.toFixed(4), "NW Longitude not within tolerance: " + Math.abs(-81.3119 - point_NW.longitude));
+
+    point_SE = algorithms.add_miles_to_coordinate(point1.latitude, point1.longitude, -0.5, 0.5);
+    test.equal('29.0275', point_SE.latitude.toFixed(4), "NE Latitude not within tolerance: " + Math.abs(29.0275 - point_SE.latitude));
+    test.equal('-81.3038', point_SE.longitude.toFixed(4), "NE Longitude not within tolerance: " + Math.abs(-81.3038 - point_SE.longitude));
+
+    point_SW = algorithms.add_miles_to_coordinate(point1.latitude, point1.longitude, -0.5, -0.5);
+    test.equal('29.0275', point_SW.latitude.toFixed(4), "NW Latitude not within tolerance: " + Math.abs(29.0275 - point_SW.latitude));
+    test.equal('-81.3119', point_SW.longitude.toFixed(4), "NW Longitude not within tolerance: " + Math.abs(-81.3119 - point_SW.longitude));
+
 	test.done();
+};
+
+/**
+ * Test the integrity of the algorithms by using one to reverse the other
+ */
+exports.test_integrity = function(test) {
+    point1_moved = algorithms.add_miles_to_coordinate(point1.latitude, point1.longitude, 0.5, -0.5);
+    test.equal(0.707107, algorithms.distance_in_miles(point1.latitude, point1.longitude, point1_moved.latitude, point1_moved.longitude));
+    test.done();
 };
