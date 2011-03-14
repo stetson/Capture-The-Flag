@@ -7,14 +7,27 @@ using namespace node;
 using namespace v8;
 
 // Earth's radius in Kilometers
-#define EARTH_RADIUS 6378.137
-//6371.009
+#define EARTH_RADIUS 6371.009
 
 // The estimated value of PI
 #define PI 3.1415926535
 
 // Miles to kilometer conversion factor
 #define MILES_PER_KILOMETER 0.621371192
+
+/**
+ * Utility function for converting degrees to radians
+ */
+double toRad(double degrees) {
+  return degrees * (PI / 180);
+}
+
+/**
+ * Utility function for converting radians to degrees
+ */
+double toDeg(double radians) {
+  return radians * (180 / PI);
+}
 
 class Algorithms: ObjectWrap
 {
@@ -85,18 +98,18 @@ public:
     Local<Value> arg3 = args[3];
 
     // Convert them into doubles
-    double nLat1 = arg0->NumberValue();
-    double nLon1 = arg1->NumberValue();
-    double nLat2 = arg2->NumberValue();
-    double nLon2 = arg3->NumberValue();
+    double latitude1 = arg0->NumberValue();
+    double longitude1 = arg1->NumberValue();
+    double latitude2 = arg2->NumberValue();
+    double longitude2 = arg3->NumberValue();
 
     // Get the difference between our two points
     // then convert the difference into radians
-    double nDLat = (nLat2 - nLat1) * (PI / 180);
-    double nDLon = (nLon2 - nLon1) * (PI / 180);
+    double dLat = (toRad(latitude2) - toRad(latitude1));
+    double dLon = (toRad(longitude2) - toRad(longitude1));
 
     // The Haversine formula
-    double nA = pow ( sin(nDLat/2), 2 ) + cos(nLat1) * cos(nLat2) * pow ( sin(nDLon/2), 2 );
+    double nA = pow ( sin(dLat/2), 2 ) + cos(latitude1) * cos(latitude2) * pow ( sin(dLon/2), 2 );
     double nC = 2 * atan2( sqrt(nA), sqrt( 1 - nA ));
     double nD = EARTH_RADIUS * nC;
 
@@ -162,25 +175,68 @@ public:
     // Declare some variables we'll use for the calculation
     double new_latitude;
     double new_longitude;
+    double offset;
+    double bearing;
+    double angular_distance;
+    int sign_lat;
+    int sign_long;
 
-    // Grabbing function parameters
+    // Grab function parameters
     double latitude = args[0]->NumberValue();
     double longitude = args[1]->NumberValue();
-    double offset_lat = args[2]->NumberValue();
-    double offset_long = args[3]->NumberValue();
 
-    // Convert miles to kilometers
-    offset_lat = (offset_lat / MILES_PER_KILOMETER);
-    offset_long = (offset_long / MILES_PER_KILOMETER);
+    // Convert offsets to kilometers
+    double offset_lat = args[2]->NumberValue() / MILES_PER_KILOMETER;
+    double offset_long = args[3]->NumberValue() / MILES_PER_KILOMETER;
+
+    // Use Pythagorean theorem to calculate distance
+    offset = sqrt( pow(offset_lat, 2) + pow(offset_long, 2));
+    sign_lat = (offset_lat / fabs(offset_long)) / fabs(offset_lat / offset_long);
+    sign_long = (fabs(offset_lat) / offset_long) / fabs(offset_lat / offset_long);
+
+    // Calculate bearing and angular distance in radians
+    if (offset > 0) {
+    	bearing = atan(offset_long / offset_lat);
+
+    	// Put it in the correct quadrant
+    	if (offset_lat < 0) {
+    		bearing = bearing + PI;
+    	} else 	if (offset_long < 0) {
+    		bearing = bearing + (2 * PI);
+    	}
+    } else {
+    	bearing = 0;
+    }
+    angular_distance = (offset / EARTH_RADIUS);
 
     // Calculate new coordinate
-    new_latitude = latitude + (180 / PI) * (offset_lat / EARTH_RADIUS);
-    new_longitude = longitude + (180 / PI) * (offset_long / EARTH_RADIUS) / cos(latitude);
+    new_latitude = toDeg(
+      asin(
+        (
+          sin(toRad(latitude)) * cos(sign_lat * angular_distance)
+        ) + (
+          cos(toRad(latitude)) * sin(sign_lat * angular_distance) * cos(bearing)
+        )
+      )
+    );
+    new_longitude =
+      toRad(longitude) +
+      atan2(
+        sin(bearing) * sin(sign_long * angular_distance) * cos(latitude),
+        cos(sign_long * angular_distance) - (sin(toRad(latitude)) * sin(toRad(new_latitude)))
+      );
+
+    // Normalize longitude
+    new_longitude = fmod((new_longitude + 3 * PI), (2 * PI)) - PI;
+    new_longitude = toDeg(new_longitude);
 
     // Return value
     Local<Object> coordinate = Object::New();
     coordinate->Set(String::New("latitude"), Number::New(new_latitude));
     coordinate->Set(String::New("longitude"), Number::New(new_longitude));
+    coordinate->Set(String::New("angular_distance"), Number::New(angular_distance));
+    coordinate->Set(String::New("bearing"), Number::New(bearing));
+    coordinate->Set(String::New("offset"), Number::New(offset));
     return scope.Close(coordinate);
   }
 };
