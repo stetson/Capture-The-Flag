@@ -117,7 +117,7 @@ fs.readFile('game_data.dat', function(err, data) {
 	 * @link controller.location 
 	 **/
 	ctf.http.post('/location', views.update_location);
-	ctf.http.get('/location', views.get_location);
+	//ctf.http.get('/location', views.get_location);
 	
 	/**
 	 * Returns a list of all games on this server<br />

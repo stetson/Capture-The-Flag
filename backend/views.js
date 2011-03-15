@@ -15,6 +15,36 @@
 var controller = require("../backend/controller.js");
 
 /**
+ * Filesystem access
+ */
+var fs = require('fs');
+
+/**
+ * The log of location updates
+ */
+fs.open("update_location.csv", "a", function(err, fd) {
+	if (! err) {
+		var log = fd;
+	}
+});
+
+
+/**
+ * Get the locations of the other players
+ */
+get_location = function(request, response) {
+    // Send the players back to the client
+    var game_id = request.query.game_id;
+    var locations = controller.get_location(game_id);
+    
+    if (locations) {
+        response.send(locations);
+    } else {
+        response.send({"error": "Invalid game"}, 404);
+    }
+};
+
+/**
  * Update the user's location
  */
 exports.update_location = function(request, response) {
@@ -25,26 +55,16 @@ exports.update_location = function(request, response) {
 	
 	if (controller.update_location(game_id, user_id)) {
         //Let the user know the operation was successful
-        response.send({"response": "OK"});
+		var update = new Buffer(256);
+		try {
+			update.write('"' + user.name + '","' + user.latitude + '","' + user.longitude + '","' + user.accuracy + '"');
+		} catch (e) { }
+		fs.write(log, update);
+        get_location(request, response);
         return;
 	}
 	
 	response.send({"error": "Invalid user"}, 404);
-};
-
-/**
- * Get the locations of the other players
- */
-exports.get_location = function(request, response) {
-    // Send the players back to the client
-    var game_id = request.query.game_id;
-    var locations = controller.get_location(game_id);
-    
-    if (locations) {
-        response.send(locations);
-    } else {
-        response.send({"error": "Invalid game"}, 404);
-    }
 };
 
 /**

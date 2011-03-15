@@ -371,27 +371,30 @@ model = {
 	/**
 	 * Center map after the first load
 	 */
-	centerMap: function() {
+	centerMap: function(latitude, longitude, accuracy) {
+		if (! map.map.getBounds()) {
+			map.map.setCenter(new google.maps.LatLng(latitude, longitude));
+		}
+		
+		model.user.latitude = latitude;
+		model.user.longitude = longitude;
+		model.user.accuracy = accuracy;
+		model.show_signal_strength(accuracy);
+		model.updateLocation(latitude, longitude, accuracy);
+	},
+	
+	getLocation: function() {
 		navigator.geolocation.getCurrentPosition(function(position) {
-			map.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
-			model.user.latitude = position.coords.latitude;
-			model.user.longitude = position.coords.longitude;
+			model.centerMap(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
 		}, function() {
-			model.error("GPS didn't work. Falling back to triangulation. <a href='/help/#signal_strength'>What does this mean?</a>");
 			navigator.geolocation.getCurrentPosition(function(position) {
-				map.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
-				model.user.latitude = position.coords.latitude;
-				model.user.longitude = position.coords.longitude;
+				model.centerMap(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
 			}, function() {
-				model.error("Triangulation didn't work. Falling back to IP lookup. <a href='/help/#signal_strength'>What does this mean?</a>");
 				$.getScript("http://j.maxmind.com/app/geoip.js", function() {
 					try {
-						map.map.setCenter(new google.maps.LatLng(geoip_latitude(), geoip_longitude()));
-						model.user.latitude = geoip_latitude();
-						model.user.longitude = geoip_longitude();
-						model.clear_error();
+						model.centerMap(geoip_latitude(), geoip_longitude(), 100000);
 					} catch(e) {
-						model.error("No known methods of geolocation worked for your device. <a href='/help/#signal_strength'>What does this mean?</a>");
+						model.error("We couldn't find you");
 					}
 				});
 			});
@@ -411,8 +414,7 @@ model = {
 			navigator.geolocation.watchPosition(
 				// Success
 				function(position) {
-				    model.show_signal_strength(position.coords.accuracy);
-					model.updateLocation(position);
+					model.updateLocation(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
 				}, 
 				
 				// Failure
@@ -434,53 +436,14 @@ model = {
 	 * Get the locations of the other players
 	 */
 	watchPlayers: function() {
-	    model.timer = setInterval(function() {
-            $.ajax({
-                url: '/location/',
-                type: 'GET',
-                data: {
-                    game_id: model.user.game_id
-                },
-                cache: false,
-                dataType: 'json',
-                success: function(data) {
-                    // Don't update if empty response from the server
-                    if (!data) {
-                        return;
-                    }
-         
-                    // Copy the players array
-                    model.players = data;
-                    
-                    // Update the locations of each player
-                    $.each(model.players, function(player_iterator, player) {
-                        if (model.player_markers[player_iterator] === undefined) {
-                            icon = player_iterator == model.user.user_id ? "/css/images/star.png" : "/css/images/person_" + player.team + ".png";
-                            model.player_markers[player_iterator] = new google.maps.Marker({
-                                position: new google.maps.LatLng(player.latitude, player.longitude),
-                                map: map.map,
-                                title: player.name,
-                                icon: icon
-                            });
-                            
-                            google.maps.event.addListener(model.player_markers[player_iterator], 'click', function() {
-                                map.infowindow.content = this.title;
-                                map.infowindow.open(map.map, this);
-                            });
-                        } else {
-                            model.player_markers[player_iterator].setPosition( new google.maps.LatLng(player.latitude, player.longitude) );
-                        }
-                    });
-                }
-            });
-	    }, 1000);
+	    model.timer = setInterval(model.getLocation(), 1000);
 	},
 	
 	/**
 	 * Server call which updates your current location
 	 */
-	updateLocation: function(position) {
-	    // Reject bad data
+	updateLocation: function(latitude, longitude, accuracy) {
+	    // TODO - Reject bad data
 	    //if (position.coords.accuracy > 30) {
 	    //    return;
 	    //}
@@ -489,19 +452,44 @@ model = {
 	    if (model.player_markers[model.user.user_id] !== undefined) {
 	        model.player_markers[model.user_id].setPosition( new google.maps.LatLng(position.coords.latitude, position.coords.longitude) );
 	    }
-	    
-	    // Update the user's information
-	    model.user.latitude = position.coords.latitude;
-	    model.user.longitude = position.coords.longitude;
-	    model.user.accuracy = position.coords.accuracy;
 		
 		// Update the server if strict requirements have been met
-		if (model.user.user_id !== "" && model.user.game_id !== "") {
+		if (model.user.user_id !== undefined && model.user.game_id !== undefined) {
 			$.ajax({
 		        url: '/location/',
 		        type: 'POST',
+		        cache: false,
 		        data: model.user,
-		        dataType: 'json'
+		        dataType: 'json',
+		        success: function(data) {
+	                // Don't update if empty response from the server
+	                if (!data) {
+	                    return;
+	                }
+	     
+	                // Copy the players array
+	                model.players = data;
+	                
+	                // Update the locations of each player
+	                $.each(model.players, function(player_iterator, player) {
+	                    if (model.player_markers[player_iterator] === undefined) {
+	                        icon = player_iterator == model.user.user_id ? "/css/images/star.png" : "/css/images/person_" + player.team + ".png";
+	                        model.player_markers[player_iterator] = new google.maps.Marker({
+	                            position: new google.maps.LatLng(player.latitude, player.longitude),
+	                            map: map.map,
+	                            title: player.name,
+	                            icon: icon
+	                        });
+	                        
+	                        google.maps.event.addListener(model.player_markers[player_iterator], 'click', function() {
+	                            map.infowindow.content = this.title;
+	                            map.infowindow.open(map.map, this);
+	                        });
+	                    } else {
+	                        model.player_markers[player_iterator].setPosition( new google.maps.LatLng(player.latitude, player.longitude) );
+	                    }
+	                });
+				}
 		    });
 		}
 	}
