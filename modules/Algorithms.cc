@@ -109,7 +109,7 @@ public:
     double dLon = (toRad(longitude2) - toRad(longitude1));
 
     // The Haversine formula
-    double nA = pow ( sin(dLat/2), 2 ) + cos(latitude1) * cos(latitude2) * pow ( sin(dLon/2), 2 );
+    double nA = pow ( sin(dLat/2), 2 ) + cos(toRad(latitude1)) * cos(toRad(latitude2)) * pow ( sin(dLon/2), 2 );
     double nC = 2 * atan2( sqrt(nA), sqrt( 1 - nA ));
     double nD = EARTH_RADIUS * nC;
 
@@ -183,26 +183,28 @@ public:
     // Convert offsets to kilometers
     double offset = args[2]->NumberValue() / MILES_PER_KILOMETER;
     double bearing = toRad(args[3]->NumberValue());
+    double angular_distance = offset / EARTH_RADIUS;
 
     // Calculate new coordinate
-    new_latitude = toDeg(
-      asin(
+    new_latitude = asin(
         (
-          sin(toRad(latitude)) * cos(offset / EARTH_RADIUS)
+          sin(toRad(latitude)) * cos(angular_distance)
         ) + (
-          cos(toRad(latitude)) * sin(offset / EARTH_RADIUS) * cos(bearing)
+          cos(toRad(latitude)) * sin(angular_distance) * cos(bearing)
         )
-      )
     );
     new_longitude =
       toRad(longitude) +
       atan2(
-        sin(bearing) * sin(offset / EARTH_RADIUS) * cos(latitude),
-        cos(offset / EARTH_RADIUS) - (sin(toRad(latitude)) * sin(toRad(new_latitude)))
+        sin(bearing) * sin(angular_distance) * cos(toRad(latitude)),
+        cos(angular_distance) - sin(toRad(latitude)) * sin(new_latitude)
       );
 
     // Normalize longitude
     new_longitude = fmod((new_longitude + 3 * PI), (2 * PI)) - PI;
+
+    // Convert to degrees
+    new_latitude = toDeg(new_latitude);
     new_longitude = toDeg(new_longitude);
 
     // Return value
