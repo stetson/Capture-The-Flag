@@ -22,9 +22,10 @@ var fs = require('fs');
 /**
  * The log of location updates
  */
+var log;
 fs.open("update_location.csv", "a", function(err, fd) {
 	if (! err) {
-		var log = fd;
+		log = fd;
 	}
 });
 
@@ -34,7 +35,7 @@ fs.open("update_location.csv", "a", function(err, fd) {
  */
 get_location = function(request, response) {
     // Send the players back to the client
-    var game_id = request.query.game_id;
+    var game_id = request.body.game_id;
     var locations = controller.get_location(game_id);
     
     if (locations) {
@@ -53,7 +54,7 @@ exports.update_location = function(request, response) {
 	var user_id = request.body.user_id;
 	var user = request.body;
 	
-	if (controller.update_location(game_id, user_id)) {
+	if (controller.update_location(game_id, user_id, user)) {
         //Let the user know the operation was successful
 		var update = new Buffer('"' + user.name + '","' + user.latitude + '","' + user.longitude + '","' + user.accuracy + '"', 'utf8');
 		fs.write(log, update);
