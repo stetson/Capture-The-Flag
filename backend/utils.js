@@ -9,7 +9,12 @@ exports.purge_players = function() {
         for (var player_iterator in ctf.game_data[game_iterator].players) {
             if (ctf.game_data[game_iterator].players.hasOwnProperty(player_iterator)) {
                 // Calculate time since last update
-                var time_since_last_update = new Date() - new Date(ctf.game_data[game_iterator].players[player_iterator].last_update);
+                var time_since_last_update;
+                try {
+                    time_since_last_update = new Date() - new Date(ctf.game_data[game_iterator].players[player_iterator].last_update);
+                } catch (e) {
+                    time_since_last_update = 0;
+                }
                 
                 // Purge players who haven't updated in over 1 minute
                 if (time_since_last_update >= ctf.constants.DISABLE_USER_INTERVAL * ctf.constants.MINUTE) {
