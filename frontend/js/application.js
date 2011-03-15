@@ -286,24 +286,24 @@ model = {
                         new google.maps.LatLng(model.game.red_bounds.top_left.latitude, model.game.red_bounds.top_left.longitude),
                         new google.maps.LatLng(model.game.red_bounds.top_left.latitude, model.game.red_bounds.bottom_right.longitude),
                         new google.maps.LatLng(model.game.red_bounds.bottom_right.latitude, model.game.red_bounds.bottom_right.longitude),
-                        new google.maps.LatLng(model.game.red_bounds.bottom_right.latitude, model.game.red_bounds.top_left.longitude),
+                        new google.maps.LatLng(model.game.red_bounds.bottom_right.latitude, model.game.red_bounds.top_left.longitude)
                     ],
                     strokeColor: "#FF0000",
-                    strokeOpacity: .5,
+                    strokeOpacity: 0.5,
                     fillColor: "#FF0000",
-                    fillOpacity: .2
+                    fillOpacity: 0.2
                 }).setMap(map.map);
                 model.game.blue_territory = new google.maps.Polygon({
                     paths: [
                         new google.maps.LatLng(model.game.blue_bounds.top_left.latitude, model.game.blue_bounds.top_left.longitude),
                         new google.maps.LatLng(model.game.blue_bounds.top_left.latitude, model.game.blue_bounds.bottom_right.longitude),
                         new google.maps.LatLng(model.game.blue_bounds.bottom_right.latitude, model.game.blue_bounds.bottom_right.longitude),
-                        new google.maps.LatLng(model.game.blue_bounds.bottom_right.latitude, model.game.blue_bounds.top_left.longitude),
+                        new google.maps.LatLng(model.game.blue_bounds.bottom_right.latitude, model.game.blue_bounds.top_left.longitude)
                     ],
                     strokeColor: "#0000FF",
-                    strokeOpacity: .5,
+                    strokeOpacity: 0.5,
                     fillColor: "#0000FF",
-                    fillOpacity: .2
+                    fillOpacity: 0.2
                 }).setMap(map.map);
 
                 // Watch the locations of the other players
