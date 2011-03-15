@@ -32,6 +32,7 @@ map = {
             disableDefaultUI: false,
             zoomControl: false,
             panControl: false,
+            streetViewControl: false,
 			mapTypeId: google.maps.MapTypeId.HYBRID
 		};
 		
@@ -44,10 +45,7 @@ map = {
 			map.map = new google.maps.Map(document.getElementById("map_canvas"), map.options);
 			
 			// Center map
-			model.centerMap();
-			
-			// Watch the current location (lock onto GPS while user is reading the front page)
-            model.watchLocation();
+			model.getLocation();
 		} else {
 			model.error("Your device does not appear to support HTML5 geolocation");
 		}
@@ -334,8 +332,6 @@ model = {
 	        post_data.game_id = model.user.name;
 	    }
 	    
-	    console.log(post_data);
-	    
         $.ajax({
             type: 'POST',
             url: '/game/',
@@ -405,38 +401,10 @@ model = {
 	},
 	
 	/**
-	 * Center the user on their own location, and set up location listener
-	 */
-	watchLocation: function() {
-		try {
-			
-			// Trigger update when position moves
-			navigator.geolocation.watchPosition(
-				// Success
-				function(position) {
-					model.updateLocation(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
-				}, 
-				
-				// Failure
-				function(error) { },
-				
-				// Options
-				{
-					maximumAge: 1000,
-					enableHighAccuracy: true
-				}
-			);
-		
-		} catch (e) {
-			model.error("Browser did not report location.");
-		}
-	},
-	
-	/**
 	 * Get the locations of the other players
 	 */
 	watchPlayers: function() {
-	    model.timer = setInterval(model.getLocation(), 1000);
+	    model.timer = setInterval(model.getLocation, 1000);
 	},
 	
 	/**
@@ -450,7 +418,7 @@ model = {
 	    
 		// Update your location, regardless of whether it's in strict accuracy requirements
 	    if (model.player_markers[model.user.user_id] !== undefined) {
-	        model.player_markers[model.user_id].setPosition( new google.maps.LatLng(position.coords.latitude, position.coords.longitude) );
+	        model.player_markers[model.user.user_id].setPosition( new google.maps.LatLng(latitude, longitude) );
 	    }
 		
 		// Update the server if strict requirements have been met
