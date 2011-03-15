@@ -8,7 +8,7 @@ var algorithms = new algorithms_class.Algorithms();
  * @name update_location
  */
 exports.update_location = function(game_id, user_id, user) {
-    if (user_id && ctf.game_data[game_id] && ctf.game_data[game_id].players[user_id] !== undefined) {
+    if (user_id && ctf.game_data[game_id] !== undefined && ctf.game_data[game_id].players[user_id] !== undefined) {
         ctf.game_data[game_id].last_update = new Date();
         ctf.game_data[game_id].players[user_id] = user;
         ctf.game_data[game_id].players[user_id].last_update = new Date();
