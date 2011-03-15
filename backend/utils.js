@@ -21,14 +21,14 @@ exports.purge_players = function() {
                     ctf.game_data[game_iterator].players[player_iterator].latitude = 0;
                     ctf.game_data[game_iterator].players[player_iterator].longitude = 0;
                     ctf.game_data[game_iterator].players[player_iterator].accuracy = 0;
-                    console.log("Deactivating " + player_iterator);
+                    console.log("Deactivating user:" + player_iterator);
                 }
                 
                 // Reclaim memory of players who haven't updated in 5 minutes
                 if (time_since_last_update >= ctf.constants.PURGE_USER_INTERVAL * ctf.constants.MINUTE ||
                         ctf.game_data[game_iterator].players[player_iterator].last_update === undefined) {
                     delete ctf.game_data[game_iterator].players[player_iterator];
-                    console.log("Purging " + player_iterator);
+                    console.log("Purging user:" + player_iterator);
                 }
             }
         }
@@ -45,7 +45,7 @@ exports.purge_games = function() {
             // Delete games that haven't been played on in a while
             if (time_since_last_update >= ctf.constants.PURGE_GAMES_INTERVAL * ctf.constants.MINUTE) {
                 delete ctf.game_data[game_iterator];
-                console.log("Purging " + game_iterator);
+                console.log("Purging game:" + game_iterator);
             }
         }
     }

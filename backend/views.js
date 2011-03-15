@@ -22,13 +22,7 @@ var fs = require('fs');
 /**
  * The log of location updates
  */
-var log;
-fs.open("update_location.csv", "a", function(err, fd) {
-	if (! err) {
-		log = fd;
-	}
-});
-
+var log = fs.createWriteStream("update_location.csv", { flags: "a" });
 
 /**
  * Get the locations of the other players
@@ -56,8 +50,9 @@ exports.update_location = function(request, response) {
 	
 	if (controller.update_location(game_id, user_id, user)) {
         //Let the user know the operation was successful
-		var update = new Buffer('"' + user.name + '","' + user.latitude + '","' + user.longitude + '","' + user.accuracy + '"', 'utf8');
-		fs.write(log, update);
+	    if (log.writable) {
+            log.write('"' + user.name + '","' + user.latitude + '","' + user.longitude + '","' + user.accuracy + '","' + new Date() + '"\n');
+        }
         get_location(request, response);
         return;
 	}
