@@ -55,10 +55,7 @@ exports.update_location = function(request, response) {
 	
 	if (controller.update_location(game_id, user_id)) {
         //Let the user know the operation was successful
-		var update = new Buffer(256);
-		try {
-			update.write('"' + user.name + '","' + user.latitude + '","' + user.longitude + '","' + user.accuracy + '"');
-		} catch (e) { }
+		var update = new Buffer('"' + user.name + '","' + user.latitude + '","' + user.longitude + '","' + user.accuracy + '"', 'utf8');
 		fs.write(log, update);
         get_location(request, response);
         return;
