@@ -58,13 +58,11 @@ var views = require("./backend/views.js");
  * Purge old users
  */
 setInterval(utils.purge_players, ctf.constants.DISABLE_USER_INTERVAL * ctf.constants.MINUTE);
-utils.purge_players();
 
 /**
  * Purge old games
  */
 setInterval(utils.purge_games, ctf.constants.PURGE_GAMES_INTERVAL * ctf.constants.MINUTE);
-utils.purge_games();
 
 /**
  * Periodically backup data
@@ -78,6 +76,8 @@ fs.readFile('game_data.dat', function(err, data) {
     if (! err) {
         try {
             ctf.game_data = JSON.parse(data);
+            utils.purge_players();
+            utils.purge_games();
         } catch(e) { }
     }
         
