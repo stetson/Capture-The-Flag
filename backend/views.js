@@ -49,10 +49,15 @@ exports.update_location = function(request, response) {
 	var user = request.body;
 	
 	if (controller.update_location(game_id, user_id, user)) {
-        //Let the user know the operation was successful
-	    if (log.writable) {
-            log.write('"' + user.name + '","' + user.latitude + '","' + user.longitude + '","' + user.accuracy + '","' + new Date() + '"\n');
-        }
+        // Log the update
+	    try {
+	       log.write('"' + user.name + '","' + user.latitude + '","' + user.longitude + '","' + user.accuracy + '","' + new Date() + '"\n');
+	    } catch (e) {
+	        log.end();
+	        log = fs.createWriteStream("update_location.csv", { flags: "a" });
+	    }
+	    
+	    // Send the locations of the other players back
         get_location(request, response);
         return;
 	}
