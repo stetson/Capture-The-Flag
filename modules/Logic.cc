@@ -3,20 +3,9 @@
  * LICENSE file.
  */
 
-#include <v8.h>
-#include <node.h>
+#include "Logic.h"
 
-using namespace node;
-using namespace v8;
-
-class Logic: ObjectWrap
-{
-private:
-  int m_count;
-public:
-
-  static Persistent<FunctionTemplate> s_ct;
-  static void Init(Handle<Object> target)
+  void Logic::Init(Handle<Object> target)
   {
     HandleScope scope;
 
@@ -32,16 +21,7 @@ public:
                 s_ct->GetFunction());
   }
 
-  Logic() :
-    m_count(0)
-  {
-  }
-
-  ~Logic()
-  {
-  }
-
-  static Handle<Value> New(const Arguments& args)
+  Handle<Value> Logic::New(const Arguments& args)
   {
     HandleScope scope;
     Logic* hw = new Logic();
@@ -49,7 +29,7 @@ public:
     return args.This();
   }
 
-  static Handle<Value> getWorld(const Arguments& args)
+  Handle<Value> Logic::getWorld(const Arguments& args)
   {
     HandleScope scope;
     Logic* hw = ObjectWrap::Unwrap<Logic>(args.This());
@@ -57,8 +37,6 @@ public:
     Local<String> result = String::New("Hello World");
     return scope.Close(result);
   }
-
-};
 
 Persistent<FunctionTemplate> Logic::s_ct;
 

@@ -1,19 +1,4 @@
-#include <v8.h>
-#include <node.h>
-#include <sstream>
-#include <math.h>
-#include <vector>
-using namespace node;
-using namespace v8;
-
-// Earth's radius in Kilometers
-#define EARTH_RADIUS 6371.009
-
-// The estimated value of PI
-#define PI 3.1415926535
-
-// Miles to kilometer conversion factor
-#define MILES_PER_KILOMETER 0.621371192
+#include "Algorithms.h"
 
 /**
  * Utility function for converting degrees to radians
@@ -29,20 +14,11 @@ double toDeg(double radians) {
   return radians * (180 / PI);
 }
 
-class Algorithms: ObjectWrap
-{
-
-private:
-  int m_count;
-  
-public:
-
-  static Persistent<FunctionTemplate> s_ct;
 
   /**
    * Configuration of the link between Node and C++ code
    */
-  static void Init(Handle<Object> target)
+  void Algorithms::Init(Handle<Object> target)
   {
     HandleScope scope;
 
@@ -62,15 +38,8 @@ public:
 	
   }
 
-  /**
-   * Constructor for C++
-   */
-  Algorithms() : m_count(0) { }
-
-  /**
-   * Constructor for js
-   */
-  static Handle<Value> New(const Arguments& args)
+  
+  Handle<Value> Algorithms::New(const Arguments& args)
   {
     HandleScope scope;
     Algorithms* hw = new Algorithms();
@@ -86,7 +55,7 @@ public:
    * @param p2_longitude The longitude of the second point
    * @return the distance in miles
    */
-  static Handle<Value> distance_in_miles(const Arguments& args)
+  Handle<Value> Algorithms::distance_in_miles(const Arguments& args)
   {
     HandleScope scope;
     //Algorithms* hw = ObjectWrap::Unwrap<Algorithms>(args.This());
@@ -132,7 +101,7 @@ public:
    * @param botRightLong
    * @return boolean indicating whether or not the given rectangle contains the point
    */
-  static Handle<Value> in_rectangle(const Arguments& args)
+  Handle<Value> Algorithms::in_rectangle(const Arguments& args)
   {
   
     // Setting scope and building an string stream for output
@@ -167,7 +136,7 @@ public:
    * @param offset
    * @param bearing
    */
-  static Handle<Value> add_miles_to_coordinate(const Arguments& args)
+  Handle<Value> Algorithms::add_miles_to_coordinate(const Arguments& args)
   {
     // Set scope
     HandleScope scope;
@@ -213,14 +182,14 @@ public:
     coordinate->Set(String::New("longitude"), Number::New(new_longitude));
     return scope.Close(coordinate);
   }
-};
+
 
 /**
  * Function template for Algorithms methods
  */
 Persistent<FunctionTemplate> Algorithms::s_ct;
-
 // Initalizes and creates the Algorithms module
+
 extern "C" {
   // Creates scope
   static void init (Handle<Object> target)
