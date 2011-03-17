@@ -22,4 +22,6 @@ console.log(" in_rectangle(...bad....)\n -> " + algo.in_rectangle(29.282806,-80.
 // Testing business logic
 console.log("[Logic.cc]")
 console.log(" getWorld()\n -> " + logic.getWorld());
+console.log("Testing if Logic can access algorithms class \n check distance\n");
+//console.log(" distance -> " + logic.check_win());
 

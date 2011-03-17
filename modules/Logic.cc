@@ -4,6 +4,7 @@
  */
 
 #include "Logic.h"
+#include "Algorithms.h"
 
   void Logic::Init(Handle<Object> target)
   {
@@ -37,6 +38,18 @@
     Local<String> result = String::New("Hello World");
     return scope.Close(result);
   }
+
+  Handle<Value> Logic::check_win(const Arguments& args)
+  {
+    HandleScope scope;
+    Logic* hw = ObjectWrap::Unwrap<Logic>(args.This());
+    Algorithms::Algorithms algo;
+    
+    hw->m_count++;
+    Local<Number> result = Number::New(3);
+    return scope.Close(result);
+  }
+
 
 Persistent<FunctionTemplate> Logic::s_ct;
 

@@ -17,6 +17,7 @@ public:
   static void Init(Handle<Object> target);
   static Handle<Value> New(const Arguments& args);
   static Handle<Value> getWorld(const Arguments& args);
+  static Handle<Value> check_win(const Arguments& args);
 
   /**
    * Constructor for C++
