@@ -386,13 +386,13 @@ model = {
 			navigator.geolocation.getCurrentPosition(function(position) {
 				model.centerMap(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
 			}, function() {
-				$.getScript("http://j.maxmind.com/app/geoip.js", function() {
-					try {
+				if (! model.user.latitude && ! model.user.longitude) {
+					$.getScript("http://j.maxmind.com/app/geoip.js", function() {
 						model.centerMap(geoip_latitude(), geoip_longitude(), 100000);
-					} catch(e) {
-						model.error("We couldn't find you");
-					}
-				});
+					});
+				} else {
+					model.centerMap(model.user.latitude, model.user.longitude, 100000);
+				}
 			});
 		}, {
 			maximumAge: 500,
@@ -411,12 +411,7 @@ model = {
 	 * Server call which updates your current location
 	 */
 	updateLocation: function(latitude, longitude, accuracy) {
-	    // TODO - Reject bad data
-	    //if (position.coords.accuracy > 30) {
-	    //    return;
-	    //}
-	    
-		// Update your location, regardless of whether it's in strict accuracy requirements
+	    // Update your location, regardless of whether it's in strict accuracy requirements
 	    if (model.player_markers[model.user.user_id] !== undefined) {
 	        model.player_markers[model.user.user_id].setPosition( new google.maps.LatLng(latitude, longitude) );
 	    }
@@ -434,12 +429,9 @@ model = {
 	                if (!data) {
 	                    return;
 	                }
-	     
-	                // Copy the players array
-	                model.players = data;
 	                
 	                // Update the locations of each player
-	                $.each(model.players, function(player_iterator, player) {
+	                $.each(data, function(player_iterator, player) {
 	                    if (model.player_markers[player_iterator] === undefined) {
 	                        icon = player_iterator == model.user.user_id ? "/css/images/star.png" : "/css/images/person_" + player.team + ".png";
 	                        model.player_markers[player_iterator] = new google.maps.Marker({
