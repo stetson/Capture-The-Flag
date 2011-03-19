@@ -73,7 +73,10 @@
     Local<Object> game = Object::Cast(*args[0]);
 
     // Do stuff (game->Set() and game->Get())
-	//messing around with code
+    /* Sorry, I had to comment out your code. The changes you made
+     * caused build errors. Please try not to commit code that breaks
+     * builds! Check out the README.txt file if you don't know how to build modules :)
+     * - Jeremy
 		game->Set(bool isCaptured)
 		{
 		  bool isCaptured = false;
@@ -90,6 +93,7 @@
 			return this->isCaptured;
 		}
 	}
+    */
   
   
     // http://marcorogers.com/blog/static/v8/doxygen/classv8_1_1Object.html
