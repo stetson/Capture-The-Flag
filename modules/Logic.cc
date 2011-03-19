@@ -73,11 +73,31 @@
     Local<Object> game = Object::Cast(*args[0]);
 
     // Do stuff (game->Set() and game->Get())
+	//messing around with code
+		game->Set(bool isCaptured)
+		{
+		  bool isCaptured = false;
+		 
+		  if ((model.user.latitude, model.user.longitude) == (flag.latitude, flag.longitude))
+		  {
+			isCapture = true;
+		  } 
+		  
+		}
+
+		game->Get()
+		{
+			return this->isCaptured;
+		}
+	}
+  
+  
     // http://marcorogers.com/blog/static/v8/doxygen/classv8_1_1Object.html
 
     return scope.Close(game);
   }
 
+  
   /**
    * Check players for out of bounds, and place them in observer mode
    * @param game The game object
