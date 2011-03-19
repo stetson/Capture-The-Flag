@@ -434,7 +434,7 @@ model = {
 	                $.each(data, function(player_iterator, player) {
 	                    if (model.player_markers[player_iterator] === undefined) {
 	                    	if (model.timer){
-	                    		getVisible() = false;
+	                    		model.player_markers.setVisible(false);
 	                    	}
 	                    	icon = player_iterator == model.user.user_id ? "/css/images/star.png" : "/css/images/person_" + player.team + ".png";
 	                        model.player_markers[player_iterator] = new google.maps.Marker({
