@@ -433,7 +433,10 @@ model = {
 	                // Update the locations of each player
 	                $.each(data, function(player_iterator, player) {
 	                    if (model.player_markers[player_iterator] === undefined) {
-	                        icon = player_iterator == model.user.user_id ? "/css/images/star.png" : "/css/images/person_" + player.team + ".png";
+	                    	if (model.timer){
+	                    		getVisible() = false;
+	                    	}
+	                    	icon = player_iterator == model.user.user_id ? "/css/images/star.png" : "/css/images/person_" + player.team + ".png";
 	                        model.player_markers[player_iterator] = new google.maps.Marker({
 	                            position: new google.maps.LatLng(player.latitude, player.longitude),
 	                            map: map.map,
@@ -445,7 +448,8 @@ model = {
 	                            map.infowindow.content = this.title;
 	                            map.infowindow.open(map.map, this);
 	                        });
-	                    } else {
+	                        
+	                	} else {
 	                        model.player_markers[player_iterator].setPosition( new google.maps.LatLng(player.latitude, player.longitude) );
 	                    }
 	                });
