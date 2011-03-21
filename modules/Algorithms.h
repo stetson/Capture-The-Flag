@@ -15,7 +15,7 @@
 #include <vector>
 
 struct coord {
-  double latitude, longitude;
+  double latitude, longitude, angular_distance, bearing, offset;
 };
 
 class Algorithms

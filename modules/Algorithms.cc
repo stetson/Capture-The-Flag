@@ -106,6 +106,9 @@ coord Algorithms::add_miles_to_coordinate(double latitude, double longitude, dou
   coord newCoord;
   newCoord.latitude = new_latitude;
   newCoord.longitude = new_longitude;
+  newCoord.angular_distance = angular_distance;
+  newCoord.bearing = bearing;
+  newCoord.offset = offset;
   return newCoord;
 
 }

@@ -16,6 +16,7 @@ void V8Algorithms::Init(Handle<Object> target)
 
   // Brings the functions to the JS namespace via "Algorithms" (below)
   NODE_SET_PROTOTYPE_METHOD(s_ct, "distance_in_miles", distance_in_miles);
+  NODE_SET_PROTOTYPE_METHOD(s_ct, "add_miles_to_coordinate", add_miles_to_coordinate);
 
   // Brings the Algorithms object to the JS namespace
   target->Set(String::NewSymbol("Algorithms"), s_ct->GetFunction());
@@ -48,11 +49,36 @@ Handle<Value> V8Algorithms::distance_in_miles(const Arguments& args)
 
   // Grab answer from Algorithms class
   double answer = Algorithms::distance_in_miles(latitude1,longitude1,latitude2,longitude2);
-  //double answer = 5;
+
   Local<Number> result = Number::New(answer);
   return scope.Close(result);
 
 }
+
+Handle<Value> V8Algorithms::add_miles_to_coordinate(const Arguments& args)
+{
+
+  HandleScope scope;
+
+  // Convert arguments to doubles
+  double argLat = args[0]->NumberValue();
+  double argLong = args[1]->NumberValue();
+  double argOff = args[2]->NumberValue();
+  double argBear = args[3]->NumberValue();
+
+  // Grab answer from Algorithms class
+  coord answer = Algorithms::add_miles_to_coordinate(argLat, argLong, argOff, argBear);
+
+  // Return value
+  Local<Object> coordinate = Object::New();
+  coordinate->Set(String::New("latitude"), Number::New(answer.latitude));
+  coordinate->Set(String::New("longitude"), Number::New(answer.longitude));
+  coordinate->Set(String::New("angular_distance"), Number::New(answer.angular_distance));
+  coordinate->Set(String::New("bearing"), Number::New(answer.bearing));
+  coordinate->Set(String::New("offset"), Number::New(answer.offset));
+  return scope.Close(coordinate);
+}
+
 
 /**
  * Function template for Algorithms methods
