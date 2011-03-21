@@ -20,7 +20,7 @@ void V8Algorithms::Init(Handle<Object> target)
   //NODE_SET_PROTOTYPE_METHOD(s_ct, "add_miles_to_coordinate", add_miles_to_coordinate);
 
   // Brings the Algorithms object to the JS namespace
-  target->Set(String::NewSymbol("V8Algorithms"), s_ct->GetFunction());
+  target->Set(String::NewSymbol("Algorithms"), s_ct->GetFunction());
 
 }
 
