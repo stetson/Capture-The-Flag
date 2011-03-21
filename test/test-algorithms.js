@@ -28,6 +28,9 @@ var point4 = {
     longitude: -81.305394
 };
 
+
+
+
 /**
  * Test that distance calculations are within required range
  */
@@ -62,7 +65,18 @@ exports.test_in_rectangle = function(test) {
  */
 exports.test_add_miles = function(test) {
 	// Adding nothing should return the same point
-	point5 = algorithms.add_miles_to_coordinate(point1.latitude, point1.longitude, 0, 0);
+	var point5 = algorithms.add_miles_to_coordinate(point1.latitude, point1.longitude, 0, 0);
+	//Starting point of our square
+	var point6 = algorithms.add_miles_to_coordinate(point1.latitude, point1.longitude, 1, 0);
+	var point7 = algorithms.add_miles_to_coordinate(point6.latitude, point6.longitude, 0, -1);
+	var point8 = algorithms.add_miles_to_coordinate(point7.latitude, point7.longitude, -1, 0);
+	var point9 = algorithms.add_miles_to_coordinate(point8.latitude, point8.longitude, 0,1);
+    var point10 = algorithms.add_miles_to_coordinate(point9.latitude, point9.longitude, -1, 0);
+	test.strictEqual(false, algorithms.in_rectangle(point10.latitude, point10.longitude, point5.latitude, 
+	point5.longitude, point7.latitude, point7.longitude));
+	test.equal(point9.latitude.toFixed(4), point1.latitude.toFixed(4));
+	test.equal(point9.longitude.toFixed(4), point1.longitude.toFixed(4));
+	
 	test.equal(point1.latitude.toFixed(4), point5.latitude.toFixed(4));
 	test.equal(point1.longitude.toFixed(4), point5.longitude.toFixed(4));
 	
