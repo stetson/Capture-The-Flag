@@ -33,7 +33,7 @@ map = {
             zoomControl: false,
             panControl: false,
             streetViewControl: false,
-			mapTypeId: google.maps.MapTypeId.HYBRID
+			mapTypeId: google.maps.MapTypeId.TERRAIN
 		};
 		
 		// Build infowindow
@@ -404,7 +404,7 @@ model = {
 	 * Get the locations of the other players
 	 */
 	watchPlayers: function() {
-	    model.timer = setInterval(model.getLocation, 1000);
+	    model.timer = setInterval(model.getLocation, 3000);
 	},
 	
 	/**
