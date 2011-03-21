@@ -21,18 +21,26 @@ class Algorithms
   private:
   
   public:
-    
+    static double toRad(double degrees);
+    static double toDeg(double radians);
+static double distance_in_miles(double p1_latitude, double p1_longitude, double p2_latitude, double p2_longitude);
+ static bool in_rectangle(double findLat, double findLong, double topLeftLat, double topLeftLong, double botRightLat, double botRightLong);
+static coord add_miles_to_coordinate(double latitude, double longitude, double offset, double bearing);
+
+};
+
+
 /**
  * Utility function for converting degrees to radians
  */
-static double toRad(double degrees) {
+ double Algorithms::toRad(double degrees) {
   return degrees * (PI / 180);
 }
 
 /**
  * Utility function for converting radians to degrees
  */
-static double toDeg(double radians) {
+ double Algorithms::toDeg(double radians) {
   return radians * (180 / PI);
 }
 
@@ -44,7 +52,7 @@ static double toDeg(double radians) {
  * @param p2_longitude The longitude of the second point
  * @return the distance in miles
  */
-static double distance_in_miles(double p1_latitude, double p1_longitude, double p2_latitude, double p2_longitude)
+ double Algorithms::distance_in_miles(double p1_latitude, double p1_longitude, double p2_latitude, double p2_longitude)
 {
 
   // Get the difference between our two points
@@ -75,7 +83,7 @@ static double distance_in_miles(double p1_latitude, double p1_longitude, double 
  * @param botRightLong
  * @return boolean indicating whether or not the given rectangle contains the point
  */
- static bool in_rectangle(double findLat, double findLong, double topLeftLat, double topLeftLong, double botRightLat, double botRightLong)
+  bool Algorithms::in_rectangle(double findLat, double findLong, double topLeftLat, double topLeftLong, double botRightLat, double botRightLong)
  {
    bool isWithinRect = true;
    if (findLat > topLeftLat || findLong < topLeftLong || findLat < botRightLat || findLong > botRightLong)
@@ -93,7 +101,7 @@ static double distance_in_miles(double p1_latitude, double p1_longitude, double 
    * @param offset
    * @param bearing
    */
-static coord add_miles_to_coordinate(double latitude, double longitude, double offset, double bearing)
+ coord Algorithms::add_miles_to_coordinate(double latitude, double longitude, double offset, double bearing)
 {
 
   // Convert offsets to kilometers
@@ -131,4 +139,3 @@ static coord add_miles_to_coordinate(double latitude, double longitude, double o
   return newCoord;
 
 }
-};
