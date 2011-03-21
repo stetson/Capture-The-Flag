@@ -108,16 +108,20 @@
     // Do stuff (game->Set() and game->Get())
     // http://marcorogers.com/blog/static/v8/doxygen/classv8_1_1Object.html
 	
-	//	game->Set(bool isInBounds)
-	//
-	//		isInBounds = true;
-	//
-	//	int playerSize = game->players[].size();
-	//		for(i=0; i<playerSize; i++)
-	//		{
-	//			if(game->players[i])
-	//		}
+	/*	game->Set(bool isInBounds)
 	
+			isInBounds = true;
+	
+		int playerSize = game->players[].size();
+			for(i=0; i<playerSize; i++)
+			{
+				if(!in_rectangle(game->players[i].latitude, game->players[i].longitude,
+				game->red_bounds., game->red_bounds., game->blue_bounds., game->blue_bounds.))
+				(
+					send player[i] to observer mode
+				)
+			}
+	*/
     return scope.Close(game);
   }
 
