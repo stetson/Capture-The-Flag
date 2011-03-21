@@ -1,46 +1,16 @@
-// Earth's radius in Kilometers
-#define EARTH_RADIUS 6371.009
-
-// The estimated value of PI
-#define PI 3.1415926535
-
-// Miles to kilometer conversion factor
-#define MILES_PER_KILOMETER 0.621371192
-
-#include <sstream>
-#include <math.h>
-#include <vector>
-
-struct coord {
-  double latitude, longitude;
-};
-
-class Algorithms
-{
-
-  private:
-  
-  public:
-    static double toRad(double degrees);
-    static double toDeg(double radians);
-static double distance_in_miles(double p1_latitude, double p1_longitude, double p2_latitude, double p2_longitude);
- static bool in_rectangle(double findLat, double findLong, double topLeftLat, double topLeftLong, double botRightLat, double botRightLong);
-static coord add_miles_to_coordinate(double latitude, double longitude, double offset, double bearing);
-
-};
-
+#include "Algorithms.h"
 
 /**
  * Utility function for converting degrees to radians
  */
- double Algorithms::toRad(double degrees) {
+double Algorithms::toRad(double degrees) {
   return degrees * (PI / 180);
 }
 
 /**
  * Utility function for converting radians to degrees
  */
- double Algorithms::toDeg(double radians) {
+double Algorithms::toDeg(double radians) {
   return radians * (180 / PI);
 }
 
@@ -52,7 +22,7 @@ static coord add_miles_to_coordinate(double latitude, double longitude, double o
  * @param p2_longitude The longitude of the second point
  * @return the distance in miles
  */
- double Algorithms::distance_in_miles(double p1_latitude, double p1_longitude, double p2_latitude, double p2_longitude)
+double Algorithms::distance_in_miles(double p1_latitude, double p1_longitude, double p2_latitude, double p2_longitude)
 {
 
   // Get the difference between our two points
@@ -83,25 +53,25 @@ static coord add_miles_to_coordinate(double latitude, double longitude, double o
  * @param botRightLong
  * @return boolean indicating whether or not the given rectangle contains the point
  */
-  bool Algorithms::in_rectangle(double findLat, double findLong, double topLeftLat, double topLeftLong, double botRightLat, double botRightLong)
- {
-   bool isWithinRect = true;
-   if (findLat > topLeftLat || findLong < topLeftLong || findLat < botRightLat || findLong > botRightLong)
-   {
-     isWithinRect = false;
-   }
-   return isWithinRect;
- }
+bool Algorithms::in_rectangle(double findLat, double findLong, double topLeftLat, double topLeftLong, double botRightLat, double botRightLong)
+{
+  bool isWithinRect = true;
+  if (findLat > topLeftLat || findLong < topLeftLong || findLat < botRightLat || findLong > botRightLong)
+  {
+    isWithinRect = false;
+  }
+ return isWithinRect;
+}
 
-  /**
-   * Add a distance in miles to a GPS coordinate
-   *
-   * @param latitude
-   * @param longitude
-   * @param offset
-   * @param bearing
-   */
- coord Algorithms::add_miles_to_coordinate(double latitude, double longitude, double offset, double bearing)
+/**
+  * Add a distance in miles to a GPS coordinate
+  *
+  * @param latitude
+  * @param longitude
+  * @param offset
+  * @param bearing
+  */
+coord Algorithms::add_miles_to_coordinate(double latitude, double longitude, double offset, double bearing)
 {
 
   // Convert offsets to kilometers

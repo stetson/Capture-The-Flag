@@ -3,12 +3,8 @@
 
 #include <v8.h>
 #include <node.h>
-#include <sstream>
-#include <math.h>
-#include <vector>
 using namespace node;
 using namespace v8;
-
 class V8Algorithms: ObjectWrap
 {
 

@@ -1,10 +1,5 @@
-/* This code is PUBLIC DOMAIN, and is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND. See the accompanying 
- * LICENSE file.
- */
-
 #include "Logic.h"
-#include "Algorithms.cc"
+#include "Algorithms.h"
 
   void Logic::Init(Handle<Object> target)
   {
