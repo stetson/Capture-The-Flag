@@ -12,7 +12,6 @@ private:
   int m_count;
   
 public:
-
   static Persistent<FunctionTemplate> s_ct;
   static void Init(Handle<Object> target);
   static Handle<Value> New(const Arguments& args);

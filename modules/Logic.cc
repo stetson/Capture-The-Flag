@@ -4,7 +4,7 @@
  */
 
 #include "Logic.h"
-#include "Algorithms.h"
+#include "Algorithms.cc"
 
   void Logic::Init(Handle<Object> target)
   {
@@ -57,8 +57,7 @@
     HandleScope scope;
     Local<Object> game = Object::Cast(*args[0]);
 
-    // Do stuff (game->Set() and game->Get())
-    // http://marcorogers.com/blog/static/v8/doxygen/classv8_1_1Object.html
+        // http://marcorogers.com/blog/static/v8/doxygen/classv8_1_1Object.html
     
     return scope.Close(game);
   }

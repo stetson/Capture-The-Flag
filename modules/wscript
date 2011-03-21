@@ -18,3 +18,7 @@ def build(bld):
   obj2.cxxflags = ["-g", "-D_FILE_OFFSET_BITS=64", "-D_LARGEFILE_SOURCE", "-Wall"]
   obj2.target = "Algorithms"
   obj2.source = "Algorithms.cc"
+  obj3 = bld.new_task_gen("cxx", "shlib", "node_addon")
+  obj3.cxxflags = ["-g", "-D_FILE_OFFSET_BITS=64", "-D_LARGEFILE_SOURCE", "-Wall"]
+  obj3.target = "V8Algorithms"
+  obj3.source = "V8Algorithms.cc"
