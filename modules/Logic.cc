@@ -109,10 +109,13 @@
     // http://marcorogers.com/blog/static/v8/doxygen/classv8_1_1Object.html
 	
 	//	game->Set(bool isInBounds)
+	//
+	//		isInBounds = true;
+	//
 	//	int playerSize = game->players[].size();
 	//		for(i=0; i<playerSize; i++)
 	//		{
-	//			if(game->players[i]
+	//			if(game->players[i])
 	//		}
 	
     return scope.Close(game);
