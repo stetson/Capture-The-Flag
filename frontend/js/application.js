@@ -433,9 +433,6 @@ model = {
 	                // Update the locations of each player
 	                $.each(data, function(player_iterator, player) {
 	                    if (model.player_markers[player_iterator] === undefined) {
-	                    	if (model.timer){
-	                    		model.player_markers.setVisible(false);
-	                    	}
 	                    	icon = player_iterator == model.user.user_id ? "/css/images/star.png" : "/css/images/person_" + player.team + ".png";
 	                        model.player_markers[player_iterator] = new google.maps.Marker({
 	                            position: new google.maps.LatLng(player.latitude, player.longitude),
