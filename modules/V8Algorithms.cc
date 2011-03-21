@@ -15,6 +15,7 @@ void V8Algorithms::Init(Handle<Object> target)
   s_ct->SetClassName(String::NewSymbol("Algorithms"));
 
   // Brings the functions to the JS namespace via "Algorithms" (below)
+  NODE_SET_PROTOTYPE_METHOD(s_ct, "in_rectangle", in_rectangle);
   NODE_SET_PROTOTYPE_METHOD(s_ct, "distance_in_miles", distance_in_miles);
   NODE_SET_PROTOTYPE_METHOD(s_ct, "add_miles_to_coordinate", add_miles_to_coordinate);
 
@@ -29,6 +30,29 @@ Handle<Value> V8Algorithms::New(const Arguments& args)
     V8Algorithms* hw = new V8Algorithms();
     hw->Wrap(args.This());
     return args.This();
+}
+
+// Wrapper for in_rectangle
+Handle<Value> V8Algorithms::in_rectangle(const Arguments& args)
+{
+
+  // Setting scope and building an string stream for output
+  HandleScope scope;
+  std::stringstream out;
+
+  // Grabbing function parameters
+  double dFindLat = args[0]->NumberValue();
+  double dFindLong = args[1]->NumberValue();
+  double dTopLeftLat = args[2]->NumberValue();
+  double dTopLeftLong = args[3]->NumberValue();
+  double dBotRightLat = args[4]->NumberValue();
+  double dBotRightLong = args[5]->NumberValue();
+
+  bool isWithinRect = Algorithms::in_rectangle(dFindLat, dFindLong, dTopLeftLat, dTopLeftLong, dBotRightLat, dBotRightLong);
+
+  // Returning the result
+  Handle<Boolean> result = Boolean::New(isWithinRect);
+  return scope.Close(result);
 }
 
 // Wrapper for distance_in_miles()
