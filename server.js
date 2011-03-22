@@ -25,87 +25,88 @@ var fs = require('fs');
 global.ctf = {};
 
 /**
- * The global object used for storing application data  <br /><br />
- * 
- * Example:                                             <br />
- * {<br />
- *     game_id: {<br />
- *         // The point of origin of the game<br />
- *         origin: {<br />
- *             latitude: Number,<br />
- *             longitude: Number<br />
- *         },<br />
- *<br />         
- *         // The position of the red flag<br />
- *         red_flag: {<br />
- *             latitude: Number,<br />
- *             longitude: Number,<br />
- *             ...<br />
- *         },<br />
- *<br />         
- *         // The position of the blue flag<br />
- *         blue_flag: {<br />
- *             latitude: Number,<br />
- *             longitude: Number,<br />
- *             ...<br />
- *         },<br />
- *<br />         
- *         // The bounds of the red territory<br />
- *         red_bounds: {<br />
- *             top_left: {<br />
- *                 latitude: Number,<br />
- *                 longitude: Number,<br />
- *                 ...<br />
- *             },<br />
- *             bottom_right: {<br />
- *                 latitude: Number,<br />
- *                 longitude: Number,<br />
- *                 ...<br />
- *             }<br />
- *         },<br />
- *<br />         
- *         // The bounds of the blue territory<br />
- *         blue_bounds: {<br />
- *             top_left: {<br />
- *                 latitude: Number,<br />
- *                 longitude: Number,<br />
- *                 ...<br />
- *             },<br />
- *             bottom_right: {<br />
- *                 latitude: Number,<br />
- *                 longitude: Number,<br />
- *                 ...<br />
- *             }<br />
- *         },<br />
- *<br />         
- *         // The number of red players<br />
- *         red: Number,<br />
- *<br />         
- *         // The number of blue players<br />
- *         blue: Number,<br />
- *<br />         
- *         // The last time anyone in this game updated<br />
- *         last_update: DateTime,<br />
- *<br />         
- *         // The player objects<br />
- *         players: {<br />
- *<br />         
- *             // A player object, keyed by user_id<br />
- *             user_id: {<br />
- *                 latitude: Number,<br />
+ * The global object used for storing application data  <br />
+ * <pre>
+ * Example:                                             
+ * {
+ *     game_id: {
+ *         // The point of origin of the game
+ *         origin: {
+ *             latitude: Number,
+ *             longitude: Number
+ *         },
+ *         
+ *         // The position of the red flag
+ *         red_flag: {
+ *             latitude: Number,
+ *             longitude: Number,
+ *             ...
+ *         },
+ *         
+ *         // The position of the blue flag
+ *         blue_flag: {
+ *             latitude: Number,
+ *             longitude: Number,
+ *             ...
+ *         },
+ *         
+ *         // The bounds of the red territory
+ *         red_bounds: {
+ *             top_left: {
+ *                 latitude: Number,
+ *                 longitude: Number,
+ *                 ...
+ *             },
+ *             bottom_right: {
+ *                 latitude: Number,
+ *                 longitude: Number,
+ *                 ...
+ *             }
+ *         },
+ *         
+ *         // The bounds of the blue territory
+ *         blue_bounds: {
+ *             top_left: {
+ *                 latitude: Number,
+ *                 longitude: Number,
+ *                 ...
+ *             },
+ *             bottom_right: {
+ *                 latitude: Number,
+ *                 longitude: Number,
+ *                 ...
+ *             }
+ *         },
+ *         
+ *         // The number of red players
+ *         red: Number,
+ *         
+ *         // The number of blue players
+ *         blue: Number,
+ *         
+ *         // The last time anyone in this game updated
+ *         last_update: DateTime,
+ *         
+ *         // The player objects
+ *         players: {
+ *         
+ *             // A player object, keyed by user_id
+ *             user_id: {
+ *                 latitude: Number,
  *                 longitude: Number,v
- *                 accuracy: Number,<br />
- *                 auth_token: String,<br />
- *                 user_id: String,<br />
- *                 name: String,<br />
- *                 game_id: String,<br />
- *                 last_update: DateTime<br />
- *             },<br />
- *             ...<br />
- *         }<br />
- *     },<br />
- *     ...<br />
- * }<br />
+ *                 accuracy: Number,
+ *                 auth_token: String,
+ *                 user_id: String,
+ *                 name: String,
+ *                 game_id: String,
+ *                 last_update: DateTime
+ *             },
+ *             ...
+ *         }
+ *     },
+ *     ...
+ * }
+ * </pre>
  *
  * @name game_data
  */
@@ -166,7 +167,7 @@ http.use(express.bodyParser());
 
 /**
  * Static files for frontend <br />
- * <b>url: /+</b>
+ * <b>url: / *</b>
  * 
  * @memberOf http
  * @name frontend 
@@ -176,7 +177,7 @@ http.use(express.static('./frontend/'));
 
 /**
  * Documentation <br />
- * <b>url: /+</b>
+ * <b>url: / *</b>
  * 
  * @memberOf http
  * @name docs 
@@ -186,32 +187,34 @@ http.use(express.static('./docs/'));
 
 /**
  * Updates the user's location     <br />
- * <b>url: /location</b>           <br />
- * methods: GET, POST              <br /><br />
+ * <pre>
+ * <b>url: /location</b>           
+ * methods: GET, POST              
  * 
- * Client data:                    <br />
- *     accuracy: Number            <br />
- *     auth_token: String<br />
- *     game_id: String<br />
- *     latitude: Number<br />
- *     longitude: Number<br />
- *     name: String<br />
- *     user_id: String<br /><br />
+ * Client data:                    
+ *     accuracy: Number            
+ *     auth_token: String
+ *     game_id: String
+ *     latitude: Number
+ *     longitude: Number
+ *     name: String
+ *     user_id: String
  * 
- * Server data:                    <br />
- *     {<br />
- *         user_id: {<br />
- *             latitude: Number,<br />
- *             longitude: Number,<br />
- *             accuracy: Number,<br />
- *             auth_token: String,<br />
- *             user_id: String,<br />
- *             name: String,<br />
- *             game_id: String,<br />
- *             last_update: DateTime<br />
- *         },<br />
- *         ...<br />
- *     }<br />
+ * Server data:                    
+ *     {
+ *         user_id: {
+ *             latitude: Number,
+ *             longitude: Number,
+ *             accuracy: Number,
+ *             auth_token: String,
+ *             user_id: String,
+ *             name: String,
+ *             game_id: String,
+ *             last_update: DateTime
+ *         },
+ *         ...
+ *     }
+ * </pre>
  * 
  * @memberOf http
  * @name post_location
@@ -222,18 +225,20 @@ http.post('/location', views.update_location);
 
 /**
  * Returns a list of all games on this server  <br />
- * <b>url: /game</b>                           <br />
- * methods: GET                                <br /><br />
+ * <pre>
+ * <b>url: /game</b>                           
+ * methods: GET                                
  * 
- * Client data:                                <br />
- *     latitude: Number                        <br />
- *     longitude: Number                       <br />
- *     accuracy: Number                        <br />
- *     user_id: String                         <br />
- *     name: String                            <br /><br />
+ * Client data:                                
+ *     latitude: Number                        
+ *     longitude: Number                       
+ *     accuracy: Number                        
+ *     user_id: String                         
+ *     name: String                            
  * 
- * Server data:                                <br />
+ * Server data:                                
  * [ "game_name", "game_name", ... ]
+ * </pre>
  * 
  * @memberOf http
  * @name get_game
@@ -243,20 +248,22 @@ http.post('/location', views.update_location);
 http.get('/game', views.get_games);
 
 /**
- * Create a new game                            <br />
- * <b>url: /game</b>                            <br />
- * methods: POST                                <br /><br />
+ * Create a new game <br />
+ * <pre>
+ * <b>url: /game</b>
+ * methods: POST
  * 
- * Client data:                                 <br />
- *     game_id: String                          <br />
- *     latitude: Number                         <br />
- *     longitude: Number                        <br />
- *     name: String                             <br /><br />
+ * Client data:
+ *     game_id: String
+ *     latitude: Number
+ *     longitude: Number
+ *     name: String
  * 
- * Server data:                                 <br />
- * { "response": "OK" } (HTTP 200)              <br />
- *     OR                                       <br />
- * { "error": "..." } (HTTP 4*)                 <br />
+ * Server data:
+ * { "response": "OK" } (HTTP 200)
+ *     OR
+ * { "error": "..." } (HTTP 4*)
+ * </pre>
  * 
  * @memberOf http
  * @name post_game
