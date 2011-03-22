@@ -21,10 +21,94 @@ var fs = require('fs');
 
 ////////// Global data
 
-/**
- * The global object used for storing application data
- */
+// Create global object
 global.ctf = {};
+
+/**
+ * The global object used for storing application data  <br /><br />
+ * 
+ * Example:                                             <br />
+ * {<br />
+ *     game_id: {<br />
+ *         // The point of origin of the game<br />
+ *         origin: {<br />
+ *             latitude: Number,<br />
+ *             longitude: Number<br />
+ *         },<br />
+ *<br />         
+ *         // The position of the red flag<br />
+ *         red_flag: {<br />
+ *             latitude: Number,<br />
+ *             longitude: Number,<br />
+ *             ...<br />
+ *         },<br />
+ *<br />         
+ *         // The position of the blue flag<br />
+ *         blue_flag: {<br />
+ *             latitude: Number,<br />
+ *             longitude: Number,<br />
+ *             ...<br />
+ *         },<br />
+ *<br />         
+ *         // The bounds of the red territory<br />
+ *         red_bounds: {<br />
+ *             top_left: {<br />
+ *                 latitude: Number,<br />
+ *                 longitude: Number,<br />
+ *                 ...<br />
+ *             },<br />
+ *             bottom_right: {<br />
+ *                 latitude: Number,<br />
+ *                 longitude: Number,<br />
+ *                 ...<br />
+ *             }<br />
+ *         },<br />
+ *<br />         
+ *         // The bounds of the blue territory<br />
+ *         blue_bounds: {<br />
+ *             top_left: {<br />
+ *                 latitude: Number,<br />
+ *                 longitude: Number,<br />
+ *                 ...<br />
+ *             },<br />
+ *             bottom_right: {<br />
+ *                 latitude: Number,<br />
+ *                 longitude: Number,<br />
+ *                 ...<br />
+ *             }<br />
+ *         },<br />
+ *<br />         
+ *         // The number of red players<br />
+ *         red: Number,<br />
+ *<br />         
+ *         // The number of blue players<br />
+ *         blue: Number,<br />
+ *<br />         
+ *         // The last time anyone in this game updated<br />
+ *         last_update: DateTime,<br />
+ *<br />         
+ *         // The player objects<br />
+ *         players: {<br />
+ *<br />         
+ *             // A player object, keyed by user_id<br />
+ *             user_id: {<br />
+ *                 latitude: Number,<br />
+ *                 longitude: Number,v
+ *                 accuracy: Number,<br />
+ *                 auth_token: String,<br />
+ *                 user_id: String,<br />
+ *                 name: String,<br />
+ *                 game_id: String,<br />
+ *                 last_update: DateTime<br />
+ *             },<br />
+ *             ...<br />
+ *         }<br />
+ *     },<br />
+ *     ...<br />
+ * }<br />
+ *
+ * @name game_data
+ */
 ctf.game_data = {};
 
 /**
@@ -82,12 +166,13 @@ fs.readFile('game_data.dat', function(err, data) {
     }
         
     /** 
-     * The server object which controls all routes
+     * The server object which controls all routes<br />
+     * These are the JSON endpoints for the entire application
      * 
      * @namespace http
      */
-    ctf.http = express.createServer();
-    ctf.http.use(express.bodyDecoder());
+    var http = express.createServer();
+    http.use(express.bodyParser());
 	
 	/**
 	 * Static files for frontend <br />
@@ -96,7 +181,7 @@ fs.readFile('game_data.dat', function(err, data) {
 	 * @memberOf http
 	 * @name frontend 
 	 **/
-	ctf.http.use(express.staticProvider('./frontend/'));
+	http.use(express.static('./frontend/'));
 	
 	/**
 	 * Documentation <br />
@@ -105,64 +190,116 @@ fs.readFile('game_data.dat', function(err, data) {
 	 * @memberOf http
 	 * @name docs 
 	 **/
-	ctf.http.use(express.staticProvider('./docs/'));
+	http.use(express.static('./docs/'));
 	
 	/**
-	 * Calls views.update_location <br />
-	 * <b>url: /location</b><br />
-	 * methods: GET, POST
+	 * Updates the user's location     <br />
+	 * <b>url: /location</b>           <br />
+	 * methods: GET, POST              <br /><br />
+	 * 
+	 * Client data:                    <br />
+	 *     accuracy: Number            <br />
+	 *     auth_token: String<br />
+	 *     game_id: String<br />
+	 *     latitude: Number<br />
+	 *     longitude: Number<br />
+	 *     name: String<br />
+	 *     user_id: String<br /><br />
+	 * 
+	 * Server data:                    <br />
+	 *     {<br />
+	 *         user_id: {<br />
+	 *             latitude: Number,<br />
+	 *             longitude: Number,<br />
+	 *             accuracy: Number,<br />
+	 *             auth_token: String,<br />
+	 *             user_id: String,<br />
+	 *             name: String,<br />
+	 *             game_id: String,<br />
+	 *             last_update: DateTime<br />
+	 *         },<br />
+	 *         ...<br />
+	 *     }<br />
 	 * 
 	 * @memberOf http
 	 * @name location
 	 * @link controller.location 
 	 **/
-	ctf.http.post('/location', views.update_location);
-	//ctf.http.get('/location', views.get_location);
+	http.post('/location', views.update_location);
 	
 	/**
-	 * Returns a list of all games on this server<br />
-	 * <b>url: /game</b><br />
-	 * methods: GET
+	 * Returns a list of all games on this server  <br />
+	 * <b>url: /game</b>                           <br />
+	 * methods: GET                                <br /><br />
+     * 
+     * Client data:                                <br />
+     *     latitude: Number                        <br />
+     *     longitude: Number                       <br />
+     *     accuracy: Number                        <br />
+     *     user_id: String                         <br />
+     *     name: String                            <br /><br />
+     * 
+     * Server data:                                <br />
+     * [ "game_name", "game_name", ... ]
 	 * 
 	 * @memberOf http
 	 * @name get_games
 	 * @link controller.get_games
 	 */
-	ctf.http.get('/game', views.get_games);
+	http.get('/game', views.get_games);
 	
 	/**
-     * Create a new game<br />
-     * <b>url: /game</b><br />
-     * methods: POST
+     * Create a new game                            <br />
+     * <b>url: /game</b>                            <br />
+     * methods: POST                                <br /><br />
+     * 
+     * Client data:                                 <br />
+     *     game_id: String                          <br />
+     *     latitude: Number                         <br />
+     *     longitude: Number                        <br />
+     *     name: String                             <br /><br />
+     * 
+     * Server data:                                 <br />
+     * { "response": "OK" } (HTTP 200)              <br />
+     *     OR                                       <br />
+     * { "error": "..." } (HTTP 4*)                 <br />
      * 
      * @memberOf http
      * @name create_game
      * @link controller.create_game
      */
-	ctf.http.post('/game', views.create_game);
+	http.post('/game', views.create_game);
 	
 	/**
-     * Join a game<br />
-     * <b>url: /game/:game_id</b><br />
-     * methods: POST
+     * Join a game                                  <br />
+     * <b>url: /game/:game_id</b>                   <br />
+     * methods: POST                                <br /><br />
+     * 
+     * Client data:                                 <br />
+     *     accuracy: Number                         <br />
+     *     auth_token: String                       <br />
+     *     latitude: Number                         <br />
+     *     longitude: Number                        <br />
+     *     name: String                             <br />
+     *     user_id: String                          <br />
      * 
      * @memberOf http
      * @name join_game
      * @link controller.join_game
      */
-    ctf.http.post('/game/:game_id', views.join_game);
+    http.post('/game/:game_id', views.join_game);
     
     // This is super s3cr3t :-)
-    ctf.http.get('/admin.json', function(request, response) {
+    http.get('/admin.json', function(request, response) {
         response.send(ctf.game_data);
     });
     
     // Start listening
     try {
-        ctf.http.listen(80);
+        http.listen(80);
         console.log("Listening on port 80");
     } catch (f) {
-        ctf.http.listen(5555);
+        http.listen(5555);
         console.log("Listening on port 5555");
     }
 });

@@ -3,6 +3,12 @@
  */
 var fs = require('fs');
 
+/**
+ * Purge players that haven't updated in a while
+ * 
+ * @name purge_players
+ * @memberOf utils
+ */
 exports.purge_players = function() {
     for (var game_iterator in ctf.game_data) {
         if (ctf.game_data.hasOwnProperty(game_iterator)) {
@@ -36,6 +42,12 @@ exports.purge_players = function() {
     }
 };
 
+/**
+ * Purge games that haven't been updated in a while
+ * 
+ * @name purge_games
+ * @memberOf utils
+ */
 exports.purge_games = function() {
     for (var game_iterator in ctf.game_data) {
         if (ctf.game_data.hasOwnProperty(game_iterator)) {
@@ -51,6 +63,12 @@ exports.purge_games = function() {
     }
 };
 
+/**
+ * Backup game data on an interval
+ * 
+ * @name backup_game_data
+ * @memberOf utils
+ */
 exports.backup_game_data = function() {
     fs.writeFile('game_data.dat', JSON.stringify(ctf.game_data));
 };
