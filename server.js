@@ -155,6 +155,135 @@ setInterval(utils.backup_game_data, 10 * ctf.constants.SECOND);
 
 ////////// Routes
 
+/** 
+ * The server object which controls all routes<br />
+ * These are the JSON endpoints for the entire application
+ * 
+ * @namespace http
+ */
+var http = express.createServer();
+http.use(express.bodyParser());
+
+/**
+ * Static files for frontend <br />
+ * <b>url: /+</b>
+ * 
+ * @memberOf http
+ * @name frontend 
+ **/
+http.use(express.static('./frontend/'));
+
+/**
+ * Documentation <br />
+ * <b>url: /+</b>
+ * 
+ * @memberOf http
+ * @name docs 
+ **/
+http.use(express.static('./docs/'));
+
+/**
+ * Updates the user's location     <br />
+ * <b>url: /location</b>           <br />
+ * methods: GET, POST              <br /><br />
+ * 
+ * Client data:                    <br />
+ *     accuracy: Number            <br />
+ *     auth_token: String<br />
+ *     game_id: String<br />
+ *     latitude: Number<br />
+ *     longitude: Number<br />
+ *     name: String<br />
+ *     user_id: String<br /><br />
+ * 
+ * Server data:                    <br />
+ *     {<br />
+ *         user_id: {<br />
+ *             latitude: Number,<br />
+ *             longitude: Number,<br />
+ *             accuracy: Number,<br />
+ *             auth_token: String,<br />
+ *             user_id: String,<br />
+ *             name: String,<br />
+ *             game_id: String,<br />
+ *             last_update: DateTime<br />
+ *         },<br />
+ *         ...<br />
+ *     }<br />
+ * 
+ * @memberOf http
+ * @name post_location
+ * @link controller.location 
+ **/
+http.post('/location', views.update_location);
+
+/**
+ * Returns a list of all games on this server  <br />
+ * <b>url: /game</b>                           <br />
+ * methods: GET                                <br /><br />
+ * 
+ * Client data:                                <br />
+ *     latitude: Number                        <br />
+ *     longitude: Number                       <br />
+ *     accuracy: Number                        <br />
+ *     user_id: String                         <br />
+ *     name: String                            <br /><br />
+ * 
+ * Server data:                                <br />
+ * [ "game_name", "game_name", ... ]
+ * 
+ * @memberOf http
+ * @name get_game
+ * @link controller.get_games
+ */
+http.get('/game', views.get_games);
+
+/**
+ * Create a new game                            <br />
+ * <b>url: /game</b>                            <br />
+ * methods: POST                                <br /><br />
+ * 
+ * Client data:                                 <br />
+ *     game_id: String                          <br />
+ *     latitude: Number                         <br />
+ *     longitude: Number                        <br />
+ *     name: String                             <br /><br />
+ * 
+ * Server data:                                 <br />
+ * { "response": "OK" } (HTTP 200)              <br />
+ *     OR                                       <br />
+ * { "error": "..." } (HTTP 4*)                 <br />
+ * 
+ * @memberOf http
+ * @name post_game
+ * @link controller.create_game
+ */
+http.post('/game', views.create_game);
+
+/**
+ * Join a game                                  <br />
+ * <b>url: /game/:game_id</b>                   <br />
+ * methods: POST                                <br /><br />
+ * 
+ * Client data:                                 <br />
+ *     accuracy: Number                         <br />
+ *     auth_token: String                       <br />
+ *     latitude: Number                         <br />
+ *     longitude: Number                        <br />
+ *     name: String                             <br />
+ *     user_id: String                          <br />
+ * 
+ * @memberOf http
+ * @name post_game_id
+ * @link controller.join_game
+ */
+http.post('/game/:game_id', views.join_game);
+
+// This is super s3cr3t :-)
+http.get('/admin.json', function(request, response) {
+    response.send(ctf.game_data);
+});
+
 fs.readFile('game_data.dat', function(err, data) {
     // Load game_data.dat
     if (! err) {
@@ -164,135 +293,6 @@ fs.readFile('game_data.dat', function(err, data) {
             utils.purge_games();
         } catch(e) { }
     }
-        
-    /** 
-     * The server object which controls all routes<br />
-     * These are the JSON endpoints for the entire application
-     * 
-     * @namespace http
-     */
-    var http = express.createServer();
-    http.use(express.bodyParser());
-	
-	/**
-	 * Static files for frontend <br />
-	 * <b>url: /+</b>
-	 * 
-	 * @memberOf http
-	 * @name frontend 
-	 **/
-	http.use(express.static('./frontend/'));
-	
-	/**
-	 * Documentation <br />
-	 * <b>url: /+</b>
-	 * 
-	 * @memberOf http
-	 * @name docs 
-	 **/
-	http.use(express.static('./docs/'));
-	
-	/**
-	 * Updates the user's location     <br />
-	 * <b>url: /location</b>           <br />
-	 * methods: GET, POST              <br /><br />
-	 * 
-	 * Client data:                    <br />
-	 *     accuracy: Number            <br />
-	 *     auth_token: String<br />
-	 *     game_id: String<br />
-	 *     latitude: Number<br />
-	 *     longitude: Number<br />
-	 *     name: String<br />
-	 *     user_id: String<br /><br />
-	 * 
-	 * Server data:                    <br />
-	 *     {<br />
-	 *         user_id: {<br />
-	 *             latitude: Number,<br />
-	 *             longitude: Number,<br />
-	 *             accuracy: Number,<br />
-	 *             auth_token: String,<br />
-	 *             user_id: String,<br />
-	 *             name: String,<br />
-	 *             game_id: String,<br />
-	 *             last_update: DateTime<br />
-	 *         },<br />
-	 *         ...<br />
-	 *     }<br />
-	 * 
-	 * @memberOf http
-	 * @name location
-	 * @link controller.location 
-	 **/
-	http.post('/location', views.update_location);
-	
-	/**
-	 * Returns a list of all games on this server  <br />
-	 * <b>url: /game</b>                           <br />
-	 * methods: GET                                <br /><br />
-     * 
-     * Client data:                                <br />
-     *     latitude: Number                        <br />
-     *     longitude: Number                       <br />
-     *     accuracy: Number                        <br />
-     *     user_id: String                         <br />
-     *     name: String                            <br /><br />
-     * 
-     * Server data:                                <br />
-     * [ "game_name", "game_name", ... ]
-	 * 
-	 * @memberOf http
-	 * @name get_games
-	 * @link controller.get_games
-	 */
-	http.get('/game', views.get_games);
-	
-	/**
-     * Create a new game                            <br />
-     * <b>url: /game</b>                            <br />
-     * methods: POST                                <br /><br />
-     * 
-     * Client data:                                 <br />
-     *     game_id: String                          <br />
-     *     latitude: Number                         <br />
-     *     longitude: Number                        <br />
-     *     name: String                             <br /><br />
-     * 
-     * Server data:                                 <br />
-     * { "response": "OK" } (HTTP 200)              <br />
-     *     OR                                       <br />
-     * { "error": "..." } (HTTP 4*)                 <br />
-     * 
-     * @memberOf http
-     * @name create_game
-     * @link controller.create_game
-     */
-	http.post('/game', views.create_game);
-	
-	/**
-     * Join a game                                  <br />
-     * <b>url: /game/:game_id</b>                   <br />
-     * methods: POST                                <br /><br />
-     * 
-     * Client data:                                 <br />
-     *     accuracy: Number                         <br />
-     *     auth_token: String                       <br />
-     *     latitude: Number                         <br />
-     *     longitude: Number                        <br />
-     *     name: String                             <br />
-     *     user_id: String                          <br />
-     * 
-     * @memberOf http
-     * @name join_game
-     * @link controller.join_game
-     */
-    http.post('/game/:game_id', views.join_game);
-    
-    // This is super s3cr3t :-)
-    http.get('/admin.json', function(request, response) {
-        response.send(ctf.game_data);
-    });
     
     // Start listening
     try {
