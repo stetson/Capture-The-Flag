@@ -24,24 +24,6 @@ var fs = require('fs');
  */
 var log = fs.createWriteStream("update_location.csv", { flags: "a" });
 
-/**
- * Get the locations of the other players
- */
-get_location = function(request, response) {
-    // Send the players back to the client
-    var game_id = request.body.game_id;
-    var locations = controller.get_location(game_id);
-    
-    if (locations) {
-        response.send(locations);
-    } else {
-        response.send({"error": "Invalid game"}, 404);
-    }
-};
-
-/**
- * Update the user's location
- */
 exports.update_location = function(request, response) {
     // Record user's location
 	var game_id = request.body.game_id;
@@ -58,17 +40,20 @@ exports.update_location = function(request, response) {
 	    }
 	    
 	    // Send the locations of the other players back
-        get_location(request, response);
+	    var locations = controller.get_location(game_id);
+	    
+	    if (locations) {
+	        response.send(locations);
+	    } else {
+	        response.send({"error": "Invalid game"}, 404);
+	    }
+	    
         return;
 	}
 	
 	response.send({"error": "Invalid user"}, 404);
 };
 
-/**
- * Game resource, which lists all games and allows users
- * to create a new game
- */ 
 exports.get_games = function(request, response) {
 	var user_latitude = request.query.latitude;
 	var user_longitude = request.query.longitude;
@@ -77,9 +62,6 @@ exports.get_games = function(request, response) {
 	response.send(games_in_radius);
 };
 
-/**
- * Create a new game, and return the id
- */
 exports.create_game = function(request, response) {
     // Generate a new game id
     var game_id = "";
@@ -99,9 +81,6 @@ exports.create_game = function(request, response) {
     }
 };
 
-/**
- * Join a game
- */
 exports.join_game = function(request, response) {
     var user_id = request.body.user_id;
     var game_id = request.params.game_id;
