@@ -6,6 +6,10 @@ var algorithms = new algorithms_class.Algorithms();
  * 
  * @memberOf controller
  * @name update_location
+ * @param game_id {String} The id of the game
+ * @param user_id {String} The id of the user to update
+ * @param user {Object} The user to update (sent from client)
+ * @returns {Boolean} if successful
  */
 exports.update_location = function(game_id, user_id, user) {
     if (user_id && ctf.game_data[game_id] !== undefined && ctf.game_data[game_id].players[user_id] !== undefined) {
@@ -23,6 +27,8 @@ exports.update_location = function(game_id, user_id, user) {
  * 
  * @memberOf controller
  * @name get_location 
+ * @param game_id
+ * @returns {Array} players or false
  */
 exports.get_location = function(game_id) {
     if (game_id && ctf.game_data[game_id]) {
@@ -38,6 +44,9 @@ exports.get_location = function(game_id) {
  * 
  * @memberOf controller
  * @name get_games
+ * @param user_latitude The latitude where the user is currently
+ * @param user_longitude The longitude where the user is currently
+ * @return {Array} Games that are in range
  */ 
 exports.get_games = function(user_latitude, user_longitude) {
     var games_in_radius = [];
@@ -65,7 +74,10 @@ exports.get_games = function(user_latitude, user_longitude) {
  * 
  * @memberOf controller
  * @name create_game
- * @param game_id
+ * @param game_id {String} The requested game_id
+ * @param latitude {Number} The latitude of the game to be created
+ * @param longitude {Number} The longitude of the game to be created
+ * @returns {Boolean} if successful
  */
 exports.create_game = function(game_id, latitude, longitude) {
     if (ctf.game_data[game_id] === undefined && latitude && longitude) {
@@ -100,7 +112,10 @@ exports.create_game = function(game_id, latitude, longitude) {
  * 
  * @memberOf controller
  * @name join_game
- * @param game_id
+ * @param game_id {String} The id of the game to join
+ * @param user_id {String} The id of the user to join
+ * @param user {Object} The user to join (sent from client)
+ * @returns {Boolean} if successful
  */
 exports.join_game = function(game_id, user_id, user) {
     if (! user_id || ! game_id || ! ctf.game_data[game_id]) {

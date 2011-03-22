@@ -221,7 +221,7 @@ http.use(express.static('./docs/'));
  * 
  * @memberOf http
  * @name post_location
- * @link controller.location 
+ * @link controller.update_location 
  * @param request
  **/
 http.post('/location', views.update_location);
