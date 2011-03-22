@@ -25,7 +25,8 @@ var fs = require('fs');
 global.ctf = {};
 
 /**
- * The global object used for storing application data  <br />
+ * The global object used for storing application data
+ * ..
  * <pre>
  * Example:                                             
  * {
@@ -186,10 +187,12 @@ http.use(express.static('./frontend/'));
 http.use(express.static('./docs/'));
 
 /**
- * Updates the user's location     <br />
+ * Updates the user's location
  * <pre>
+ * 
  * <b>url: /location</b>           
- * methods: GET, POST              
+ * methods: GET, POST
+ * ..              
  * 
  * Client data:                    
  *     accuracy: Number            
@@ -224,10 +227,12 @@ http.use(express.static('./docs/'));
 http.post('/location', views.update_location);
 
 /**
- * Returns a list of all games on this server  <br />
+ * Returns a list of all games on this server
  * <pre>
+ * 
  * <b>url: /game</b>                           
- * methods: GET                                
+ * methods: GET    
+ * ..                            
  * 
  * Client data:                                
  *     latitude: Number                        
@@ -248,10 +253,12 @@ http.post('/location', views.update_location);
 http.get('/game', views.get_games);
 
 /**
- * Create a new game <br />
+ * Create a new game
  * <pre>
+ * 
  * <b>url: /game</b>
  * methods: POST
+ * ..
  * 
  * Client data:
  *     game_id: String
@@ -273,10 +280,12 @@ http.get('/game', views.get_games);
 http.post('/game', views.create_game);
 
 /**
- * Join a game                                  <br />
+ * Join a game
  * <pre>
+ * 
  * <b>url: /game/:game_id</b>
  * methods: POST
+ * ..
  * 
  * Client data:
  *     accuracy: Number
