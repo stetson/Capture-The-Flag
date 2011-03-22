@@ -114,6 +114,7 @@ global.ctf = {};
  * </pre>
  *
  * @name game_data
+ * @memberOf global.ctf
  */
 ctf.game_data = {};
 
@@ -121,7 +122,7 @@ ctf.game_data = {};
  * Constants for use in the program
  * 
  * @name constants
- * @memberOf ctf
+ * @memberOf global.ctf
  */
 ctf.constants = {
     MINUTE: 60*1000,
