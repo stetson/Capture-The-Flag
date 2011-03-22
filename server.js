@@ -21,7 +21,11 @@ var fs = require('fs');
 
 ////////// Global data
 
-// Create global object
+/**
+ * Global object
+ * 
+ * @namespace ctf
+ */
 global.ctf = {};
 
 /**
@@ -115,6 +119,9 @@ ctf.game_data = {};
 
 /**
  * Constants for use in the program
+ * 
+ * @name constants
+ * @memberOf ctf
  */
 ctf.constants = {
     MINUTE: 60*1000,

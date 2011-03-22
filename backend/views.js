@@ -14,9 +14,6 @@
  */
 var controller = require("../backend/controller.js");
 
-/**
- * Filesystem access
- */
 var fs = require('fs');
 
 /**
