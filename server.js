@@ -170,6 +170,7 @@ http.use(express.bodyParser());
  * 
  * @memberOf http
  * @name frontend 
+ * @param request
  **/
 http.use(express.static('./frontend/'));
 
@@ -179,6 +180,7 @@ http.use(express.static('./frontend/'));
  * 
  * @memberOf http
  * @name docs 
+ * @param request
  **/
 http.use(express.static('./docs/'));
 
@@ -214,6 +216,7 @@ http.use(express.static('./docs/'));
  * @memberOf http
  * @name post_location
  * @link controller.location 
+ * @param request
  **/
 http.post('/location', views.update_location);
 
@@ -235,6 +238,7 @@ http.post('/location', views.update_location);
  * @memberOf http
  * @name get_game
  * @link controller.get_games
+ * @param request
  */
 http.get('/game', views.get_games);
 
@@ -257,25 +261,68 @@ http.get('/game', views.get_games);
  * @memberOf http
  * @name post_game
  * @link controller.create_game
+ * @param request
  */
 http.post('/game', views.create_game);
 
 /**
  * Join a game                                  <br />
- * <b>url: /game/:game_id</b>                   <br />
- * methods: POST                                <br /><br />
+ * <pre>
+ * <b>url: /game/:game_id</b>
+ * methods: POST
  * 
- * Client data:                                 <br />
- *     accuracy: Number                         <br />
- *     auth_token: String                       <br />
- *     latitude: Number                         <br />
- *     longitude: Number                        <br />
- *     name: String                             <br />
- *     user_id: String                          <br />
+ * Client data:
+ *     accuracy: Number
+ *     auth_token: String
+ *     latitude: Number
+ *     longitude: Number
+ *     name: String
+ *     user_id: String
+ * 
+ * Server data:
+ *     {
+ *         team: String,
+ *         red_flag: {
+ *             latitude: Number,
+ *             longitude: Number,
+ *             ...
+ *         },
+ *         blue_flag: {
+ *             latitude: Number,
+ *             longitude: Number,
+ *             ...
+ *         },
+ *         red_bounds: {
+ *             top_left: {
+ *                 latitude: Number,
+ *                 longitude: Number,
+ *                 ...
+ *             },
+ *             bottom_right: {
+ *                 latitude: Number,
+ *                 longitude: Number,
+ *                 ...
+ *             }
+ *         },
+ *         blue_bounds: {
+ *             top_left: {
+ *                 latitude: Number,
+ *                 longitude: Number,
+ *                 ...
+ *             },
+ *             bottom_right: {
+ *                 latitude: Number,
+ *                 longitude: Number,
+ *                 ...
+ *             }
+ *         }
+ *     }
+ * </pre>
  * 
  * @memberOf http
  * @name post_game_id
  * @link controller.join_game
+ * @param request
  */
 http.post('/game/:game_id', views.join_game);
 
