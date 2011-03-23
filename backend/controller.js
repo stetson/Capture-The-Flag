@@ -130,6 +130,7 @@ exports.join_game = function(game_id, user_id, user) {
     } else {
         ctf.game_data[game_id].players[user_id] = user;
         ctf.game_data[game_id].players[user_id].team = ctf.game_data[game_id].red > ctf.game_data[game_id].blue ? 'blue' : 'red';
+        ctf.game_data[game_id].players[user_id].has_flag = false;
         ctf.game_data[game_id][ctf.game_data[game_id].players[user_id].team] += 1;
         return true;
     }

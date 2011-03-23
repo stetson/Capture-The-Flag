@@ -111,7 +111,8 @@ global.ctf = {};
  *                 name: String,
  *                 game_id: String,
  *                 last_update: DateTime,
- *                 team: String
+ *                 team: String,
+ *                 has_flag: Boolean
  *             },
  *             ...
  *         }
