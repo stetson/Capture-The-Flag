@@ -89,6 +89,12 @@ global.ctf = {};
  *         // The number of blue players
  *         blue: Number,
  *         
+ *         // The score for the red team
+ *         red_score: Number,
+ *         
+ *         // The score for the blue team
+ *         blue_score: Number,
+ *         
  *         // The last time anyone in this game updated
  *         last_update: DateTime,
  *         
@@ -104,7 +110,8 @@ global.ctf = {};
  *                 user_id: String,
  *                 name: String,
  *                 game_id: String,
- *                 last_update: DateTime
+ *                 last_update: DateTime,
+ *                 team: String
  *             },
  *             ...
  *         }

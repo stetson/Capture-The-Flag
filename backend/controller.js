@@ -103,7 +103,9 @@ exports.create_game = function(game_id, latitude, longitude) {
             last_update: new Date(),
             players: {},
             red: 0,
-            blue: 0
+            blue: 0,
+            red_score: 0,
+            blue_score: 0
         };
         return true;
     } else {
