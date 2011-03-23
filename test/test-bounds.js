@@ -8,12 +8,14 @@ global.ctf = {};
 ctf.game_data = {};
 var controller = require("../backend/controller.js");
 
+var TWENTY_FEET = 0.000001;
+
 // Test data
 var user_id = "Bob the tester";
 var game_id = "test_game";
 var user = {
-    latitude: 29.034681,
-    longitude: -81.303774
+    latitude: 29.034681,    // 29°02′04.9″N
+    longitude: -81.303774   // 81°18′13.6″W
 };
 
 exports.test_bounds = function(test) {
@@ -34,10 +36,21 @@ exports.test_bounds = function(test) {
         { latitude: user.latitude, longitude: game.blue_bounds.top_left.longitude, boundary: boundaries.blue, expected_result: false },
         
         // Test just a hair to the South (Should be in blue territory)
-        { latitude: user.latitude - 0.000001, longitude: game.blue_bounds.bottom_right.longitude, boundary: boundaries.blue, expected_result: true },
-        { latitude: user.latitude - 0.000001, longitude: game.blue_bounds.top_left.longitude, boundary: boundaries.blue, expected_result: true }
+        { latitude: user.latitude - TWENTY_FEET, longitude: game.blue_bounds.bottom_right.longitude, boundary: boundaries.blue, expected_result: true },
+        { latitude: user.latitude - TWENTY_FEET, longitude: game.blue_bounds.top_left.longitude, boundary: boundaries.blue, expected_result: true },
         
-        // TODO - test corners
+        // Test red corners
+        { latitude: game.red_bounds.top_left.latitude, longitude: game.red_bounds.top_left.longitude, boundary: boundaries.red, expected_result: true },
+        { latitude: game.red_bounds.bottom_right.latitude, longitude: game.red_bounds.bottom_right.longitude, boundary: boundaries.red, expected_result: true },
+        { latitude: game.red_bounds.bottom_right.latitude, longitude: game.red_bounds.top_left.longitude, boundary: boundaries.red, expected_result: true },
+        { latitude: game.red_bounds.top_left.latitude, longitude: game.red_bounds.bottom_right.longitude, boundary: boundaries.red, expected_result: true },
+        
+        // Test blue corners
+        { latitude: game.blue_bounds.top_left.latitude - TWENTY_FEET, longitude: game.blue_bounds.top_left.longitude, boundary: boundaries.blue, expected_result: true },
+        { latitude: game.blue_bounds.bottom_right.latitude, longitude: game.blue_bounds.bottom_right.longitude, boundary: boundaries.blue, expected_result: true },
+        { latitude: game.blue_bounds.bottom_right.latitude, longitude: game.blue_bounds.top_left.longitude, boundary: boundaries.blue, expected_result: true },
+        { latitude: game.blue_bounds.top_left.latitude - TWENTY_FEET, longitude: game.blue_bounds.bottom_right.longitude, boundary: boundaries.blue, expected_result: true }
+        
         // TODO - test points known to be inside
         // TODO - test points known to be outside
         // TODO - test points very close to where the line should be on either side
