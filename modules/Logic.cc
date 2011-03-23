@@ -36,9 +36,51 @@
   {
     HandleScope scope;
     Local<Object> game = Object::Cast(*args[0]);
+    Local<Object> players = game->Get(String::New("players"))->ToObject();
+    Local<Array> player_keys = players->GetPropertyNames();
+    Local<Object> player;
+    Local<String> team;
+    Local<Object> top_left;
+    Local<Object> bottom_right;
+    Local<String> bounds;
+    Local<String> score;
 
-    // Do stuff (game->Set() and game->Get())
-    // http://marcorogers.com/blog/static/v8/doxygen/classv8_1_1Object.html
+    // Keys for accessing object properties
+    Local<String> latitude = String::New("latitude");
+    Local<String> longitude = String::New("longitude");
+    Local<String> has_flag = String::New("has_flag");
+
+    // Iterate over players
+    for (unsigned int i = 0; i < player_keys->Length(); i++) {
+        // Grab the player
+        player = players->Get(player_keys->Get(i))->ToObject();
+
+        // If they have the flag...
+        if (player->Has(has_flag) && player->Get(has_flag)->ToBoolean()->Value()) {
+
+            // Figure out which team they are on
+            team = player->Get(String::New("team"))->ToString();
+            bounds = String::Concat(team, String::New("_bounds"));
+
+            // Grab the bounds for the player
+
+            top_left = game->Get(bounds)->ToObject()->Get(String::New("top_left"))->ToObject();
+            bottom_right = game->Get(bounds)->ToObject()->Get(String::New("bottom_right"))->ToObject();
+
+            // ...And if they're in their own territory
+            if (Algorithms::in_rectangle(player->Get(latitude)->NumberValue(), player->Get(longitude)->NumberValue(),
+                top_left->Get(latitude)->NumberValue(), top_left->Get(longitude)->NumberValue(),
+                bottom_right->Get(latitude)->NumberValue(), bottom_right->Get(longitude)->NumberValue())) {
+
+                // Increment their team's score
+                score = String::Concat(team, String::New("_score"));
+                game->Set(score, Integer::New(game->Get(score)->IntegerValue() + 1));
+
+                // Take the flag away from them
+                player->Set(has_flag, Boolean::New(false));
+            }
+        }
+    }
 
     return scope.Close(game);
   }
