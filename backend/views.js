@@ -16,7 +16,7 @@ var controller = require("../backend/controller.js");
 
 var fs = require('fs');
 
-logic_class = require("../modules/build/default/Algorithms.node");
+logic_class = require("../modules/build/default/Logic.node");
 /**
  * The state engine which handles all business logic for the application
  *
