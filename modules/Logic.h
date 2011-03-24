@@ -8,26 +8,23 @@ using namespace v8;
 class Logic: ObjectWrap
 {
 
-private:
-  int m_count;
-  
 public:
   static Persistent<FunctionTemplate> s_ct;
   static void Init(Handle<Object> target);
   static Handle<Value> New(const Arguments& args);
-  static Handle<Value> check_win(const Arguments& args);
-  static Handle<Value> check_distance(const Arguments& args);
-  static Handle<Value> check_flags(const Arguments& args);
-  static Handle<Value> check_bounds(const Arguments& args);
+  static Handle<Value> run(const Arguments& args);
+  static void check_win(const Local<Object>& game, const Local<Object>& player);
+  static void check_distance(const Local<Object>& game, const Local<Object>& player1, const Local<Object>& player2);
+  static void check_flags(const Local<Object>& game, const Local<Object>& player);
+  static void check_bounds(const Local<Object>& game, const Local<Object>& player);
 
-  /**
-   * Constructor for C++
-   */
-  Logic() { }
+  // Constructor
+  Logic()
+  { }
 
+  // Destructor
   ~Logic()
-  {
-  }
+  { }
 
 };
 

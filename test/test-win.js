@@ -46,7 +46,7 @@ exports.test_win = function(test) {
     test.strictEqual(true, ctf.game_data[game_id].players[user_id].has_flag, "The user doesn't have the flag");
     
     // Run business logic
-    logic.check_win(ctf.game_data[game_id]);
+    logic.run(ctf.game_data[game_id]);
     
     // Test score
     test.equal(1, ctf.game_data[game_id].red_score, "The user's team was not credited with a win");

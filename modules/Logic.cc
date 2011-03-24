@@ -11,10 +11,7 @@
     s_ct->InstanceTemplate()->SetInternalFieldCount(1);
     s_ct->SetClassName(String::NewSymbol("Logic"));
 
-    NODE_SET_PROTOTYPE_METHOD(s_ct, "check_win", check_win);
-    NODE_SET_PROTOTYPE_METHOD(s_ct, "check_distance", check_distance);
-    NODE_SET_PROTOTYPE_METHOD(s_ct, "check_flags", check_distance);
-    NODE_SET_PROTOTYPE_METHOD(s_ct, "check_bounds", check_distance);
+    NODE_SET_PROTOTYPE_METHOD(s_ct, "run", run);
 
     target->Set(String::NewSymbol("Logic"),
                 s_ct->GetFunction());
@@ -29,112 +26,96 @@
   }
 
   /**
-   * Check for a win
-   * @param game The game object
+   * Run all business logic
    */
-  Handle<Value> Logic::check_win(const Arguments& args)
+  Handle<Value> Logic::run(const Arguments& args)
   {
     HandleScope scope;
     Local<Object> game = Object::Cast(*args[0]);
     Local<Object> players = game->Get(String::New("players"))->ToObject();
     Local<Array> player_keys = players->GetPropertyNames();
-    Local<Object> player;
-    Local<String> team;
-    Local<Object> top_left;
-    Local<Object> bottom_right;
-    Local<String> bounds;
-    Local<String> score;
-
-    // Keys for accessing object properties
-    Local<String> latitude = String::New("latitude");
-    Local<String> longitude = String::New("longitude");
-    Local<String> has_flag = String::New("has_flag");
+    Local<Object> player1;
+    Local<Object> player2;
 
     // Iterate over players
     for (unsigned int i = 0; i < player_keys->Length(); i++) {
+      // Grab the player
+      player1 = players->Get(player_keys->Get(i))->ToObject();
+
+      // Run single-player business logic
+      Logic::check_win(game, player1);
+
+      // Cross-compare to the rest of the players
+      for (unsigned int j = 0; j < player_keys->Length(); j++) {
         // Grab the player
-        player = players->Get(player_keys->Get(i))->ToObject();
-
-        // If they have the flag...
-        if (player->Has(has_flag) && player->Get(has_flag)->ToBoolean()->Value()) {
-
-            // Figure out which team they are on
-            team = player->Get(String::New("team"))->ToString();
-            bounds = String::Concat(team, String::New("_bounds"));
-
-            // Grab the bounds for the player
-
-            top_left = game->Get(bounds)->ToObject()->Get(String::New("top_left"))->ToObject();
-            bottom_right = game->Get(bounds)->ToObject()->Get(String::New("bottom_right"))->ToObject();
-
-            // ...And if they're in their own territory
-            if (Algorithms::in_rectangle(player->Get(latitude)->NumberValue(), player->Get(longitude)->NumberValue(),
-                top_left->Get(latitude)->NumberValue(), top_left->Get(longitude)->NumberValue(),
-                bottom_right->Get(latitude)->NumberValue(), bottom_right->Get(longitude)->NumberValue())) {
-
-                // Increment their team's score
-                score = String::Concat(team, String::New("_score"));
-                game->Set(score, Integer::New(game->Get(score)->IntegerValue() + 1));
-
-                // Take the flag away from them
-                player->Set(has_flag, Boolean::New(false));
-            }
-        }
+        player2 = players->Get(player_keys->Get(j))->ToObject();
+      }
     }
 
     return scope.Close(game);
   }
 
   /**
-   * Check distances between players for tagging
+   * Check for a win
    * @param game The game object
    */
-  Handle<Value> Logic::check_distance(const Arguments& args)
+  void Logic::check_win(const Local<Object>& game, const Local<Object>& player)
   {
-    HandleScope scope;
-    Local<Object> game = Object::Cast(*args[0]);
+    // Keys for accessing data members
+    Local<String> latitude = String::New("latitude");
+    Local<String> longitude = String::New("longitude");
+    Local<String> has_flag = String::New("has_flag");
 
-        // http://marcorogers.com/blog/static/v8/doxygen/classv8_1_1Object.html
-    
-    return scope.Close(game);
+    // Local variables
+    Local<String> team;
+    Local<String> score;
+    Local<String> bounds;
+    Local<Object> top_left;
+    Local<Object> bottom_right;
+
+    // If they have the flag...
+    if (player->Has(has_flag) && player->Get(has_flag)->ToBoolean()->Value()) {
+
+      // Figure out which team they are on
+      team = player->Get(String::New("team"))->ToString();
+      bounds = String::Concat(team, String::New("_bounds"));
+
+      // Grab the bounds for the player
+
+      top_left = game->Get(bounds)->ToObject()->Get(String::New("top_left"))->ToObject();
+      bottom_right = game->Get(bounds)->ToObject()->Get(String::New("bottom_right"))->ToObject();
+
+      // ...And if they're in their own territory
+      if (Algorithms::in_rectangle(player->Get(latitude)->NumberValue(), player->Get(longitude)->NumberValue(),
+        top_left->Get(latitude)->NumberValue(), top_left->Get(longitude)->NumberValue(),
+        bottom_right->Get(latitude)->NumberValue(), bottom_right->Get(longitude)->NumberValue())) {
+
+        // Increment their team's score
+        score = String::Concat(team, String::New("_score"));
+        game->Set(score, Integer::New(game->Get(score)->IntegerValue() + 1));
+
+        // Take the flag away from them
+        player->Set(has_flag, Boolean::New(false));
+      }
+    }
   }
 
   /**
-   * Check flags to see if one is captured
+   * Check distances between players for tagging
    * @param game The game object
    */
-  Handle<Value> Logic::check_flags(const Arguments& args)
+  void Logic::check_distance(const Local<Object>& game, const Local<Object>& player1, const Local<Object>& player2)
   {
-    HandleScope scope;
-    Local<Object> game = Object::Cast(*args[0]);
+    // Check here
+  }
 
-    // Do stuff (game->Set() and game->Get())
-    /* Sorry, I had to comment out your code. The changes you made
-     * caused build errors. Please try not to commit code that breaks
-     * builds! Check out the README.txt file if you don't know how to build modules :)
-     * - Jeremy
-		game->Set(bool isCaptured)
-		{
-		  bool isCaptured = false;
-		 
-		  if ((model.user.latitude, model.user.longitude) == (flag.latitude, flag.longitude))
-		  {
-			isCapture = true;
-		  } 
-		  
-		}
-
-		game->Get()
-		{
-			return this->isCaptured;
-		}
-	}
-    */
-  
-  
-    // http://marcorogers.com/blog/static/v8/doxygen/classv8_1_1Object.html
-
-    return scope.Close(game);
+  /**
+   * Give the player the flag if they are within range of the flag
+   * @param game The game object
+   */
+  void Logic::check_flags(const Local<Object>& game, const Local<Object>& player)
+  {
+    // Check here
   }
 
   
@@ -142,29 +123,9 @@
    * Check players for out of bounds, and place them in observer mode
    * @param game The game object
    */
-  Handle<Value> Logic::check_bounds(const Arguments& args)
+  void Logic::check_bounds(const Local<Object>& game, const Local<Object>& player)
   {
-    HandleScope scope;
-    Local<Object> game = Object::Cast(*args[0]);
-
-    // Do stuff (game->Set() and game->Get())
-    // http://marcorogers.com/blog/static/v8/doxygen/classv8_1_1Object.html
-	
-	/*	game->Set(bool isInBounds)
-	
-			isInBounds = true;
-	
-		int playerSize = game->players[].size();
-			for(i=0; i<playerSize; i++)
-			{
-				if(!in_rectangle(game->players[i].latitude, game->players[i].longitude,
-				game->red_bounds., game->red_bounds., game->blue_bounds., game->blue_bounds.))
-				(
-					send player[i] to observer mode
-				)
-			}
-	*/
-    return scope.Close(game);
+    // Check here
   }
 
 
