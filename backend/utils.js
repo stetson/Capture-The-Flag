@@ -33,6 +33,10 @@ exports.purge_players = function() {
                 // Reclaim memory of players who haven't updated in 5 minutes
                 if (time_since_last_update >= ctf.constants.PURGE_USER_INTERVAL * ctf.constants.MINUTE ||
                         ctf.game_data[game_iterator].players[player_iterator].last_update === undefined) {
+                    // Decrement the user's team by 1
+                    ctf.game_data[game_iterator][ctf.game_data[game_iterator].players[player_iterator].team] -= 1;
+                    
+                    // Delete them from the Array
                     delete ctf.game_data[game_iterator].players[player_iterator];
                     console.log("Purging user:" + player_iterator);
                 }

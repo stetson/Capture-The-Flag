@@ -27,14 +27,32 @@ ctf.constants = {
 var utils = require("../backend/utils.js");
 
 exports.test_purge_players = function(test) {
+    // Make sure that non-existent users aren't in Array
     test.strictEqual(undefined, ctf.game_data[game_id].players["The Tooth Fairy"]);
+    
+    // Make sure the user we expect to be in there is
     test.notStrictEqual(undefined, ctf.game_data[game_id].players[user_id]);
+    
+    // Make sure our team count is what we expect it to be
+    test.equal(1, ctf.game_data[game_id].red);
+    
     setTimeout(function() {
+        // Set deactivation
         utils.purge_players();
+        
+        // Make sure the player has been deactivated
         test.equal(0, ctf.game_data[game_id].players[user_id].latitude);
+        
         setTimeout(function() {
+            // Set purge
             utils.purge_players();
+            
+            // Make sure the player is gone
             test.strictEqual(undefined, ctf.game_data[game_id].players[user_id]);
+            
+            // Make sure our team count is what we expect it to be
+            test.equal(0, ctf.game_data[game_id].red);
+            
             test.done();
         }, ctf.constants.PURGE_USER_INTERVAL * ctf.constants.MINUTE);
     }, ctf.constants.DISABLE_USER_INTERVAL * ctf.constants.MINUTE);
@@ -42,8 +60,13 @@ exports.test_purge_players = function(test) {
 
 exports.test_purge_games = function(test) {
     setTimeout(function() {
+        // Make sure the game exists
         test.notStrictEqual(undefined, ctf.game_data[game_id]);
+        
+        // Purge it
         utils.purge_games();
+        
+        // Make sure the game does not exist
         test.strictEqual(undefined, ctf.game_data[game_id]);
         test.done();
     }, ctf.constants.PURGE_GAMES_INTERVAL * ctf.constants.MINUTE);
