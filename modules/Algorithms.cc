@@ -2,6 +2,9 @@
 
 /**
  * Utility function for converting degrees to radians
+ *
+ * @name toRad
+ * @memberOf algorithms
  */
 double Algorithms::toRad(double degrees) {
   return degrees * (PI / 180);
@@ -9,6 +12,9 @@ double Algorithms::toRad(double degrees) {
 
 /**
  * Utility function for converting radians to degrees
+ *
+ * @name toDeg
+ * @memberOf algorithms
  */
 double Algorithms::toDeg(double radians) {
   return radians * (180 / PI);
@@ -16,6 +22,9 @@ double Algorithms::toDeg(double radians) {
 
 /**
  * Calculate the distance between two geographic points in miles
+ *
+ * @name distance_in_miles
+ * @memberOf algorithms
  * @param p1_latitude The latitude of the first point
  * @param p1_longitude The longitude of the first point
  * @param p2_latitude The latitude of the second point
@@ -45,6 +54,8 @@ double Algorithms::distance_in_miles(double p1_latitude, double p1_longitude, do
 /**
  * Determines if a coordinate lies within a rectangle
  *
+ * @name in_rectangle
+ * @memberOf algorithms
  * @param findLat
  * @param findLong
  * @param topLeftLat
@@ -64,13 +75,15 @@ bool Algorithms::in_rectangle(double findLat, double findLong, double topLeftLat
 }
 
 /**
-  * Add a distance in miles to a GPS coordinate
-  *
-  * @param latitude
-  * @param longitude
-  * @param offset
-  * @param bearing
-  */
+ * Add a distance in miles to a GPS coordinate
+ *
+ * @name add_miles_to_coordinate
+ * @memberOf algorithms
+ * @param latitude
+ * @param longitude
+ * @param offset
+ * @param bearing
+ */
 coord Algorithms::add_miles_to_coordinate(double latitude, double longitude, double offset, double bearing)
 {
 

@@ -5,6 +5,7 @@
 #include <node.h>
 using namespace node;
 using namespace v8;
+
 class Logic: ObjectWrap
 {
 

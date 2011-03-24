@@ -27,6 +27,11 @@
 
   /**
    * Run all business logic
+   *
+   * @name run
+   * @memberOf logic
+   * @param game {Object} The game object
+   * @function
    */
   Handle<Value> Logic::run(const Arguments& args)
   {
@@ -57,7 +62,13 @@
 
   /**
    * Check for a win
+   *
+   * @name check_win
+   * @memberOf logic
    * @param game The game object
+   * @param player The player to inspect
+   * @function
+   * @private
    */
   void Logic::check_win(const Local<Object>& game, const Local<Object>& player)
   {
@@ -102,7 +113,14 @@
 
   /**
    * Check distances between players for tagging
+   *
+   * @name check_distance
+   * @memberOf logic
    * @param game The game object
+   * @param player1 The player to compare
+   * @param player2 The player to compare
+   * @function
+   * @private
    */
   void Logic::check_distance(const Local<Object>& game, const Local<Object>& player1, const Local<Object>& player2)
   {
@@ -111,7 +129,13 @@
 
   /**
    * Give the player the flag if they are within range of the flag
+   *
+   * @name check_flags
+   * @memberOf logic
    * @param game The game object
+   * @param player The player to inspect
+   * @function
+   * @private
    */
   void Logic::check_flags(const Local<Object>& game, const Local<Object>& player)
   {
@@ -121,7 +145,13 @@
   
   /**
    * Check players for out of bounds, and place them in observer mode
+   *
+   * @name check_bounds
+   * @memberOf logic
    * @param game The game object
+   * @param player The player to inspect
+   * @function
+   * @private
    */
   void Logic::check_bounds(const Local<Object>& game, const Local<Object>& player)
   {

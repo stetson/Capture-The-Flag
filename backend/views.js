@@ -16,6 +16,14 @@ var controller = require("../backend/controller.js");
 
 var fs = require('fs');
 
+logic_class = require("../modules/build/default/Algorithms.node");
+/**
+ * The state engine which handles all business logic for the application
+ *
+ * @namespace logic
+ */
+var logic = new logic_class.Logic();
+
 /**
  * The log of location updates
  */

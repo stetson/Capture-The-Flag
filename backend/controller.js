@@ -1,4 +1,9 @@
 algorithms_class = require("../modules/build/default/Algorithms.node");
+/**
+ * The collection of algorithms used by the application
+ *
+ * @namespace logic
+ */
 var algorithms = new algorithms_class.Algorithms();
 
 /**
