@@ -246,7 +246,8 @@
     Local<String> latitude = String::New("latitude");
     Local<String> longitude = String::New("longitude");
     Local<String> has_flag = String::New("has_flag");
-    Local<String> team = String::New("team");
+	Local<Object> top_left;
+    Local<Object> bottom_right;
 	Local<String> bounds;
 	
 	 // Grab the bounds for the player
