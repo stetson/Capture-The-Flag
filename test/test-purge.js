@@ -35,6 +35,7 @@ exports.test_purge_players = function(test) {
     
     // Make sure our team count is what we expect it to be
     test.equal(1, ctf.game_data[game_id].red);
+    test.equal(0, ctf.game_data[game_id].blue);
     
     setTimeout(function() {
         // Set deactivation
@@ -52,6 +53,7 @@ exports.test_purge_players = function(test) {
             
             // Make sure our team count is what we expect it to be
             test.equal(0, ctf.game_data[game_id].red);
+            test.equal(0, ctf.game_data[game_id].blue);
             
             test.done();
         }, ctf.constants.PURGE_USER_INTERVAL * ctf.constants.MINUTE);
