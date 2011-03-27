@@ -49,6 +49,7 @@
       player1 = players->Get(player_keys->Get(i))->ToObject();
 
       // Run single-player business logic
+      Logic::check_bounds(game, player1);
       Logic::check_win(game, player1);
 
       // Cross-compare to the rest of the players
@@ -241,31 +242,32 @@
    */
   void Logic::check_bounds(const Local<Object>& game, const Local<Object>& player)
   {
-    // Check here
-	// Keys for accessing data members
+    // Keys for accessing data members
     Local<String> latitude = String::New("latitude");
     Local<String> longitude = String::New("longitude");
     Local<String> has_flag = String::New("has_flag");
-	Local<Object> top_left;
+    Local<Object> top_left;
     Local<Object> bottom_right;
-	Local<String> bounds;
+    Local<String> bounds = String::New("bounds");
 	
-	 // Grab the bounds for the player
+    // Grab the bounds for the player
+    top_left = game->Get(bounds)->ToObject()->Get(String::New("top_left"))->ToObject();
+    bottom_right = game->Get(bounds)->ToObject()->Get(String::New("bottom_right"))->ToObject();
+	
+    //If person not in game bounds
+    if (!Algorithms::in_rectangle(player->Get(latitude)->NumberValue(), player->Get(longitude)->NumberValue(),
+      top_left->Get(latitude)->NumberValue(), top_left->Get(longitude)->NumberValue(),
+      bottom_right->Get(latitude)->NumberValue(), bottom_right->Get(longitude)->NumberValue())) {
 
-      top_left = game->Get(bounds)->ToObject()->Get(String::New("top_left"))->ToObject();
-      bottom_right = game->Get(bounds)->ToObject()->Get(String::New("bottom_right"))->ToObject();
-	
-	//If person not in game bounds
-	 if (!Algorithms::in_rectangle(player->Get(latitude)->NumberValue(), player->Get(longitude)->NumberValue(),
-        top_left->Get(latitude)->NumberValue(), top_left->Get(longitude)->NumberValue(),
-        bottom_right->Get(latitude)->NumberValue(), bottom_right->Get(longitude)->NumberValue())){
-			//If person has flag
-			if (player->Has(has_flag) && player->Get(has_flag)->ToBoolean()->Value()) {
-				 // Take the flag away from them
-				player->Set(has_flag, Boolean::New(false));
-				}
-            player->Set(String::New("observer_mode"), Boolean::New(true));
-		}
+      //If person has flag
+      if (player->Has(has_flag) && player->Get(has_flag)->ToBoolean()->Value()) {
+
+        // Take the flag away from them
+        player->Set(has_flag, Boolean::New(false));
+      }
+
+      player->Set(String::New("observer_mode"), Boolean::New(true));
+    }
   }
 
 
