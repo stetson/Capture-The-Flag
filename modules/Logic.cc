@@ -248,11 +248,10 @@
     Local<String> has_flag = String::New("has_flag");
     Local<Object> top_left;
     Local<Object> bottom_right;
-    Local<String> bounds = String::New("bounds");
 	
-    // Grab the bounds for the player
-    top_left = game->Get(bounds)->ToObject()->Get(String::New("top_left"))->ToObject();
-    bottom_right = game->Get(bounds)->ToObject()->Get(String::New("bottom_right"))->ToObject();
+    // Grab the bounds for the whole field
+    top_left = game->Get(String::New("red_bounds"))->ToObject()->Get(String::New("top_left"))->ToObject();
+    bottom_right = game->Get(String::New("blue_bounds"))->ToObject()->Get(String::New("bottom_right"))->ToObject();
 	
     //If person not in game bounds
     if (!Algorithms::in_rectangle(player->Get(latitude)->NumberValue(), player->Get(longitude)->NumberValue(),
@@ -261,11 +260,11 @@
 
       //If person has flag
       if (player->Has(has_flag) && player->Get(has_flag)->ToBoolean()->Value()) {
-
         // Take the flag away from them
         player->Set(has_flag, Boolean::New(false));
       }
 
+      // Place the player in observer mode
       player->Set(String::New("observer_mode"), Boolean::New(true));
     }
   }
