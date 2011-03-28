@@ -97,6 +97,8 @@ exports.create_game = function(game_id, latitude, longitude) {
             },
             red_flag: algorithms.add_miles_to_coordinate(latitude, longitude, 0.45, 0),
             blue_flag: algorithms.add_miles_to_coordinate(latitude, longitude, 0.45, 180),
+            red_flag_captured: false,
+            blue_flag_captured: false,
             red_bounds: {
                 top_left: algorithms.add_miles_to_coordinate(latitude, longitude, Math.sqrt(0.5), 315),
                 bottom_right: algorithms.add_miles_to_coordinate(latitude, longitude, 0.5, 90)
