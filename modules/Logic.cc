@@ -276,19 +276,22 @@
     Local<String> latitude = String::New("latitude");
     Local<String> longitude = String::New("longitude");
     Local<String> has_flag = String::New("has_flag");
-    Local<Object> top_left;
-    Local<Object> bottom_right;
+    Local<String> team = player->Get(String::New("team"))->ToString();
 	
     // Grab the bounds for the whole field
-    top_left = game->Get(String::New("red_bounds"))->ToObject()->Get(String::New("top_left"))->ToObject();
-    bottom_right = game->Get(String::New("blue_bounds"))->ToObject()->Get(String::New("bottom_right"))->ToObject();
-	
-    //If person not in game bounds
-    if (!Algorithms::in_rectangle(player->Get(latitude)->NumberValue(), player->Get(longitude)->NumberValue(),
-      top_left->Get(latitude)->NumberValue(), top_left->Get(longitude)->NumberValue(),
-      bottom_right->Get(latitude)->NumberValue(), bottom_right->Get(longitude)->NumberValue()))
-      {
+    Local<Object> field_top_left = game->Get(String::New("red_bounds"))->ToObject()->Get(String::New("top_left"))->ToObject();
+    Local<Object> field_bottom_right = game->Get(String::New("blue_bounds"))->ToObject()->Get(String::New("bottom_right"))->ToObject();
 
+    // Grab the bounds for the player's team
+    Local<Object> team_top_left = game->Get(String::Concat(team, String::New("_bounds")))->ToObject()->Get(String::New("top_left"))->ToObject();
+    Local<Object> team_bottom_right = game->Get(String::Concat(team, String::New("_bounds")))->ToObject()->Get(String::New("bottom_right"))->ToObject();
+	
+    // If person in game bounds
+    if (! Algorithms::in_rectangle(
+        player->Get(latitude)->NumberValue(), player->Get(longitude)->NumberValue(),
+        field_top_left->Get(latitude)->NumberValue(), field_top_left->Get(longitude)->NumberValue(),
+        field_bottom_right->Get(latitude)->NumberValue(), field_bottom_right->Get(longitude)->NumberValue()))
+    {
       //If person has flag
       if (player->Has(has_flag) && player->Get(has_flag)->ToBoolean()->Value())
       {
@@ -298,6 +301,16 @@
 
       // Place the player in observer mode
       player->Set(String::New("observer_mode"), Boolean::New(true));
+    }
+
+    // If person is in their own bounds
+    if (Algorithms::in_rectangle(
+        player->Get(latitude)->NumberValue(), player->Get(longitude)->NumberValue(),
+        team_top_left->Get(latitude)->NumberValue(), team_top_left->Get(longitude)->NumberValue(),
+        team_bottom_right->Get(latitude)->NumberValue(), team_bottom_right->Get(longitude)->NumberValue()))
+    {
+      // Set observer mode to false
+      player->Set(String::New("observer_mode"), Boolean::New(false));
     }
   }
 

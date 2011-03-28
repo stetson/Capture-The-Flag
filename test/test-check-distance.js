@@ -47,10 +47,6 @@ exports.test_win = function(test) {
     // Run business logic
     logic.run(ctf.game_data[game_id]);
     
-    // FIXME - these should be removed after Logic::check_bounds is implemented
-    ctf.game_data[game_id].players[user1.id].observer_mode = false;
-    ctf.game_data[game_id].players[user2.id].observer_mode = false;
-    
     // Player 1 observer_mode should be false
     test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "Player 1 not starting in observer mode");
     

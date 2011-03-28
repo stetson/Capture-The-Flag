@@ -12,37 +12,39 @@ var HALF_FIELD = 0.25;
 
 // Test data
 exports.test_observer = function(test) {
-var user_id = "Bob the tester";
-var game_id = "test_game";
-var user = {
-    latitude: 29.034681,    // 29°02′04.9″N
-    longitude: -81.303774   // 81°18′13.6″W
-};
-
-// Create game
-test.ok(controller.create_game(game_id, user.latitude, user.longitude), "Could not create game");
-controller.create_game(game_id, user.latitude, user.longitude);
-    var game = ctf.game_data[game_id];
+    var user_id = "Bob the tester";
+    var game_id = "test_game";
+    var user = {
+        latitude: 29.034681,    // 29°02′04.9″N
+        longitude: -81.303774   // 81°18′13.6″W
+    };
     
-// Join game
-test.ok(controller.join_game(game_id, user_id, user), "Could not join game");
-controller.join_game(game_id, user.latitude, user.longitude);
+    // Create game
+    test.ok(controller.create_game(game_id, user.latitude, user.longitude), "Could not create game");
+    controller.create_game(game_id, user.latitude, user.longitude);
+        
+    // Join game
+    test.ok(controller.join_game(game_id, user_id, user), "Could not join game");
+    
+    // Test that user is in observer mode to start
+    test.strictEqual(true, ctf.game_data[game_id].players[user_id].observer_mode, "User did not start in observer mode");
+    
+    // Run the business logic
+    logic.run(ctf.game_data[game_id]);
+    
+    // Test that user is now out of observer mode
+    test.strictEqual(false, ctf.game_data[game_id].players[user_id].observer_mode, "User is still in observer mode, even though they are in their own territory");
+    
+    // Move out of bounds
+    user.latitude = 31.503629; // China :-)
+    user.longitude = 121.289063;
+    test.ok(controller.update_location(game_id, user_id, user), "Could not move out of bounds");
 
-test.strictEqual(true, user.observer_mode);
-logic.run(ctf.game_data[game_id]);
-
-
-// The different boundaries to test against
-    var boundaries = { "red": 0, "blue": 1, "field": 2 };
-point_inside_red = algorithms.add_miles_to_coordinate(user.latitude, user.longitude, HALF_FIELD, 0);
-point_inside_blue = algorithms.add_miles_to_coordinate(user.latitude, user.longitude, HALF_FIELD, 180);
-
-//Move out of bounds
-var point_to_test = [
-{latitude: game.blue_bounds.top_left.latitude, longitude: game.red_bounds.top_left.longitude - TWENTY_FEET, boundary: boundaries.field, expected_result: false }
-];
-
-logic.run(ctf.game_data[game_id]);
-
-test.done();
+    // Run business logic
+    logic.run(ctf.game_data[game_id]);
+    
+    // Test that user is back in observer mode
+    test.strictEqual(true, ctf.game_data[game_id].players[user_id].observer_mode, "User is out of bounds, and therefore should be in observer mode");
+    
+    test.done();
 };
