@@ -8,21 +8,6 @@ var map;
  */
 map = {
 	/**
-	 * Google maps object
-	 */
-	map: {},
-	
-	/**
-	 * Info window for displaying information to the user
-	 */
-	infowindow: {},
-	
-	/**
-	 * Map options
-	 */
-	options: {},
-	
-	/**
 	 * Constructor, called upon page load
 	 */
 	initialize: function() {
