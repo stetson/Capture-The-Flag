@@ -214,7 +214,16 @@
     }
   }
 
-
+/**
+  * Give the player the flag if they are within range of the flag
+  *
+  * @name check_flags
+  * @memberOf logic
+  * @param game The game object
+  * @param player The player to inspect
+  * @function
+  * @private
+  */
  void Logic::check_flags(const Local<Object>& game, const Local<Object>& player)
   {
   
@@ -248,8 +257,6 @@ player->Set(String::New("has_flag"), Boolean::New(true));
 }
 
   }
-
-
 
   
   /**
