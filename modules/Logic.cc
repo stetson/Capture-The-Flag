@@ -214,44 +214,48 @@
     }
   }
 
-
-  /**
-   * Give the player the flag if they are within range of the flag
-   *
-   * @name check_flags
-   * @memberOf logic
-   * @param game The game object
-   * @param player The player to inspect
-   * @function
-   * @private
-   */
-  void Logic::check_flags(const Local<Object>& game, const Local<Object>& player)
-  {
 /**
-  // Figure out which team they are on (whether blue or red)
-	team = player->Get(String::New("team"))->ToString();
-	
-  // Keys for lat and long
-    Local<String> latitude = String::New("latitude");
-    Local<String> longitude = String::New("longitude");  
-	
-  // For red team capture blue flag, for blue team capture red flag	
-	if(team->Equals(String::New("red")))
-	{
-	  flag = player->Get(String::New("blue_flag"))->ToObject();
-	}
-	else
-	{
-	  flag = player->Get(String::New("red_flag"))->ToObject();
-	}
-	
-  // Check to see if player's distance is less then the tolerance of the 
-  // flags and if it is then give the player the opposite team's flag	
-	if (Algorithms::distance_in_miles(player->Get(latitude)->NumberValue(),player->Get(longitude)->NumberValue(), flag->Get(latitude)->NumberValue(), flag->Get(longitude)->NumberValue()) < TOLERANCE)
-	{
-	  player->Set(String::New("has_flag"), Boolean::New(true));
-	}
-*/
+  * Give the player the flag if they are within range of the flag
+  *
+  * @name check_flags
+  * @memberOf logic
+  * @param game The game object
+  * @param player The player to inspect
+  * @function
+  * @private
+  */
+ void Logic::check_flags(const Local<Object>& game, const Local<Object>& player)
+  {
+  
+ // Local Variables
+Local<Object> flag;
+Local<String> team;
+
+// Figure out which team they are on (whether blue or red)
+team = player->Get(String::New("team"))->ToString();
+
+// Keys for accessing data members
+Local<String> latitude = String::New("latitude");
+Local<String> longitude = String::New("longitude");
+
+
+// For red team capture blue flag, for blue team capture red flag
+if(team->Equals(String::New("red")))
+{
+flag = player->Get(String::New("blue_flag"))->ToObject();
+}
+else
+{
+flag = player->Get(String::New("red_flag"))->ToObject();
+}
+
+// Check to see if player's distance is less then the tolerance of the
+// flags and if it is then give the player the opposite team's flag
+if (Algorithms::distance_in_miles(player->Get(latitude)->NumberValue(),player->Get(longitude)->NumberValue(), flag->Get(latitude)->NumberValue(), flag->Get(longitude)->NumberValue()) < TOLERANCE)
+{
+player->Set(String::New("has_flag"), Boolean::New(true));
+}
+
   }
 
   
