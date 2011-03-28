@@ -227,7 +227,7 @@
    */
   void Logic::check_flags(const Local<Object>& game, const Local<Object>& player)
   {
-
+/**
   // Figure out which team they are on (whether blue or red)
 	team = player->Get(String::New("team"))->ToString();
 	
@@ -251,7 +251,7 @@
 	{
 	  player->Set(String::New("has_flag"), Boolean::New(true));
 	}
-
+*/
   }
 
   

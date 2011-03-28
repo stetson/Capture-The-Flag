@@ -1,3 +1,4 @@
+/**
 logic_class = require("../modules/build/default/Logic.node");
 var logic = new logic_class.Logic();
 
@@ -53,3 +54,4 @@ exports.test_flag = function(test) {
     
     test.done();
 };
+*/
