@@ -1,53 +1,9 @@
-var model;
-var map;
-
-/**
- * Map object which handles geolocation and mapping
- * 
- * @namespace map
- */
-map = {
-	/**
-	 * Constructor, called upon page load
-	 */
-	initialize: function() {
-		// Make street level map with no UI controls
-		map.options = {
-			zoom: 18,
-            disableDefaultUI: false,
-            zoomControl: false,
-            panControl: false,
-            streetViewControl: false,
-			mapTypeId: google.maps.MapTypeId.TERRAIN
-		};
-		
-		// Build infowindow
-		map.infowindow = new google.maps.InfoWindow();
-		
-		// Check for geolocation support
-		if (navigator.geolocation) {
-			// Generate map and render on page
-			map.map = new google.maps.Map(document.getElementById("map_canvas"), map.options);
-			
-			// Center map
-			model.getLocation();
-		} else {
-			model.error("Your device does not appear to support HTML5 geolocation");
-		}
-	}
-};
-
 /**
  * Model which handles server calls
  * 
  * @namespace model
  */
-model = {
-		
-	/**
-	 * Facebook App ID
-	 */
-	app_id: 151829711542674,
+var model = {
 	
 	/**
 	 * User information
@@ -65,120 +21,23 @@ model = {
 	players: {},
 	
 	/**
-	 * Array which holds the player markers
-	 */
-	player_markers: {},
-	
-	/**
 	 * Timer used for various polling activities
 	 */
 	timer: {},
 	
 	/**
-	 * Initialize Facebook Connect login
-	 */
-	login: function() {
-		FB.init({
-			appId  : model.app_id,
-			status : true, // check login status
-			cookie : true, // enable cookies to allow the server to access the session
-			xfbml  : true,  // parse XFBML
-			popup: false
-		});
-		
-		// Hook authentication into Facebook Connect
-		FB.getLoginStatus(function(response) {
-			  if (response.session) {
-				  // user was already logged in
-				  model.user.auth_token = response.session.access_token;
-				  model.user.user_id = response.session.uid;
-				  
-				  FB.api('/me', function(response) {
-				      model.user.name = response.name;
-				  });
-				  
-				  model.login_successful();
-				  
-			  } else {
-				  // let user log in whenever they darn well please
-			  }
-		});
-	},
-	
-	/**
 	 * Log in as guest instead of using Facebook Connect
 	 */
-	guest_login: function() {
-		model.user.auth_token = "guest";
+	login: function() {
 		model.user.user_id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
 		    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
 		    return v.toString(16);
 		}).toUpperCase();
 		
-		model.user.name = prompt("What is your name?");
-
-		model.login_successful();
-		return false;
-	},
-	
-	/**
-	 * Called after session is successfully retrieved
-	 */
-	login_successful: function() {
-		try {
-			window.location.hash = "#play";
-		} catch (e) { }
-		
-		$("#toolbar a").click(function(){
-		    try {
-                model[$(this).attr('href').replace('#','')]();
-		    } catch (e) { }
-		    
-		    return false;
-        });
+		model.user.name = $('#login input[name="username"]').val();
 
 		model.load_games();
-	},
-	
-	/**
-	 * Is a button that when clicked should center on the user playing
-	 */
-	center_on_self: function() {
-	    try {
-	       map.map.setCenter(new google.maps.LatLng(model.user.latitude, model.user.longitude));
-	    } catch (e) { }
-	},
-	
-	/**
-	 * Is a button that when clicked should center on the blue flag
-	 */
-	center_on_blue_flag: function() {
-	    map.map.setCenter(new google.maps.LatLng(model.game.blue_flag.latitude, model.game.blue_flag.longitude));
-	},
-	
-	/**
-	 * Is a button that when clicked should center on the red flag
-	 */
-	center_on_red_flag: function() {
-        map.map.setCenter(new google.maps.LatLng(model.game.red_flag.latitude, model.game.red_flag.longitude));
-	},
-	
-	show_signal_strength: function(accuracy) {
-	    // Determine which level accuracy falls within
-	    // Change image on $("#signal_strength").css(backgroundImage: '');
-	    // http://stackoverflow.com/questions/253689/switching-div-background-image-with-jquery
-		if(accuracy < 10){
-			$('#signal_strength').css("background-image", "/css/images/4bar.png");
-		}
-		else if(accuracy <= 30){ 
-			$('#signal_strength').css("background-image", "/css/images/3Bar.png");
-		}
-		else if(accuracy <= 200){ 
-			$('#signal_strength').css("background-image", "/css/images/2Bar.png");
-		}
-		else { 
-			$('#signal_strength').css("background-image", "/css/images/1Bar.png");
-		}
+		return false;
 	},
 	
 	/**
@@ -206,11 +65,13 @@ model = {
                     $.each(data, function(game_iterator, game) {
                         $("<a />").data('id', game)
                             .attr({'href': '#'})
+                            .addClass('button')
                             .text(game)
                             .appendTo($("#content"));
                         $("<br />").appendTo($("#content"));
                     });
-                    $("#content a").click(function() {
+                    $("#content a")
+                    .click(function() {
                         model.choose_game($(this).data('id'));
                         return false;
                     });
@@ -223,6 +84,7 @@ model = {
                 if (model.user.latitude && model.user.longitude) {
                     $("<a />").text("Create new game")
                         .attr({'href': '#'})
+                        .addClass('button')
                         .click(function() {
                             model.create_game();
                             return false;
@@ -254,6 +116,7 @@ model = {
                 model.game = data;
                 
                 // Create markers for flags and draw bounds
+                /*
                 model.game.red_marker = new google.maps.Marker({
                     position: new google.maps.LatLng(data.red_flag.latitude, data.red_flag.longitude),
                     map: map.map,
@@ -293,10 +156,11 @@ model = {
 
                 // Watch the locations of the other players
                 model.watchPlayers();
+                */
 
                 // Clear overlay so gameplay can begin
                 $("#content").html('');
-                $("#overlay").fadeOut('slow');
+                $("body").empty();
             }
 	    });
 	},
@@ -337,52 +201,58 @@ model = {
 	 * Something isn't right
 	 */
 	error: function(message) {
-		$("#overlay").fadeIn();
-		$(".error").show();
-		$(".error").html(message);	
+		$("<p />").html(message).addClass('error').appendTo('body');	
 	},
 	
 	/**
 	 * Clear error
 	 */
 	clear_error: function() {
-        $('.error').hide();	    
+        $('.error').remove();	    
 	},
 	
 	/**
 	 * Center map after the first load
 	 */
 	centerMap: function(latitude, longitude, accuracy) {
-		if (! map.map.getBounds()) {
-			map.map.setCenter(new google.maps.LatLng(latitude, longitude));
-		}
-		
 		model.user.latitude = latitude;
 		model.user.longitude = longitude;
 		model.user.accuracy = accuracy;
-		model.show_signal_strength(accuracy);
 		model.updateLocation(latitude, longitude, accuracy);
 	},
 	
 	getLocation: function() {
+	    model.error("Locking on to your location...");
 		navigator.geolocation.getCurrentPosition(function(position) {
 			model.centerMap(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
 		}, function() {
+		    model.error("GPS was not active. Trying triangulation...");
+		    setTimeout(function() {
+		        if (model.user.latitude === undefined && model.user.longitude == undefined) {
+		            model.ipGetLocation();
+		        }
+		    }, 5000);
 			navigator.geolocation.getCurrentPosition(function(position) {
 				model.centerMap(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
 			}, function() {
-				if (! model.user.latitude && ! model.user.longitude) {
-					$.getScript("http://j.maxmind.com/app/geoip.js", function() {
-						model.centerMap(geoip_latitude(), geoip_longitude(), 100000);
-					});
-				} else {
-					model.centerMap(model.user.latitude, model.user.longitude, 100000);
-				}
+                model.ipGetLocation();
 			});
 		}, {
 			maximumAge: 500,
 			enableHighAccuracy: true
 		});
+	},
+	
+	ipGetLocation: function() {
+        model.error("Triangulation did not work. Attempting network geolocation...");
+        if (model.user.latitude === undefined && model.user.longitude == undefined) {
+            $.getScript("http://j.maxmind.com/app/geoip.js", function() {
+                model.clear_error();
+                model.centerMap(geoip_latitude(), geoip_longitude(), 100000);
+            });
+        } else {
+            model.centerMap(model.user.latitude, model.user.longitude, 100000);
+        }  
 	},
 	
 	/**
@@ -443,14 +313,8 @@ model = {
 
 // Start application
 $(document).ready(function() {
-	$(".error").hide();
-	$("#guest-login").click(model.guest_login);
-	
-	// Asynchronously load Facebook Connect js, then login
-	$.getScript("http://connect.facebook.net/en_US/all.js", function() {
-		model.login();
-	});
+	$("#login").submit(model.login);
 	
 	// In the background, lock onto the user's location
-	map.initialize();
+	model.getLocation();
 });

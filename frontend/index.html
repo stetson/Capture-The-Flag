@@ -10,19 +10,15 @@
 	<script type="text/javascript" src="/js/application.js"></script>
 	</head>
 	<body>
-		<div id="toolbar">
-			<a href="#signal" id="signal_strength"></a> 
-            <a href="#center_on_self" id="center_on_self"></a> 
-			<a href="#center_on_blue_flag" id="center_on_blue"></a> 
-			<a href="#center_on_red_flag" id="center_on_red"></a> 
-		</div>
-        <p>
-        	<h3>Welcome to Capture the Flag!</h3>
-        	This is an online game that anyone can play with their friends in an outside environment. You can log in with either your Facebook account or as a guest. Then join or create a game, and then stay outside with your friends until it’s done.
-        	<div id="content">
-	        	<a href='#' onClick='window.location="https://m.facebook.com/dialog/oauth?client_id=" + model.app_id + "&redirect_uri=" + window.location + "&response_type=token"; return false;'>Login with Facebook</a><br />
-	        	<a href='#' id="guest-login">Login as guest</a>
-	        </div>
-        </p>
+       	<h3>Welcome to Capture the Flag!</h3>
+       	<p>Play the traditional game of capture the flag with a modern twist. You may join an existing game in progress, or create a new game and play with your friends.</p>
+       	<div id="content">
+        	<form method="get" id="login">
+        	  Enter your name below to begin.
+        	  <label for="username">Username:</label><br />
+        	  <input type="text" name="username" />
+        	  <button type="submit">Find a game</button>
+        	</form>
+        </div>
 	</body>
 </html>
