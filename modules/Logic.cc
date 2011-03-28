@@ -50,6 +50,7 @@
 
       // Run single-player business logic
       Logic::check_bounds(game, player1);
+      Logic::check_flags(game, player1);
       Logic::check_win(game, player1);
 
       // Cross-compare to the rest of the players
@@ -240,11 +241,11 @@
     // For red team capture blue flag, for blue team capture red flag
     if (team->Equals(String::New("red")))
     {
-      flag = player->Get(String::New("blue_flag"))->ToObject();
+      flag = game->Get(String::New("blue_flag"))->ToObject();
     }
     else
     {
-      flag = player->Get(String::New("red_flag"))->ToObject();
+      flag = game->Get(String::New("red_flag"))->ToObject();
     }
 
     // Check to see if player's distance is less then the tolerance of the

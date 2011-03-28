@@ -1,4 +1,3 @@
-/**
 logic_class = require("../modules/build/default/Logic.node");
 var logic = new logic_class.Logic();
 
@@ -17,15 +16,9 @@ exports.test_flag = function(test) {
         longitude: -81.303774     
     };
     
-    // Test that invalid game is rejected
-    test.strictEqual(false, controller.join_game(game_id, user_id, user), "Should not allow user to join game before it is created");
-    test.strictEqual(false, controller.update_location(game_id, user_id, user), "Should not allow user to update their location before joining");
-    
-    // Create game
-    test.ok(controller.create_game(game_id, user.latitude, user.longitude), "Could not create game");
-    
-    // Have the user join the game
-    test.ok(controller.join_game(game_id, user_id, user), "Could not join game");
+    // Set up game
+    controller.create_game(game_id, user.latitude, user.longitude);
+    controller.join_game(game_id, user_id, user);
     
     // Put them in their territory
     ctf.game_data[game_id].players[user_id].latitude += .001;
@@ -33,25 +26,30 @@ exports.test_flag = function(test) {
             ctf.game_data[game_id].red_bounds.top_left.latitude, ctf.game_data[game_id].red_bounds.top_left.longitude,  
             ctf.game_data[game_id].red_bounds.bottom_right.latitude, ctf.game_data[game_id].red_bounds.bottom_right.longitude), "The user is not starting the test in their territory");
     
-    // Test team
-    test.equal("red", ctf.game_data[game_id].players[user_id].team, "The user is not on the right team");
+    // Make sure user doesn't have flag
+    test.strictEqual(false, ctf.game_data[game_id].players[user_id].has_flag, "The user has the flag");
     
-    // Test team has right flag
-    test.equal("red", ctf.game_data[game_id].players[user_id].flag, "The user did not capture the right flag");
+    // Move player over flag
+    user.latitude = ctf.game_data[game_id].blue_flag.latitude;
+    user.longitude = ctf.game_data[game_id].blue_flag.longitude;
+    controller.update_location(game_id, user_id, user);
     
-    // Test captured flag
-    test.strictEqual(true, ctf.game_data[game_id].players[user_id].has_flag, "The user has the flag");
+    // Run business logic
+    logic.run(ctf.game_data[game_id]);
     
-    // Give player flag
-    ctf.game_data[game_id].players[user_id].has_flag = true;
+    // User should now have flag
     test.strictEqual(true, ctf.game_data[game_id].players[user_id].has_flag, "The user doesn't have the flag");
+    
+    // Move the user back into their own territory
+    user.latitude = ctf.game_data[game_id].origin.latitude + .001;
+    user.longitude = ctf.game_data[game_id].origin.longitude;
+    controller.update_location(game_id, user_id, user);
     
     // Run business logic
     logic.run(ctf.game_data[game_id]);
      
-    // Test has_flag
+    // User should no longer have flag
     test.strictEqual(false, ctf.game_data[game_id].players[user_id].has_flag, "The user still has the flag");
     
     test.done();
 };
-*/
