@@ -3,4 +3,4 @@ a { color: #000; display: block; padding: 10px; border: 1px solid #ccc; backgrou
 body { height: 100%; width: 100%; margin: 0px; padding: 0px; font: 9pt sans-serif; overflow: hidden; }
 p, h1, h2, h3, form, a.button { margin: 5px auto; width: 96%; }
 .error { border: 1px solid #900; background-color: #F99; }
-.marker { border: 0; width: 32px; height: 32px; position: absolute; } 
+.marker { border: 0; width: 32px; height: 32px; margin: -16px 0 0 -16px; position: absolute; } 

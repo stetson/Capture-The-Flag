@@ -45,7 +45,7 @@ ui = {
                 }
 
                 $("#" + player_iterator).css({
-                    top: (
+                    top: 
                         (
                             (
                                 (
@@ -54,9 +54,9 @@ ui = {
                                 (
                                     (model.game.red_bounds.top_left.latitude + 180) - (model.game.blue_bounds.bottom_right.latitude + 180)
                                 )
-                            ) * ui.height
-                        ) - 16).toFixed(0) + "px",         // Relative from latitude
-                    left: (
+                            ) * 100
+                        ).toFixed(0) + "%",         // Relative from latitude
+                    left: 
                         (
                             (
                                 (
@@ -65,8 +65,8 @@ ui = {
                                 (
                                     (model.game.blue_bounds.bottom_right.longitude + 180) - (model.game.red_bounds.top_left.longitude + 180)
                                 )
-                            ) * ui.width
-                        ) - 16).toFixed(0) + "px"        // Relative from longitude
+                            ) * 100
+                        ).toFixed(0) + "%"        // Relative from longitude
                 }); 
             }
         });
