@@ -9,6 +9,7 @@ ctf.game_data = {};
 var controller = require("../backend/controller.js");
 
 var TWENTY_FEET = 0.000001;
+var HALF_FIELD = 0.25;
 
 // Test data
 var user_id = "Bob the tester";
@@ -25,6 +26,10 @@ exports.test_bounds = function(test) {
     
     // The different boundaries to test against
     var boundaries = { "red": 0, "blue": 1, "field": 2 };
+
+    // Define some points to test
+    point_inside_red = algorithms.add_miles_to_coordinate(user.latitude, user.longitude, HALF_FIELD, 0);
+    point_inside_blue = algorithms.add_miles_to_coordinate(user.latitude, user.longitude, HALF_FIELD, 180);
 
     // Generate points around where bounds are using http://www.movable-type.co.uk/scripts/latlong.html
     // Do *NOT* use the Algorithms class to generate these points
@@ -49,11 +54,16 @@ exports.test_bounds = function(test) {
         { latitude: game.blue_bounds.top_left.latitude - TWENTY_FEET, longitude: game.blue_bounds.top_left.longitude, boundary: boundaries.blue, expected_result: true },
         { latitude: game.blue_bounds.bottom_right.latitude, longitude: game.blue_bounds.bottom_right.longitude, boundary: boundaries.blue, expected_result: true },
         { latitude: game.blue_bounds.bottom_right.latitude, longitude: game.blue_bounds.top_left.longitude, boundary: boundaries.blue, expected_result: true },
-        { latitude: game.blue_bounds.top_left.latitude - TWENTY_FEET, longitude: game.blue_bounds.bottom_right.longitude, boundary: boundaries.blue, expected_result: true }
+        { latitude: game.blue_bounds.top_left.latitude - TWENTY_FEET, longitude: game.blue_bounds.bottom_right.longitude, boundary: boundaries.blue, expected_result: true },
+        //Test red inside 
+        {latitude: point_inside_red.latitude, longitude: point_inside_red.longitude, boundary: boundaries.field, expected_result: true },
+        //Test blue inside
+        {latitude: point_inside_blue.latitude, longitude: point_inside_blue.longitude, boundary: boundaries.field, expected_result: true },
         
-        // TODO - test points known to be inside
-        // TODO - test points known to be outside
-        // TODO - test points very close to where the line should be on either side
+        //Test points close to line
+        {latitude: game.blue_bounds.top_left.latitude, longitude: game.red_bounds.top_left.longitude + TWENTY_FEET, boundary: boundaries.field, expected_result: true },
+
+        {latitude: game.blue_bounds.top_left.latitude, longitude: game.red_bounds.top_left.longitude - TWENTY_FEET, boundary: boundaries.field, expected_result: false }
     ];
     
     // Test to see if points are in the rectangle, and match against expected result:
