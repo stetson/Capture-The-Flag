@@ -1,9 +1,84 @@
+var model;
+var ui;
+
+/**
+ * Class which handles drawing of the user interface
+ */
+ui = {
+    width: window.innerWidth ? window.innerWidth : document.body.offsetWidth,
+    height: window.innerHeight ? window.innerHeight : document.body.offsetHeight,
+    update: function() {
+        if (model.game.origin !== undefined) {
+            parameters = {
+                size: ui.width + "x" + ui.height,
+                center: model.game.origin.latitude + "," + model.game.origin.longitude,
+                maptype: "satellite",
+                markers: "color:gray|size:tiny|" + model.game.red_flag.latitude + "," + model.game.red_flag.longitude + "|" + model.game.blue_flag.latitude + "," + model.game.blue_flag.longitude,
+                sensor: true
+            };
+            
+            url = "http://maps.google.com/maps/api/staticmap?";
+            for (parameter in parameters) {
+                url += "&" + parameter + "=" + escape(parameters[parameter]);               
+            }
+            
+            $("body").css({'background': "#000 url('" + url + "') 50% 50% no-repeat"});
+        }
+    },
+    
+    update_players: function(data) {
+        $.each(data, function(player_iterator, player) {
+            if (player.latitude) {
+                if ($("#" + player_iterator).length === 0) {
+                    icon = player_iterator == model.user.user_id ? "/css/images/star.png" : "/css/images/person_" + player.team + ".png";
+                    $('<a href="#"></a>')
+                        .attr({
+                            'title': player.name,
+                            'id': player_iterator
+                        })
+                        .click(function() { return false; })
+                        .addClass("marker")
+                        .css({
+                            background: 'url("' + icon + '") 50% 50% no-repeat'
+                        })
+                        .appendTo($("body"));                
+                }
+
+                $("#" + player_iterator).css({
+                    top: (
+                        (
+                            (
+                                (
+                                    (model.game.red_bounds.top_left.latitude + 180) - (1.0 * player.latitude + 180)
+                                ) /
+                                (
+                                    (model.game.red_bounds.top_left.latitude + 180) - (model.game.blue_bounds.bottom_right.latitude + 180)
+                                )
+                            ) * ui.height
+                        ) - 16).toFixed(0) + "px",         // Relative from latitude
+                    left: (
+                        (
+                            (
+                                (
+                                    (model.game.blue_bounds.bottom_right.longitude + 180) - (1.0 * player.longitude + 180)
+                                ) /
+                                (
+                                    (model.game.blue_bounds.bottom_right.longitude + 180) - (model.game.red_bounds.top_left.longitude + 180)
+                                )
+                            ) * ui.width
+                        ) - 16).toFixed(0) + "px"        // Relative from longitude
+                }); 
+            }
+        });
+    }
+};
+
 /**
  * Model which handles server calls
  * 
  * @namespace model
  */
-var model = {
+model = {
 	
 	/**
 	 * User information
@@ -152,15 +227,17 @@ var model = {
                     strokeOpacity: 0.5,
                     fillColor: "#0000FF",
                     fillOpacity: 0.2
-                }).setMap(map.map);
-
+                }).setMap(map.map);*/
+                
                 // Watch the locations of the other players
                 model.watchPlayers();
-                */
-
+                
                 // Clear overlay so gameplay can begin
                 $("#content").html('');
                 $("body").empty();
+                
+                // Draw map
+                ui.update();
             }
 	    });
 	},
@@ -222,29 +299,24 @@ var model = {
 	},
 	
 	getLocation: function() {
-	    model.error("Locking on to your location...");
 		navigator.geolocation.getCurrentPosition(function(position) {
 			model.centerMap(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
 		}, function() {
-		    model.error("GPS was not active. Trying triangulation...");
-		    setTimeout(function() {
-		        if (model.user.latitude === undefined && model.user.longitude == undefined) {
-		            model.ipGetLocation();
-		        }
-		    }, 5000);
 			navigator.geolocation.getCurrentPosition(function(position) {
 				model.centerMap(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
 			}, function() {
                 model.ipGetLocation();
+			}, {
+			    timeout: 3000
 			});
 		}, {
 			maximumAge: 500,
+			timeout: 3000,
 			enableHighAccuracy: true
 		});
 	},
 	
 	ipGetLocation: function() {
-        model.error("Triangulation did not work. Attempting network geolocation...");
         if (model.user.latitude === undefined && model.user.longitude == undefined) {
             $.getScript("http://j.maxmind.com/app/geoip.js", function() {
                 model.clear_error();
@@ -259,18 +331,13 @@ var model = {
 	 * Get the locations of the other players
 	 */
 	watchPlayers: function() {
-	    model.timer = setInterval(model.getLocation, 3000);
+	    model.timer = setInterval(model.getLocation, 1000);
 	},
 	
 	/**
 	 * Server call which updates your current location
 	 */
 	updateLocation: function(latitude, longitude, accuracy) {
-	    // Update your location, regardless of whether it's in strict accuracy requirements
-	    if (model.player_markers[model.user.user_id] !== undefined) {
-	        model.player_markers[model.user.user_id].setPosition( new google.maps.LatLng(latitude, longitude) );
-	    }
-		
 		// Update the server if strict requirements have been met
 		if (model.user.user_id !== undefined && model.user.game_id !== undefined) {
 			$.ajax({
@@ -279,33 +346,7 @@ var model = {
 		        cache: false,
 		        data: model.user,
 		        dataType: 'json',
-		        success: function(data) {
-	                // Don't update if empty response from the server
-	                if (!data) {
-	                    return;
-	                }
-	                
-	                // Update the locations of each player
-	                $.each(data, function(player_iterator, player) {
-	                    if (model.player_markers[player_iterator] === undefined) {
-	                    	icon = player_iterator == model.user.user_id ? "/css/images/star.png" : "/css/images/person_" + player.team + ".png";
-	                        model.player_markers[player_iterator] = new google.maps.Marker({
-	                            position: new google.maps.LatLng(player.latitude, player.longitude),
-	                            map: map.map,
-	                            title: player.name,
-	                            icon: icon
-	                        });
-	                        
-	                        google.maps.event.addListener(model.player_markers[player_iterator], 'click', function() {
-	                            map.infowindow.content = this.title;
-	                            map.infowindow.open(map.map, this);
-	                        });
-	                        
-	                	} else {
-	                        model.player_markers[player_iterator].setPosition( new google.maps.LatLng(player.latitude, player.longitude) );
-	                    }
-	                });
-				}
+		        success: ui.update_players
 		    });
 		}
 	}
@@ -313,6 +354,8 @@ var model = {
 
 // Start application
 $(document).ready(function() {
+    // Get name to log in with
+    $("#login input[name='username']").focus();
 	$("#login").submit(model.login);
 	
 	// In the background, lock onto the user's location
