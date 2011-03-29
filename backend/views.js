@@ -31,14 +31,19 @@ var log = fs.createWriteStream("update_location.csv", { flags: "a" });
 
 exports.update_location = function(request, response) {
     // Record user's location
-	var game_id = request.body.game_id;
-	var user_id = request.body.user_id;
-	var user = request.body;
-	
+    if (request.body !== undefined && request.body.game_id !== undefined && request.body.user_id !== undefined) {
+    	var game_id = request.body.game_id;
+    	var user_id = request.body.user_id;
+    	var user = request.body;
+    } else {
+        response.send({"error": "Some required information was missing"}, 400);
+        return;
+    }
+    	
 	if (controller.update_location(game_id, user_id, user)) {
         // Log the update
 	    try {
-	       log.write('"' + user.name + '","' + user.latitude + '","' + user.longitude + '","' + user.accuracy + '","' + new Date() + '"\n');
+            log.write('"' + user.name + '","' + user.latitude + '","' + user.longitude + '","' + user.accuracy + '","' + new Date() + '"\n');
 	    } catch (e) {
 	        log.end();
 	        log = fs.createWriteStream("update_location.csv", { flags: "a" });
@@ -60,8 +65,13 @@ exports.update_location = function(request, response) {
 };
 
 exports.get_games = function(request, response) {
-	var user_latitude = request.query.latitude;
-	var user_longitude = request.query.longitude;
+    if (request.query.latitude !== undefined && request.query.longitude !== undefined) {
+    	var user_latitude = request.query.latitude;
+    	var user_longitude = request.query.longitude;
+    } else {
+        response.send({"error": "Some required information was missing"}, 400);
+        return;
+    }
 	
     games_in_radius = controller.get_games(user_latitude, user_longitude);
 	response.send(games_in_radius);
@@ -70,13 +80,23 @@ exports.get_games = function(request, response) {
 exports.create_game = function(request, response) {
     // Generate a new game id
     var game_id = "";
-    if (request.body.game_id) {
+    if (request.body !== undefined && request.body.game_id !== undefined) {
         game_id = request.body.game_id;
-    } else {
+    } else if (request.body !== undefined && request.body.name !== undefined) {
         game_id = request.body.name;         
+    } else {
+        response.send({"error": "Some required information was missing"}, 400);
+        return;
     }
-    var latitude = request.body.latitude;
-    var longitude = request.body.longitude;
+    
+    // Make sure we have latitude and longitude as well
+    if (request.body.latitude !== undefined && request.body.longitude !== undefined) {
+        var latitude = request.body.latitude;
+        var longitude = request.body.longitude;
+    } else {
+        response.send({"error": "Some required information was missing"}, 400);
+        return;
+    }
     
     // Create the skeleton of the game
     if (controller.create_game(game_id, latitude, longitude)) {
@@ -87,9 +107,15 @@ exports.create_game = function(request, response) {
 };
 
 exports.join_game = function(request, response) {
-    var user_id = request.body.user_id;
-    var game_id = request.params.game_id;
-    var user = request.body;
+    if (request.body.user_id !== undefined && request.params.game_id !== undefined) {
+        var user_id = request.body.user_id;
+        var game_id = request.params.game_id;
+        var user = request.body;
+    } else {
+        response.send({"error": "Some required information was missing"}, 400);
+        return;
+    }
+    
     if (controller.join_game(game_id, user_id, user)) {
         response.send(ctf.game_data[game_id]);
     } else {

@@ -375,8 +375,9 @@ fs.readFile('game_data.dat', function(err, data) {
     
     // Start listening
     try {
-        http.listen(80);
-        console.log("Listening on port 80");
+        var port = process.ARGV[2] || 80;
+        http.listen(port);
+        console.log("Listening on port " + port);
     } catch (f) {
         http.listen(5555);
         console.log("Listening on port 5555");
