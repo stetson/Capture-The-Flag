@@ -28,6 +28,7 @@ exports.test_flag = function(test) {
     
     // Make sure user doesn't have flag
     test.strictEqual(false, ctf.game_data[game_id].players[user_id].has_flag, "The user has the flag");
+    test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "The blue flag should not be captured");
     
     // Move player over flag
     user.latitude = ctf.game_data[game_id].blue_flag.latitude;
@@ -39,6 +40,7 @@ exports.test_flag = function(test) {
     
     // User should now have flag
     test.strictEqual(true, ctf.game_data[game_id].players[user_id].has_flag, "The user doesn't have the flag");
+    test.strictEqual(true, ctf.game_data[game_id].blue_flag_captured, "The blue flag should be captured");
     
     // Move the user back into their own territory
     user.latitude = ctf.game_data[game_id].origin.latitude + .001;
@@ -50,6 +52,23 @@ exports.test_flag = function(test) {
      
     // User should no longer have flag
     test.strictEqual(false, ctf.game_data[game_id].players[user_id].has_flag, "The user still has the flag");
+    test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "The blue flag shold not captured now");
     
     test.done();
+};
+
+exports.test_flag_race_condition = function(test) {
+    // Create game
+    // Have three players join
+    // Have two red players reach flag at the same time
+    // Test that first to join has flag
+    // Test that flag is captured
+    // Move player with flag to own side
+    // Move other red player away from flag
+    // Test that flag is no longer captured
+    // Move other red player back on flag
+    // Test that flag is captured again
+    // Move to own side
+    // Test that flag is no longer captured
+    test.done();    
 };
