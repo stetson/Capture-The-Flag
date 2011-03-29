@@ -40,7 +40,8 @@ exports.update_location = function(request, response) {
         return;
     }
     	
-	if (controller.update_location(game_id, user_id, user)) {
+	var update = controller.update_location(game_id, user_id, user);
+    if (update === null) {
         // Log the update
 	    try {
             log.write('"' + user.name + '","' + user.latitude + '","' + user.longitude + '","' + user.accuracy + '","' + new Date() + '"\n');
@@ -55,13 +56,13 @@ exports.update_location = function(request, response) {
 	    if (locations) {
 	        response.send(locations);
 	    } else {
-	        response.send({"error": "Invalid game"}, 404);
+	        response.send({"error": "Invalid game"}, 400);
 	    }
 	    
         return;
 	}
 	
-	response.send({"error": "Invalid user"}, 404);
+	response.send({"error": update}, 400);
 };
 
 exports.get_games = function(request, response) {

@@ -34,7 +34,7 @@ var tests = [
     { method: "POST", url: "/game", postData: "game_id=test_game&latitude=27&longitude=-83", statusCode: 200 },
     
     // Make sure we can't duplicate a game
-    { method: "POST", url: "/game", postData: "game_id=test_game&latitude=27&longitude=-83", statusCode: 409 },
+    { method: "POST", url: "/game", postData: "game_id=test_game&latitude=27&longitude=-83", statusCode: 409, data: "Game already exists" },
     
     // Make sure crappy data won't corrupt game object
     { method: "POST", url: "/game", postData: "game_id=test_game2", statusCode: 400 },
@@ -43,6 +43,35 @@ var tests = [
     { method: "POST", url: "/game", postData: "latitude=27&longitude=-83", statusCode: 400 },
     { method: "POST", url: "/game", postData: "game_id=test_game2&potato=nomnom", statusCode: 400 },
     { method: "POST", url: "/game", postData: "game_id=test_game2&latitude=27&longitude=-83", statusCode: 200 },
+    
+    // Not implemented (returned as 404 for now. this is an express issue)
+    { method: "PUT", url: "/game", statusCode: 404 },
+    { method: "DELETE", url: "/game", statusCode: 404 },
+    
+    // Join the game
+    { method: "POST", url: "/game/test_game", postData: "user_id=Bob", statusCode: 200, data: "red_flag" },
+    
+    // Make sure I can't join an imaginary game
+    { method: "POST", url: "/game/fantasy", postData: "user_id=Bob", statusCode: 404, data: "error" },
+    
+    // Make sure I can't join the game with crap data
+    { method: "POST", url: "/game/test_game", statusCode: 400, data: "required information" },
+    { method: "POST", url: "/game/test_game", postData: "potato=red", statusCode: 400, data: "required information" },
+    { method: "POST", url: "/game/test_game", postData: "latitude=27&longitude=-83", statusCode: 400, data: "required information" },
+    
+    // Thou shalt only POST
+    { method: "GET", url: "/location", statusCode: 404 },
+    { method: "PUT", url: "/location", statusCode: 404 },
+    { method: "DELETE", url: "/location", statusCode: 404 },
+    
+    // Update the user's information
+    { method: "POST", url: "/location", postData: "game_id=test_game&user_id=Bob&latitude=27&longitude=-83&accuracy=5", statusCode: 200, data: "Bob" },
+    
+    // Make sure I can't update for a fake user
+    { method: "POST", url: "/location", postData: "game_id=test_game&user_id=PeeWeeHerman&latitude=27&longitude=-83&accuracy=5", statusCode: 400, data: "Invalid user" },
+    
+    // Make sure user can't be updated with crap information
+    { method: "POST", url: "/location", postData: "game_id=test_game&user_id=Frank&potato=red", statusCode: 400, data: "Invalid user" },
 ];
 
 var run_test = function(test, test_case) {
@@ -77,7 +106,7 @@ var run_test = function(test, test_case) {
             // Check the response for the given data
             res.on('data', function(chunk) {
                 if (tests[test_case].data !== undefined) {
-                    test.notEqual(-1, chunk.toString().indexOf(tests[test_case].data), "Test data (" + tests[test_case].data + " was not found in response (" + chunk.toString().substring(0,20) + "...)");
+                    test.notEqual(-1, chunk.toString().indexOf(tests[test_case].data), "Test data (" + tests[test_case].data + ") was not found in response (" + chunk.toString().substring(0,50) + "...)");
                 }
             });
             

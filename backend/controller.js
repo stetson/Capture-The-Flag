@@ -14,18 +14,22 @@ var algorithms = new algorithms_class.Algorithms();
  * @param game_id {String} The id of the game
  * @param user_id {String} The id of the user to update
  * @param user {Object} The user to update (sent from client)
- * @returns {Boolean} if successful
+ * @returns {String} error message
  * @function
  */
 exports.update_location = function(game_id, user_id, user) {
-    if (user_id && ctf.game_data[game_id] !== undefined && ctf.game_data[game_id].players[user_id] !== undefined) {
-        ctf.game_data[game_id].last_update = new Date();
-        ctf.game_data[game_id].players[user_id] = user;
-        ctf.game_data[game_id].players[user_id].last_update = new Date();
-        return true;
+    if (ctf.game_data[game_id] === undefined) {
+        return "Invalid game";
+    } 
+    
+    if (ctf.game_data[game_id].players[user_id] === undefined) {
+        return "Invalid user";
     }
     
-    return false;
+    ctf.game_data[game_id].last_update = new Date();
+    ctf.game_data[game_id].players[user_id] = user;
+    ctf.game_data[game_id].players[user_id].last_update = new Date();
+    return null;
 };
 
 /**
