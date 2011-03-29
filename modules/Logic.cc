@@ -115,6 +115,8 @@
 
         // Take the flag away from them
         player->Set(has_flag, Boolean::New(false));
+
+        // TODO - return the flag to its place
       }
     }
   }
@@ -200,14 +202,24 @@
         // If both players are in the same territory
         if (player1_territory->Equals(player2_territory)) {
 
-          // If player 1 is not in their own territory, place them in observer mode
+          // If player 1 is not in their own territory...
           if (player1_territory->Equals(player1->Get(String::New("team"))->ToString()) == false) {
+            // ...place them in observer mode
             player1->Set(String::New("observer_mode"), Boolean::New(true));
+
+            // TODO - if they have the flag
+              // TODO - take it away from them
+              // TODO - return it to its place
           }
 
-          // If player 1 is not in their own territory, place them in observer mode
+          // If player 1 is not in their own territory...
           if (player2_territory->Equals(player2->Get(String::New("team"))->ToString()) == false) {
+            // ...place them in observer mode
             player2->Set(String::New("observer_mode"), Boolean::New(true));
+
+            // TODO - if they have the flag
+              // TODO - take it away from them
+              // TODO - return it to its place
           }
 
         }
@@ -255,7 +267,10 @@
         flag->Get(latitude)->NumberValue(), flag->Get(longitude)->NumberValue())
       < TOLERANCE)
     {
+      // Give player the flag
       player->Set(String::New("has_flag"), Boolean::New(true));
+
+      // TODO - Remove the flag from its place
     }
   }
 
@@ -297,6 +312,8 @@
       {
         // Take the flag away from them
         player->Set(has_flag, Boolean::New(false));
+
+        // TODO - Return the flag to its place
       }
 
       // Place the player in observer mode
