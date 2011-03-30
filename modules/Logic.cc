@@ -139,6 +139,8 @@
     Local<String> longitude = String::New("longitude");
     Local<String> has_flag = String::New("has_flag");
     Local<String> team = String::New("team");
+	Local<String> captured;
+
 
     Local<Object> red_bounds = game->Get(String::New("red_bounds"))->ToObject();
     Local<Object> blue_bounds = game->Get(String::New("blue_bounds"))->ToObject();
@@ -210,7 +212,12 @@
             // TODO - if they have the flag
               // TODO - take it away from them
               // TODO - return it to its place
-          }
+			 if (player->Get(has_flag == true))
+			{ 
+			   game->Set(captured, Boolean::New(false));
+			}
+			else
+			}
 
           // If player 1 is not in their own territory...
           if (player2_territory->Equals(player2->Get(String::New("team"))->ToString()) == false) {
@@ -220,7 +227,12 @@
             // TODO - if they have the flag
               // TODO - take it away from them
               // TODO - return it to its place
-          }
+			 if (player->Get(has_flag == true))
+			{ 
+			   game->Set(captured, Boolean::New(false));
+			}
+			else
+			}
 
         }
       }
@@ -242,7 +254,7 @@
      // Local Variables
     Local<Object> flag;
     Local<String> team;
-	  Local<String> captured;
+	Local<String> captured;
 
     // Figure out which team they are on (whether blue or red)
     team = player->Get(String::New("team"))->ToString();
