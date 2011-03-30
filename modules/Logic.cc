@@ -242,7 +242,7 @@
      // Local Variables
     Local<Object> flag;
     Local<String> team;
-	Local<Object> captured;
+	  Local<String> captured;
 
     // Figure out which team they are on (whether blue or red)
     team = player->Get(String::New("team"))->ToString();
@@ -255,10 +255,12 @@
     if (team->Equals(String::New("red")))
     {
       flag = game->Get(String::New("blue_flag"))->ToObject();
+      captured = String::New("blue_flag_captured");
     }
     else
     {
       flag = game->Get(String::New("red_flag"))->ToObject();
+      captured = String::New("red_flag_captured");
     }
 
     // Check to see if player's distance is less then the tolerance of the
@@ -271,21 +273,8 @@
       // Give player the flag
       player->Set(String::New("has_flag"), Boolean::New(true));
 
-      // TODO - Remove the flag from its place:
-	  // If team is red and they have the flag then set flag captured to true.
-	  if (team->Equals(String::New("red")) && has_flag == true)
-    {
-      captured = game->Get(String::New("blue_flag"))->ToObject();
-	  game->Set(String::New("blue_flag_captured"), Boolean::New(true));
-    }
-	 // If team is blue and they have the flag then set flag captured to true.
-    else (team->Equals(String::New("blue")) && has_flag == true)
-    {
-      captured = game->Get(String::New("red_flag"))->ToObject();
-	  game->Set(String::New("red_flag_captured"), Boolean::New(true));    
-	  
-	}
-
+      // Remove the flag from its place
+      game->Set(captured, Boolean::New(true));
     }
   }
 
