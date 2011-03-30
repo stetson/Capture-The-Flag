@@ -18,7 +18,7 @@ exports.test_win = function(test) {
     
     // Test that invalid game is rejected
     test.strictEqual(false, controller.join_game(game_id, user_id, user), "Should not allow user to join game before it is created");
-    test.strictEqual(false, controller.update_location(game_id, user_id, user), "Should not allow user to update their location before joining");
+    test.notStrictEqual(null, controller.update_location(game_id, user_id, user), "Should not allow user to update their location before joining");
     
     // Create game
     test.ok(controller.create_game(game_id, user.latitude, user.longitude), "Could not create game");

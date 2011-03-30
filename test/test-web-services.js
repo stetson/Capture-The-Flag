@@ -71,7 +71,9 @@ var tests = [
     { method: "POST", url: "/location", postData: "game_id=test_game&user_id=PeeWeeHerman&latitude=27&longitude=-83&accuracy=5", statusCode: 400, data: "Invalid user" },
     
     // Make sure user can't be updated with crap information
-    { method: "POST", url: "/location", postData: "game_id=test_game&user_id=Frank&potato=red", statusCode: 400, data: "Invalid user" },
+    { method: "POST", url: "/location", postData: "game_id=test_game&user_id=Frank&latitude=27&longitude=-83&accuracy=5", statusCode: 400, data: "Invalid user" },
+    { method: "POST", url: "/location", postData: "game_id=test_game3&user_id=Bob&latitude=27&longitude=-83&accuracy=5", statusCode: 400, data: "Invalid game" },
+    { method: "POST", url: "/location", postData: "game_id=test_game&user_id=Frank&latitude=somewhere&longitude=out_there", statusCode: 400, data: "Invalid data" },
 ];
 
 var run_test = function(test, test_case) {
@@ -84,7 +86,7 @@ var run_test = function(test, test_case) {
     }
     
     // Log request
-    console.log(tests[test_case].method + " " + tests[test_case].url);
+    // console.log(tests[test_case].method + " " + tests[test_case].url);
     
     // Request the given url and check the response
     try {
@@ -96,7 +98,7 @@ var run_test = function(test, test_case) {
             headers: { "Content-type": "application/x-www-form-urlencoded" }
         }, function(res) {
             // Log response
-            console.log("  HTTP " + tests[test_case].statusCode);
+            // console.log("  HTTP " + tests[test_case].statusCode);
             
             // Check the response for the given status code
             if (tests[test_case].statusCode !== undefined) {
@@ -131,7 +133,6 @@ exports.test_web_services = function(test) {
     
     server.stdout.on('data', function(data) {
         // Run the first test
-        test.notEqual(-1, data.toString('utf-8').indexOf(test_port), "Server did not start on the expected port: " + data.toString('utf-8'));
         setTimeout(function() {
             if (! started) {
                 started = true;

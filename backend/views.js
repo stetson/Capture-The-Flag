@@ -39,6 +39,13 @@ exports.update_location = function(request, response) {
         response.send({"error": "Some required information was missing"}, 400);
         return;
     }
+    
+    // Validate incoming data
+    if (request.body.latitude === undefined || isNaN(request.body.latitude) 
+    		|| request.body.longitude === undefined || isNaN(request.body.longitude)) {
+    	response.send({"error": "Invalid data"}, 400);
+        return;
+    }
     	
 	var update = controller.update_location(game_id, user_id, user);
     if (update === null) {

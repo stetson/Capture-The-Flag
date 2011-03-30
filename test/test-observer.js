@@ -38,7 +38,7 @@ exports.test_observer = function(test) {
     // Move out of bounds
     user.latitude = 31.503629; // China :-)
     user.longitude = 121.289063;
-    test.ok(controller.update_location(game_id, user_id, user), "Could not move out of bounds");
+    test.strictEqual(null, controller.update_location(game_id, user_id, user), "Could not move out of bounds");
 
     // Run business logic
     logic.run(ctf.game_data[game_id]);

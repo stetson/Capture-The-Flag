@@ -33,7 +33,7 @@ exports.test_flag = function(test) {
     // Move player over flag
     user.latitude = ctf.game_data[game_id].blue_flag.latitude;
     user.longitude = ctf.game_data[game_id].blue_flag.longitude;
-    controller.update_location(game_id, user_id, user);
+    test.strictEqual(null, controller.update_location(game_id, user_id, user), "Could not move player over flag");
     
     // Run business logic
     logic.run(ctf.game_data[game_id]);
@@ -45,7 +45,7 @@ exports.test_flag = function(test) {
     // Move the user back into their own territory
     user.latitude = ctf.game_data[game_id].origin.latitude + .001;
     user.longitude = ctf.game_data[game_id].origin.longitude;
-    controller.update_location(game_id, user_id, user);
+    test.strictEqual(null, controller.update_location(game_id, user_id, user), "Could not move player back into their territory");
     
     // Run business logic
     logic.run(ctf.game_data[game_id]);
