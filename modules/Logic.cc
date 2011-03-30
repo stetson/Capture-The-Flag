@@ -139,101 +139,91 @@
     Local<String> longitude = String::New("longitude");
     Local<String> has_flag = String::New("has_flag");
     Local<String> team = String::New("team");
-	Local<String> captured;
+	  Local<String> captured;
 
-
+	  // Grab each team's bounds
     Local<Object> red_bounds = game->Get(String::New("red_bounds"))->ToObject();
     Local<Object> blue_bounds = game->Get(String::New("blue_bounds"))->ToObject();
 
     // If players are on different teams
-    if (player1->Get(team)->Equals(player2->Get(team)) == false) {
-      // Find distance between players
-      double distance = Algorithms::distance_in_miles(player1->Get(latitude)->NumberValue(), player1->Get(longitude)->NumberValue(),
-          player2->Get(latitude)->NumberValue(), player2->Get(longitude)->NumberValue());
+    if (player1->Get(team)->Equals(player2->Get(team))) {
+        return;
+    }
 
-      // If distance in acceptable tolarance
-      if (distance < TOLERANCE) {
-        // Find out what territory each player is in
-        Local<String> player1_territory;
-        Local<String> player2_territory;
+    // Find distance between players
+    double distance = Algorithms::distance_in_miles(player1->Get(latitude)->NumberValue(), player1->Get(longitude)->NumberValue(),
+        player2->Get(latitude)->NumberValue(), player2->Get(longitude)->NumberValue());
 
-        // Find out what territory player 1 is in
-        if (Algorithms::in_rectangle(
-          player1->Get(latitude)->NumberValue(), player1->Get(longitude)->NumberValue(),
-          red_bounds->Get(String::New("top_left"))->ToObject()->Get(latitude)->NumberValue(),
-          red_bounds->Get(String::New("top_left"))->ToObject()->Get(longitude)->NumberValue(),
-          red_bounds->Get(String::New("bottom_right"))->ToObject()->Get(latitude)->NumberValue(),
-          red_bounds->Get(String::New("bottom_right"))->ToObject()->Get(longitude)->NumberValue()
-          )) {
-            player1_territory = String::New("red");
-        } else if (Algorithms::in_rectangle(
-          player1->Get(latitude)->NumberValue(), player1->Get(longitude)->NumberValue(),
-          blue_bounds->Get(String::New("top_left"))->ToObject()->Get(latitude)->NumberValue(),
-          blue_bounds->Get(String::New("top_left"))->ToObject()->Get(longitude)->NumberValue(),
-          blue_bounds->Get(String::New("bottom_right"))->ToObject()->Get(latitude)->NumberValue(),
-          blue_bounds->Get(String::New("bottom_right"))->ToObject()->Get(longitude)->NumberValue()
-          )) {
-            player1_territory = String::New("blue");
-        } else {
-          // Out of bounds, not worth proceeding
-          return;
-        }
+    // If distance in acceptable tolarance
+    if (distance > TOLERANCE) {
+        return;
+    }
 
-        // Find out what territory player 2 is in
-        if (Algorithms::in_rectangle(
-          player2->Get(latitude)->NumberValue(), player2->Get(longitude)->NumberValue(),
-          red_bounds->Get(String::New("top_left"))->ToObject()->Get(latitude)->NumberValue(),
-          red_bounds->Get(String::New("top_left"))->ToObject()->Get(longitude)->NumberValue(),
-          red_bounds->Get(String::New("bottom_right"))->ToObject()->Get(latitude)->NumberValue(),
-          red_bounds->Get(String::New("bottom_right"))->ToObject()->Get(longitude)->NumberValue()
-          )) {
-            player2_territory = String::New("red");
-        } else if (Algorithms::in_rectangle(
-          player2->Get(latitude)->NumberValue(), player2->Get(longitude)->NumberValue(),
-          blue_bounds->Get(String::New("top_left"))->ToObject()->Get(latitude)->NumberValue(),
-          blue_bounds->Get(String::New("top_left"))->ToObject()->Get(longitude)->NumberValue(),
-          blue_bounds->Get(String::New("bottom_right"))->ToObject()->Get(latitude)->NumberValue(),
-          blue_bounds->Get(String::New("bottom_right"))->ToObject()->Get(longitude)->NumberValue()
-          )) {
-            player2_territory = String::New("blue");
-        } else {
-          // Out of bounds, not worth proceeding
-          return;
-        }
+    // Find out what territory each player is in
+    Local<String> player1_territory;
+    Local<String> player2_territory;
 
-        // If both players are in the same territory
-        if (player1_territory->Equals(player2_territory)) {
+    // Find out what territory player 1 is in
+    if (Algorithms::in_rectangle(
+      player1->Get(latitude)->NumberValue(), player1->Get(longitude)->NumberValue(),
+      red_bounds->Get(String::New("top_left"))->ToObject()->Get(latitude)->NumberValue(),
+      red_bounds->Get(String::New("top_left"))->ToObject()->Get(longitude)->NumberValue(),
+      red_bounds->Get(String::New("bottom_right"))->ToObject()->Get(latitude)->NumberValue(),
+      red_bounds->Get(String::New("bottom_right"))->ToObject()->Get(longitude)->NumberValue()
+      )) {
+        player1_territory = String::New("red");
+    } else if (Algorithms::in_rectangle(
+      player1->Get(latitude)->NumberValue(), player1->Get(longitude)->NumberValue(),
+      blue_bounds->Get(String::New("top_left"))->ToObject()->Get(latitude)->NumberValue(),
+      blue_bounds->Get(String::New("top_left"))->ToObject()->Get(longitude)->NumberValue(),
+      blue_bounds->Get(String::New("bottom_right"))->ToObject()->Get(latitude)->NumberValue(),
+      blue_bounds->Get(String::New("bottom_right"))->ToObject()->Get(longitude)->NumberValue()
+      )) {
+        player1_territory = String::New("blue");
+    } else {
+      // Out of bounds, not worth proceeding
+      return;
+    }
 
-          // If player 1 is not in their own territory...
-          if (player1_territory->Equals(player1->Get(String::New("team"))->ToString()) == false) {
-            // ...place them in observer mode
-            player1->Set(String::New("observer_mode"), Boolean::New(true));
+    // Find out what territory player 2 is in
+    if (Algorithms::in_rectangle(
+      player2->Get(latitude)->NumberValue(), player2->Get(longitude)->NumberValue(),
+      red_bounds->Get(String::New("top_left"))->ToObject()->Get(latitude)->NumberValue(),
+      red_bounds->Get(String::New("top_left"))->ToObject()->Get(longitude)->NumberValue(),
+      red_bounds->Get(String::New("bottom_right"))->ToObject()->Get(latitude)->NumberValue(),
+      red_bounds->Get(String::New("bottom_right"))->ToObject()->Get(longitude)->NumberValue()
+      )) {
+        player2_territory = String::New("red");
+    } else if (Algorithms::in_rectangle(
+      player2->Get(latitude)->NumberValue(), player2->Get(longitude)->NumberValue(),
+      blue_bounds->Get(String::New("top_left"))->ToObject()->Get(latitude)->NumberValue(),
+      blue_bounds->Get(String::New("top_left"))->ToObject()->Get(longitude)->NumberValue(),
+      blue_bounds->Get(String::New("bottom_right"))->ToObject()->Get(latitude)->NumberValue(),
+      blue_bounds->Get(String::New("bottom_right"))->ToObject()->Get(longitude)->NumberValue()
+      )) {
+        player2_territory = String::New("blue");
+    } else {
+      // Out of bounds, not worth proceeding
+      return;
+    }
 
-            // TODO - if they have the flag
-              // TODO - take it away from them
-              // TODO - return it to its place
-			 if (player->Get(has_flag == true))
-			{ 
-			   game->Set(captured, Boolean::New(false));
-			}
-			else
-			}
+    // If both players are in the same territory
+    if (player1_territory->Equals(player2_territory)) {
 
-          // If player 1 is not in their own territory...
-          if (player2_territory->Equals(player2->Get(String::New("team"))->ToString()) == false) {
-            // ...place them in observer mode
-            player2->Set(String::New("observer_mode"), Boolean::New(true));
+      // If player 1 is not in their own territory...
+      if (player1_territory->Equals(player1->Get(String::New("team"))->ToString()) == false) {
+        // ...place them in observer mode
+        player1->Set(String::New("observer_mode"), Boolean::New(true));
 
-            // TODO - if they have the flag
-              // TODO - take it away from them
-              // TODO - return it to its place
-			 if (player->Get(has_flag == true))
-			{ 
-			   game->Set(captured, Boolean::New(false));
-			}
-			else
-			}
+        // If they have the flag
+        if (player1->Get(has_flag)->BooleanValue())
+        {
+          // Take it away from them
+          player1->Set(has_flag, Boolean::New(false));
 
+          // Return it to its place
+          captured = String::Concat(player1->Get(team)->ToString(), String::New("_flag_captured"));
+          game->Set(captured, Boolean::New(false));
         }
       }
     }
@@ -254,7 +244,7 @@
      // Local Variables
     Local<Object> flag;
     Local<String> team;
-	Local<String> captured;
+	  Local<String> captured;
 
     // Figure out which team they are on (whether blue or red)
     team = player->Get(String::New("team"))->ToString();
