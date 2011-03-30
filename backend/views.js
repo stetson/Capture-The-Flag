@@ -82,7 +82,9 @@ exports.get_games = function(request, response) {
     }
 	
     games_in_radius = controller.get_games(user_latitude, user_longitude);
-	response.send(games_in_radius);
+	response.send({
+		games: games_in_radius
+	});
 };
 
 exports.create_game = function(request, response) {
