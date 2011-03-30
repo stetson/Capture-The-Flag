@@ -84,6 +84,7 @@
     Local<String> latitude = String::New("latitude");
     Local<String> longitude = String::New("longitude");
     Local<String> has_flag = String::New("has_flag");
+    Local<String> captured;
 
     // Local variables
     Local<String> team;
@@ -99,8 +100,14 @@
       team = player->Get(String::New("team"))->ToString();
       bounds = String::Concat(team, String::New("_bounds"));
 
-      // Grab the bounds for the player
+      // Find the other team's flag
+      if (team->Equals(String::New("red"))) {
+        captured = String::New("blue_flag_captured");
+      } else {
+        captured = String::New("red_flag_captured");
+      }
 
+      // Grab the bounds for the player
       top_left = game->Get(bounds)->ToObject()->Get(String::New("top_left"))->ToObject();
       bottom_right = game->Get(bounds)->ToObject()->Get(String::New("bottom_right"))->ToObject();
 
@@ -116,7 +123,8 @@
         // Take the flag away from them
         player->Set(has_flag, Boolean::New(false));
 
-        // TODO - return the flag to its place
+        // Return the flag to its place
+        game->Set(captured, Boolean::New(false));
       }
     }
   }

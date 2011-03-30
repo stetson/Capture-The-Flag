@@ -40,7 +40,7 @@ exports.test_flag = function(test) {
     
     // User should now have flag
     test.strictEqual(true, ctf.game_data[game_id].players[user_id].has_flag, "The user doesn't have the flag");
-    test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "The blue flag should be captured");
+    test.strictEqual(true, ctf.game_data[game_id].blue_flag_captured, "The blue flag should be captured");
     
     // Move the user back into their own territory
     user.latitude = ctf.game_data[game_id].origin.latitude + .001;
