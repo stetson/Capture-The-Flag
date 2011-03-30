@@ -1,4 +1,4 @@
-var test_port = 9999;
+var test_port = 9090;
 var http = require('http');
 var spawn = require('child_process').spawn;
 var timer, server;
@@ -49,7 +49,7 @@ var tests = [
     { method: "DELETE", url: "/game", statusCode: 404 },
     
     // Join the game
-    { method: "POST", url: "/game/test_game", postData: "user_id=Bob", statusCode: 200, data: "red_flag" },
+    { method: "POST", url: "/game/test_game", postData: "user_id=Bob&latitude=27&longitude=-83&accuracy=5", statusCode: 200, data: "red_flag" },
     
     // Make sure I can't join an imaginary game
     { method: "POST", url: "/game/fantasy", postData: "user_id=Bob", statusCode: 404, data: "error" },
@@ -59,13 +59,13 @@ var tests = [
     { method: "POST", url: "/game/test_game", postData: "potato=red", statusCode: 400, data: "required information" },
     { method: "POST", url: "/game/test_game", postData: "latitude=27&longitude=-83", statusCode: 400, data: "required information" },
     
+ 	// Update the user's information
+    { method: "POST", url: "/location", postData: "game_id=test_game&user_id=Bob&latitude=27&longitude=-83&accuracy=5", statusCode: 200, data: "Bob" },
+    
     // Thou shalt only POST
     { method: "GET", url: "/location", statusCode: 404 },
     { method: "PUT", url: "/location", statusCode: 404 },
     { method: "DELETE", url: "/location", statusCode: 404 },
-    
-    // Update the user's information
-    { method: "POST", url: "/location", postData: "game_id=test_game&user_id=Bob&latitude=27&longitude=-83&accuracy=5", statusCode: 200, data: "Bob" },
     
     // Make sure I can't update for a fake user
     { method: "POST", url: "/location", postData: "game_id=test_game&user_id=PeeWeeHerman&latitude=27&longitude=-83&accuracy=5", statusCode: 400, data: "Invalid user" },
@@ -80,7 +80,7 @@ var run_test = function(test, test_case) {
     // If we reached the end of the case, then quit
     if (test_case >= tests.length) {
         clearTimeout(timer);
-        server.kill('SIGTERM');
+        server.kill('SIGKILL');
         test.done();
         return;
     }
@@ -132,6 +132,9 @@ exports.test_web_services = function(test) {
     server = spawn("node", ["server.js", "" + test_port]);
     
     server.stdout.on('data', function(data) {
+    	// Write the data to the terminal
+    	console.log(data.toString());
+    	
         // Run the first test
         setTimeout(function() {
             if (! started) {
@@ -148,8 +151,8 @@ exports.test_web_services = function(test) {
     
     timer = setTimeout(function() {
         console.log("Tests timed out");
-        server.kill('SIGTERM');
+        server.kill('SIGKILL');
         test.ok(false, "Server hanging. Check your firewall settings.");
         test.done();
-    }, 30000);
+    }, 5000);
 };
