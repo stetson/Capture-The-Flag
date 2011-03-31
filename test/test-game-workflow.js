@@ -28,3 +28,19 @@ exports.test_game_workflow = function(test) {
     
     test.done();
 };
+
+exports.test_flag_race_condition = function(test) {
+    // Create game
+    // Have three players join
+    // Have two red players reach flag at the same time
+    // Test that first to join has flag
+    // Test that flag is captured
+    // Move player with flag to own side
+    // Move other red player away from flag
+    // Test that flag is no longer captured
+    // Move other red player back on flag
+    // Test that flag is captured again
+    // Move to own side
+    // Test that flag is no longer captured
+    test.done();    
+};
