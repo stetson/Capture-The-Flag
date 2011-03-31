@@ -48,11 +48,6 @@
       // Grab the player
       player1 = players->Get(player_keys->Get(i))->ToObject();
 
-      // Run single-player business logic
-      Logic::check_bounds(game, player1);
-      Logic::check_flags(game, player1);
-      Logic::check_win(game, player1);
-
       // Cross-compare to the rest of the players
       for (unsigned int j = 0; j < player_keys->Length(); j++) {
         if (i != j) {
@@ -63,6 +58,11 @@
           Logic::check_distance(game, player1, player2);
         }
       }
+
+      // Run single-player business logic
+      Logic::check_bounds(game, player1);
+      Logic::check_flags(game, player1);
+      Logic::check_win(game, player1);
     }
 
     return scope.Close(game);
@@ -216,24 +216,27 @@
     }
 
     // If both players are in the same territory
-    if (player1_territory->Equals(player2_territory)) {
+    if (player1_territory->Equals(player2_territory) == false) {
+        return;
+    }
 
-      // If player 1 is not in their own territory...
-      if (player1_territory->Equals(player1->Get(String::New("team"))->ToString()) == false) {
-        // ...place them in observer mode
-        player1->Set(String::New("observer_mode"), Boolean::New(true));
+    // If player 1 is not in their own territory...
+    if (player1_territory->Equals(player1->Get(String::New("team"))->ToString())) {
+        return;
+    }
 
-        // If they have the flag
-        if (player1->Get(has_flag)->BooleanValue())
-        {
-          // Take it away from them
-          player1->Set(has_flag, Boolean::New(false));
+    // ...place them in observer mode
+    player1->Set(String::New("observer_mode"), Boolean::New(true));
 
-          // Return it to its place
-          captured = String::Concat(player1->Get(team)->ToString(), String::New("_flag_captured"));
-          game->Set(captured, Boolean::New(false));
-        }
-      }
+    // If they have the flag
+    if (player1->Get(has_flag)->BooleanValue())
+    {
+      // Take it away from them
+      player1->Set(has_flag, Boolean::New(false));
+
+      // Return it to its place
+      captured = String::Concat(player2->Get(team)->ToString(), String::New("_flag_captured"));
+      game->Set(captured, Boolean::New(false));
     }
   }
 
@@ -253,6 +256,11 @@
     Local<Object> flag;
     Local<String> team;
 	  Local<String> captured;
+
+	  // If the player is in observer mode, then short circuit
+	  if (player->Get(String::New("observer_mode"))->BooleanValue()) {
+	      return;
+	  }
 
     // Figure out which team they are on (whether blue or red)
     team = player->Get(String::New("team"))->ToString();
@@ -306,6 +314,17 @@
     Local<String> longitude = String::New("longitude");
     Local<String> has_flag = String::New("has_flag");
     Local<String> team = player->Get(String::New("team"))->ToString();
+    Local<String> captured;
+
+    // For red team capture blue flag, for blue team capture red flag
+    if (team->Equals(String::New("red")))
+    {
+      captured = String::New("blue_flag_captured");
+    }
+    else
+    {
+      captured = String::New("red_flag_captured");
+    }
 	
     // Grab the bounds for the whole field
     Local<Object> field_top_left = game->Get(String::New("red_bounds"))->ToObject()->Get(String::New("top_left"))->ToObject();
@@ -327,7 +346,8 @@
         // Take the flag away from them
         player->Set(has_flag, Boolean::New(false));
 
-        // TODO - Return the flag to its place
+        // Return the flag to its place
+        game->Set(captured, Boolean::New(false));
       }
 
       // Place the player in observer mode
