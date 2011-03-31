@@ -16,7 +16,7 @@ var HALF_FIELD = 0.25;
 
 // Test data
 var user_id = "Bob the tester";
-var game_id = "test_game";
+var game_id = "test-bounds";
 var user = {
     latitude: 29.034681,    // 29°02′04.9″N
     longitude: -81.303774   // 81°18′13.6″W
@@ -72,7 +72,6 @@ exports.test_generated_bounds = function(test) {
         
         //Test points close to line
         {latitude: game.blue_bounds.top_left.latitude, longitude: game.red_bounds.top_left.longitude + TWENTY_FEET, boundary: boundaries.field, expected_result: true },
-
         {latitude: game.blue_bounds.top_left.latitude, longitude: game.red_bounds.top_left.longitude - TWENTY_FEET, boundary: boundaries.field, expected_result: false }
     ];
     
