@@ -237,6 +237,12 @@
       // Return it to its place
       captured = String::Concat(player2->Get(team)->ToString(), String::New("_flag_captured"));
       game->Set(captured, Boolean::New(false));
+	  
+	  // Increment player2's tags
+	  player2->Set(String::New("tags"), player2->Get(String::New("tags"))->IntegerValue() + 1);
+	  
+	  //TODO create test cast for tags in test-logic.js
+	  //TODO implement in algorithms
     }
   }
 
