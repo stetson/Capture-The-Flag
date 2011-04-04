@@ -25,7 +25,7 @@ exports.test_game_workflow = function(test) {
     controller.join_game(game_id, "Player 10", user);
     
     // Make sure it's 6 on 5
-    test.equal(6, ctf.game_data[game_id].red, "Red team does not have 5 people!");
+    test.equal(6, ctf.game_data[game_id].red, "Red team does not have 6 people!");
     test.equal(5, ctf.game_data[game_id].blue, "Blue team does not have 5 people!");
     
     // Remove one of the blue players
@@ -36,8 +36,39 @@ exports.test_game_workflow = function(test) {
     controller.join_game(game_id, "Player 10", user);
     
     // Make sure it's still 6 on 5
-    test.equal(6, ctf.game_data[game_id].red, "Red team does not have 5 people!");
+    test.equal(6, ctf.game_data[game_id].red, "Red team does not have 6 people!");
     test.equal(5, ctf.game_data[game_id].blue, "Blue team does not have 5 people!");
     
-    test.done();
+    // Remove remaining players
+    delete ctf.game_data[game_id].players["Player 0"];
+    ctf.game_data[game_id].red -= 1;
+    delete ctf.game_data[game_id].players["Player 2"];
+    ctf.game_data[game_id].red -= 1;
+    delete ctf.game_data[game_id].players["Player 3"];
+    ctf.game_data[game_id].blue -= 1;
+    delete ctf.game_data[game_id].players["Player 4"];
+    ctf.game_data[game_id].red -= 1;
+    delete ctf.game_data[game_id].players["Player 5"];
+    ctf.game_data[game_id].blue -= 1;
+    delete ctf.game_data[game_id].players["Player 6"];
+    ctf.game_data[game_id].red -= 1;
+    delete ctf.game_data[game_id].players["Player 7"];
+    ctf.game_data[game_id].blue -= 1;
+    delete ctf.game_data[game_id].players["Player 8"];
+    ctf.game_data[game_id].red -= 1;
+    delete ctf.game_data[game_id].players["Player 9"];
+    ctf.game_data[game_id].blue -= 1;
+    delete ctf.game_data[game_id].players["Player 10"]; 
+    ctf.game_data[game_id].red -= 1;
+    delete ctf.game_data[game_id].players["Player 10"]; 
+    ctf.game_data[game_id].blue -= 1;
+
+
+    //Make sure the game is now 0 on 0
+    test.equal(0, ctf.game_data[game_id].red, "Red team does not have 0 people!");
+    test.equal(0, ctf.game_data[game_id].blue, "Blue team does not have 0 people!");
+
+
+
+   test.done();
 };
