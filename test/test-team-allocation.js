@@ -76,5 +76,5 @@ exports.test_team_allocation = function(test) {
     }
     test.equal(0, player_count, "There are players");
 
-   test.done();
+   	test.done();
 };
