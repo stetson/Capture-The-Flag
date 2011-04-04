@@ -2,7 +2,7 @@ global.ctf = {};
 ctf.game_data = {};
 var controller = require("../backend/controller.js");
 
-exports.test_game_workflow = function(test) {
+exports.test_team_allocation = function(test) {
     var game_id = "location_test";
     var user = {
         latitude: 29.034681,
@@ -67,14 +67,14 @@ exports.test_game_workflow = function(test) {
     test.equal(0, ctf.game_data[game_id].red, "Red team does not have 0 people!");
     test.equal(0, ctf.game_data[game_id].blue, "Blue team does not have 0 people!");
 
-    test.equal(null, ctf.game_data[game_id].players, "There are players");
-
-    // Make sure there are no negative players
-    //ctf.game_data[game_id].red -= 1;
-    //ctf.game_data[game_id].blue -= 1;
-
-   // test.equal(0, ctf.game_data[game_id].red, "Red team does not have -1 people!");
-   // test.equal(0, ctf.game_data[game_id].blue, "Blue team does not have -1 people!")
+    // Make sure there are no players
+    var player_count = 0;
+    for (k in ctf.game_data[game_id].players) {
+        if (ctf.game_data[game_id].hasOwnProperty(k)) { 
+            player_count++;
+        }
+    }
+    test.equal(0, player_count, "There are players");
 
    test.done();
 };
