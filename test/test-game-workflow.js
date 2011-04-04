@@ -83,6 +83,14 @@ user1.latitude = ctf.game_data[game_id].blue_flag.latitude;
     test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to starting point");
     // Test that flag is not captured again
 test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "The user doesn't have the flag");
+  // Test if two players get to flag at same time
+/*
+user1.latitude = ctf.game_data[game_id].blue_flag.latitude;
+    user1.longitude = ctf.game_data[game_id].blue_flag.longitude;
+	user2.latitude = ctf.game_data[game_id].blue_flag.latitude;
+    user2.longitude = ctf.game_data[game_id].blue_flag.longitude;
+    test.strictEqual(null, controller.update_location(game_id, user1.id, user1, game_id, user2.id, user2), "No one has the flag");
+*/
     // Move to own side
 user1.latitude = ctf.game_data[game_id].red_flag.latitude;
     user1.longitude = ctf.game_data[game_id].red_flag.longitude;
