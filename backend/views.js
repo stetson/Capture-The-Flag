@@ -61,7 +61,7 @@ exports.update_location = function(request, response) {
 	    var locations = controller.get_location(game_id);
 	    
 	    if (locations) {
-	        response.send(locations);
+	        response.send(ctf.game_data[game_id]);
 	    } else {
 	        response.send({"error": "Invalid game"}, 400);
 	    }

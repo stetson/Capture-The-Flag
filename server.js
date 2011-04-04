@@ -220,24 +220,13 @@ http.use(express.static('./docs/'));
  *     user_id: String
  * 
  * Server data:                    
- *     {
- *         user_id: {
- *             latitude: Number,
- *             longitude: Number,
- *             accuracy: Number,
- *             auth_token: String,
- *             user_id: String,
- *             name: String,
- *             game_id: String,
- *             last_update: DateTime
- *         },
- *         ...
- *     }
+ *     [game object]
  * </pre>
  * 
  * @memberOf http
  * @name post_location
- * @link controller.update_location 
+ * @link controller.update_location
+ * @link ctf.game_data
  * @param request
  **/
 http.post('/location', views.update_location);
@@ -312,48 +301,13 @@ http.post('/game', views.create_game);
  *     user_id: String
  * 
  * Server data:
- *     {
- *         team: String,
- *         red_flag: {
- *             latitude: Number,
- *             longitude: Number,
- *             ...
- *         },
- *         blue_flag: {
- *             latitude: Number,
- *             longitude: Number,
- *             ...
- *         },
- *         red_bounds: {
- *             top_left: {
- *                 latitude: Number,
- *                 longitude: Number,
- *                 ...
- *             },
- *             bottom_right: {
- *                 latitude: Number,
- *                 longitude: Number,
- *                 ...
- *             }
- *         },
- *         blue_bounds: {
- *             top_left: {
- *                 latitude: Number,
- *                 longitude: Number,
- *                 ...
- *             },
- *             bottom_right: {
- *                 latitude: Number,
- *                 longitude: Number,
- *                 ...
- *             }
- *         }
- *     }
+ *     [game object]
  * </pre>
  * 
  * @memberOf http
  * @name post_game_id
  * @link controller.join_game
+ * @link ctf.game_data
  * @param request
  */
 http.post('/game/:game_id', views.join_game);
