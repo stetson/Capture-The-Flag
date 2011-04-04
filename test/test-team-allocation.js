@@ -63,12 +63,18 @@ exports.test_game_workflow = function(test) {
     delete ctf.game_data[game_id].players["Player 10"]; 
     ctf.game_data[game_id].blue -= 1;
 
-
-    //Make sure the game is now 0 on 0
+    // Make sure the game is now 0 on 0
     test.equal(0, ctf.game_data[game_id].red, "Red team does not have 0 people!");
     test.equal(0, ctf.game_data[game_id].blue, "Blue team does not have 0 people!");
 
+    test.equal(null, ctf.game_data[game_id].players, "There are players");
 
+    // Make sure there are no negative players
+    //ctf.game_data[game_id].red -= 1;
+    //ctf.game_data[game_id].blue -= 1;
+
+   // test.equal(0, ctf.game_data[game_id].red, "Red team does not have -1 people!");
+   // test.equal(0, ctf.game_data[game_id].blue, "Blue team does not have -1 people!")
 
    test.done();
 };
