@@ -78,3 +78,57 @@ exports.test_team_allocation = function(test) {
 
    	test.done();
 };
+
+exports.test_team_switching = function(test) {
+    var game_id = "team_switching_test";
+    var user = {
+        latitude: 29.034681,
+        longitude: -81.303774     
+    };
+    
+    // Create game
+    controller.create_game(game_id, user.latitude, user.longitude);
+    
+    // Have some people join
+    for (var i = 0; i < 10; i++) {
+        controller.join_game(game_id, "player_" + i, {
+            latitude: user.latitude,
+            longitude: user.longitude
+        });
+    }
+    
+    // Test that player 0 is red
+    test.equal("red", ctf.game_data[game_id].players["player_0"].team, "player isn't on red team");
+    
+    // Test that there are equal teams
+    test.equal(5, ctf.game_data[game_id].red, "Red team doesn't have 5 people");
+    test.equal(5, ctf.game_data[game_id].blue, "Blue team doesn't have 5 people");
+    
+    // Have even people leave
+    for (i = 0; i < 5; i++) {
+        var player_id = "player_" + ((i * 2) + 1);
+        ctf.game_data[game_id][
+            ctf.game_data[game_id].players[player_id].team
+        ] -= 1;
+        delete ctf.game_data[game_id].players[player_id];
+    }
+    
+    // Test that player 0 is red
+    test.equal("red", ctf.game_data[game_id].players["player_0"].team, "player isn't on red team");
+    
+    // Test that it's 5-0
+    test.equal(5, ctf.game_data[game_id].red, "Red team doesn't have 5 people");
+    test.equal(0, ctf.game_data[game_id].blue, "Blue team doesn't have 0 people");
+    
+    // Have Bob join the game
+    controller.join_game(game_id, "Bob" + i, user);
+    
+    // Test that player 0 is red
+    test.equal("red", ctf.game_data[game_id].players["player_0"].team, "player isn't on red team");
+    
+    // Test that it's 5-1
+    test.equal(5, ctf.game_data[game_id].red, "Red team doesn't have 5 people");
+    test.equal(1, ctf.game_data[game_id].blue, "Blue team doesn't have 1 people");
+    
+    test.done();
+};
