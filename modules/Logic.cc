@@ -286,7 +286,8 @@
     if (Algorithms::distance_in_miles(
         player->Get(latitude)->NumberValue(), player->Get(longitude)->NumberValue(),
         flag->Get(latitude)->NumberValue(), flag->Get(longitude)->NumberValue())
-      < TOLERANCE)
+      < TOLERANCE
+      && game->Get(captured)->IsFalse())
     {
       // Give player the flag
       player->Set(String::New("has_flag"), Boolean::New(true));

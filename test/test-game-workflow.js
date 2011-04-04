@@ -83,6 +83,9 @@ exports.test_flag_race_condition = function(test) {
     test.strictEqual(true, algorithms.in_rectangle(user2.latitude, user2.longitude,
             ctf.game_data[game_id].blue_bounds.top_left.latitude, ctf.game_data[game_id].blue_bounds.top_left.longitude,
             ctf.game_data[game_id].blue_bounds.bottom_right.latitude, ctf.game_data[game_id].blue_bounds.bottom_right.longitude), 'Player 1 not where expected');
+    test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 got put into observer mode");
+    test.strictEqual(false, ctf.game_data[game_id].players[user2.id].observer_mode, "user2 got put into observer mode");
+    test.strictEqual(false, ctf.game_data[game_id].players[user3.id].observer_mode, "user3 got put into observer mode");
     
     // Have two red players reach flag at the same time
     user1.latitude = ctf.game_data[game_id].blue_flag.latitude;
@@ -95,11 +98,17 @@ exports.test_flag_race_condition = function(test) {
     // Run business logic
     logic.run(ctf.game_data[game_id]);
     
-    // Test that last to join has flag
+    // Test that first to join has flag
     test.strictEqual(true, ctf.game_data[game_id].players[user1.id].has_flag, "user1 doesn't have the flag");
     test.strictEqual(false, ctf.game_data[game_id].players[user3.id].has_flag, "user3 has the flag");
     
+    // Test that no one is in observer mode
+    test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 got put into observer mode");
+    test.strictEqual(false, ctf.game_data[game_id].players[user2.id].observer_mode, "user2 got put into observer mode");
+    test.strictEqual(false, ctf.game_data[game_id].players[user3.id].observer_mode, "user3 got put into observer mode");
+    
     // Test that flag is captured
+    test.strictEqual(false, ctf.game_data[game_id].red_flag_captured, "The user doesn't have the flag");
     test.strictEqual(true, ctf.game_data[game_id].blue_flag_captured, "The user doesn't have the flag");
     
     // Move player with flag to own side
@@ -108,20 +117,29 @@ exports.test_flag_race_condition = function(test) {
     test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to starting point");
     
     // Move other red player away from flag
-    user3.latitude = ctf.game_data[game_id].blue_flag.latitude;
-    user3.longitude = ctf.game_data[game_id].blue_flag.longitude + (TWENTY_FEET * 2);
+    new_position = algorithms.add_miles_to_coordinate(user3.latitude, user3.longitude, 0.1, 45);
+    user3.latitude = new_position.latitude;
+    user3.longitude = new_position.longitude;
     test.strictEqual(null, controller.update_location(game_id, user3.id, user3), "Could not update location to starting point");
+    test.strictEqual(false, ctf.game_data[game_id].players[user3.id].observer_mode, "user3 got put into observer mode");
     
     // Run business logic
     logic.run(ctf.game_data[game_id]);
     
-    // Test that flag is not captured
+    // Test that flag is not captured and that no one has the flag
+    test.strictEqual(false, ctf.game_data[game_id].players[user3.id].observer_mode, "user3 got put into observer mode");
+    test.strictEqual(false, ctf.game_data[game_id].players[user1.id].has_flag, "user1 has the flag");
+    test.strictEqual(false, ctf.game_data[game_id].players[user3.id].has_flag, "user3 has the flag");
     test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "The flag is still captured");
+    test.strictEqual(false, ctf.game_data[game_id].red_flag_captured, "The user doesn't have the flag");
     
     // Move other red player back on flag
     user3.latitude = ctf.game_data[game_id].blue_flag.latitude;
     user3.longitude = ctf.game_data[game_id].blue_flag.longitude;
     test.strictEqual(null, controller.update_location(game_id, user3.id, user3), "Could not update location to starting point");
+    
+    // Run business logic
+    logic.run(ctf.game_data[game_id]);
     
     // Test that flag is captured again
     test.strictEqual(true, ctf.game_data[game_id].blue_flag_captured, "The user doesn't have the flag");
