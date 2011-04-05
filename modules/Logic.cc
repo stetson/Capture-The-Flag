@@ -1,5 +1,6 @@
 #include "Logic.h"
 #include "Algorithms.h"
+#include <assert.h>
 
   void Logic::Init(Handle<Object> target)
   {
@@ -48,6 +49,13 @@
       // Grab the player
       player1 = players->Get(player_keys->Get(i))->ToObject();
 
+      // Do assertion testing to ensure there is no corrupt data
+      assert(! player1->Get(String::New("latitude"))->IsUndefined());
+      assert(! player1->Get(String::New("longitude"))->IsUndefined());
+      assert(! player1->Get(String::New("has_flag"))->IsUndefined());
+      assert(! player1->Get(String::New("team"))->IsUndefined());
+      assert(! player1->Get(String::New("observer_mode"))->IsUndefined());
+
       // Cross-compare to the rest of the players
       for (unsigned int j = 0; j < player_keys->Length(); j++) {
         if (i != j) {
@@ -87,6 +95,7 @@
     Local<String> captured;
 
     // Local variables
+    Local<Value> team_object;
     Local<String> team;
     Local<String> score;
     Local<String> bounds;
@@ -97,7 +106,8 @@
     if (player->Has(has_flag) && player->Get(has_flag)->ToBoolean()->Value()) {
 
       // Figure out which team they are on
-      team = player->Get(String::New("team"))->ToString();
+      team_object = player->Get(String::New("team"));
+      team = team_object->ToString();
       bounds = String::Concat(team, String::New("_bounds"));
 
       // Find the other team's flag
