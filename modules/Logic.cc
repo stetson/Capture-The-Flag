@@ -239,7 +239,7 @@
       game->Set(captured, Boolean::New(false));
 	  
 	  // Increment player2's tags
-	  player2->Set(String::New("tags"), player2->Get(String::New("tags"))->IntegerValue() + 1);
+	  player2->Set(String::New("tags"), Integer::New(player2->Get(String::New("tags"))->IntegerValue() + 1));
 	  
 	  //TODO create test cast for tags in test-logic.js
 	  //TODO implement in algorithms
