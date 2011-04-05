@@ -131,7 +131,7 @@ exports.test_bounds_tagging = function(test) {
     // Mode user1 to user2
     user1.latitude = user2.latitude;
     user1.longitude = user2.longitude;
-    test.strictEqual(null, controller.update_location(game_id, user2.id, user2), "Could not update location to starting point");
+    test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to starting point");
     
     // Run logic
     logic.run(ctf.game_data[game_id]);
@@ -140,7 +140,8 @@ exports.test_bounds_tagging = function(test) {
     test.equal(0, ctf.game_data[game_id].red_score, "The red score is not 0");
     test.strictEqual(false, ctf.game_data[game_id].players[user1.id].has_flag, "The user doesn't have the flag");
     test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "The user doesn't have the flag");
-    test.strictEqual(true, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 in observer mode");
+    test.strictEqual(true, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 not in observer mode");
+    test.strictEqual(false, ctf.game_data[game_id].players[user2.id].observer_mode, "user1 in observer mode");
     
     // Move back to starting points
     user1.latitude = ctf.game_data[game_id].origin.latitude + TWENTY_FEET;

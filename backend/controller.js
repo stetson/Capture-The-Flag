@@ -27,7 +27,9 @@ exports.update_location = function(game_id, user_id, user) {
     }
     
     ctf.game_data[game_id].last_update = new Date();
-    ctf.game_data[game_id].players[user_id] = user;
+    for (var property in user) {
+        ctf.game_data[game_id].players[user_id][property] = user[property];
+    }
     ctf.game_data[game_id].players[user_id].last_update = new Date();
     return null;
 };
@@ -139,7 +141,11 @@ exports.join_game = function(game_id, user_id, user) {
     if (! user_id || ! game_id || ! ctf.game_data[game_id]) {
         return false;
     } else {
-        ctf.game_data[game_id].players[user_id] = user;
+        ctf.game_data[game_id].players[user_id] = {};
+        for (var property in user) {
+            ctf.game_data[game_id].players[user_id][property] = user[property];
+        }
+        
         ctf.game_data[game_id].players[user_id].team = ctf.game_data[game_id].red > ctf.game_data[game_id].blue ? 'blue' : 'red';
         ctf.game_data[game_id].players[user_id].has_flag = false;
 		ctf.game_data[game_id].players[user_id].captures = 0;
