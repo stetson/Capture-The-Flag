@@ -45,9 +45,13 @@ exports.test_game_workflow = function(test) {
     
     // Join game
     test.ok(controller.join_game(game_id, user_id, user), "Could not join game");
+    test.notStrictEqual(undefined, ctf.game_data[game_id].players[user_id].observer_mode, "No observer mode");
+    test.notStrictEqual(undefined, ctf.game_data[game_id].players[user_id].team, "No team");
     
     // Update location
     test.strictEqual(null, controller.update_location(game_id, user_id, user), "Could not update location");
+    test.notStrictEqual(undefined, ctf.game_data[game_id].players[user_id].observer_mode, "No observer mode");
+    test.notStrictEqual(undefined, ctf.game_data[game_id].players[user_id].team, "No team");
     
     // Get location
     test.ok(controller.get_location(game_id));
