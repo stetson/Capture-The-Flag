@@ -23,6 +23,16 @@ logic_class = require("../modules/build/default/Logic.node");
  * @namespace logic
  */
 var logic = new logic_class.Logic();
+var run_logic = function() {
+    for (game in ctf.game_data){
+        if (ctf.game_data.hasOwnProperty(game)) {
+            logic.run(ctf.game_data[game]);
+        }
+    }
+    
+    setTimeout(run_logic, 100);
+};
+run_logic();
 
 /**
  * The log of location updates
