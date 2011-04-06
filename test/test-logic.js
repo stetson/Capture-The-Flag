@@ -199,6 +199,12 @@ exports.test_bounds_tagging = function(test) {
     test.strictEqual(true, ctf.game_data[game_id].blue_flag_captured, "The user doesn't have the flag");
     test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 in observer mode");
     
+	// Test to see that tag score in incremented when user1 is tagged by user2
+    test.strictEqual(true, ctf.game_data[game_id].players[user2.id].tags, "User2 didn't get the tagging point");
+	
+	// Test to see that captures score in incremented when user1 captures the flag
+	test.strictEqual(true, ctf.game_data[game_id].players[user1.id].captures, "The user didn't get the captures point");
+	
     // Move user2 over user 1
     user2.latitude = user1.latitude;
     user2.longitude = user1.longitude;
