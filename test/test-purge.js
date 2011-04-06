@@ -55,6 +55,16 @@ exports.test_purge_players = function(test) {
             test.equal(0, ctf.game_data[game_id].red);
             test.equal(0, ctf.game_data[game_id].blue);
             
+            // Add a fake player
+            ctf.game_data[game_id].players[user_id] = { last_update: new Date("1983-06-27") };
+            
+            // Set purge
+            utils.purge_players();
+            
+            // Make sure our team count is what we expect it to be
+            test.equal(0, ctf.game_data[game_id].red);
+            test.equal(0, ctf.game_data[game_id].blue);
+            
             test.done();
         }, ctf.constants.PURGE_USER_INTERVAL * ctf.constants.MINUTE);
     }, ctf.constants.DISABLE_USER_INTERVAL * ctf.constants.MINUTE);
