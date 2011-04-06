@@ -7,6 +7,11 @@ algorithms_class = require("../modules/build/default/Algorithms.node");
 var algorithms = new algorithms_class.Algorithms();
 
 /**
+ * Constant that determines the side length of the field in miles
+ */
+var GAME_SIZE_IN_MI = 0.5;
+
+/**
  * Update the user's location
  * 
  * @memberOf controller
@@ -101,17 +106,17 @@ exports.create_game = function(game_id, latitude, longitude) {
                 'latitude': latitude,
                 'longitude': longitude
             },
-            red_flag: algorithms.add_miles_to_coordinate(latitude, longitude, 0.45, 0),
-            blue_flag: algorithms.add_miles_to_coordinate(latitude, longitude, 0.45, 180),
+            red_flag: algorithms.add_miles_to_coordinate(latitude, longitude, 0.9 * GAME_SIZE_IN_MI, 0),
+            blue_flag: algorithms.add_miles_to_coordinate(latitude, longitude, 0.9 * GAME_SIZE_IN_MI, 180),
             red_flag_captured: false,
             blue_flag_captured: false,
             red_bounds: {
-                top_left: algorithms.add_miles_to_coordinate(latitude, longitude, Math.sqrt(0.5), 315),
-                bottom_right: algorithms.add_miles_to_coordinate(latitude, longitude, 0.5, 90)
+                top_left: algorithms.add_miles_to_coordinate(latitude, longitude, Math.sqrt(GAME_SIZE_IN_MI), 315),
+                bottom_right: algorithms.add_miles_to_coordinate(latitude, longitude, GAME_SIZE_IN_MI, 90)
             },
             blue_bounds: {
-                top_left: algorithms.add_miles_to_coordinate(latitude, longitude, 0.5, 270),
-                bottom_right: algorithms.add_miles_to_coordinate(latitude, longitude, Math.sqrt(0.5), 135)
+                top_left: algorithms.add_miles_to_coordinate(latitude, longitude, GAME_SIZE_IN_MI, 270),
+                bottom_right: algorithms.add_miles_to_coordinate(latitude, longitude, Math.sqrt(GAME_SIZE_IN_MI), 135)
             },
             last_update: new Date(),
             players: {},
