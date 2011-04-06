@@ -11,8 +11,9 @@ global.ctf = {};
 ctf.game_data = {};
 var controller = require("../backend/controller.js");
 
+var FIELD_SIZE = 0.125;
 var TWENTY_FEET = 0.000001;
-var HALF_FIELD = 0.25;
+var HALF_FIELD = FIELD_SIZE * 0.5;
 
 // Test data
 var user_id = "Bob the tester";
