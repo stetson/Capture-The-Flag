@@ -130,8 +130,11 @@
         score = String::Concat(team, String::New("_score"));
         game->Set(score, Integer::New(game->Get(score)->IntegerValue() + 1));
 
-        // Take the flag away from them
-        player->Set(has_flag, Boolean::New(false));
+        // Increment the players score for captures
+	    player->Set(String::New("captures"), Integer::New(player->Get(String::New("captures"))->IntegerValue() + 1));
+        
+		// Take the flag away from them
+		player->Set(has_flag, Boolean::New(false));
 
         // Return the flag to its place
         game->Set(captured, Boolean::New(false));
