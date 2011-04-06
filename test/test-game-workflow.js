@@ -28,6 +28,48 @@ var user3 = {
     longitude: -81.303774   // 81°18′13.6″W
 };
 
+var user4 = {
+	id: "Allen the Lackey",
+	latitude: 29.034681,    // 29°02′04.9″N
+    longitude: -81.303774   // 81°18′13.6″W
+};
+
+var user5 = {
+	id: "Sean the Artful",
+	latitude: 29.034681,    // 29°02′04.9″N
+    longitude: -81.303774   // 81°18′13.6″W
+};
+
+var user6 = {
+	id: "Mark the Puppeteer",
+	latitude: 29.034681,    // 29°02′04.9″N
+    longitude: -81.303774   // 81°18′13.6″W
+};
+
+var user7 = {
+	id: "Cap the Flag",
+	latitude: 29.034681,    // 29°02′04.9″N
+    longitude: -81.303774   // 81°18′13.6″W
+};
+
+var user8 = {
+	id: "Mike the Mechanic",
+	latitude: 29.034681,    // 29°02′04.9″N
+    longitude: -81.303774   // 81°18′13.6″W
+};
+
+var user9 = {
+	id: "Matt the Technician",
+	latitude: 29.034681,    // 29°02′04.9″N
+    longitude: -81.303774   // 81°18′13.6″W
+};
+
+var user10 = {
+	id: "Dan the Wise",
+	latitude: 29.034681,    // 29°02′04.9″N
+    longitude: -81.303774   // 81°18′13.6″W
+};
+
 exports.test_game_workflow = function(test) {
     var user_id = "Bob the tester";
     var game_id = "test_game";
@@ -159,4 +201,24 @@ exports.test_flag_race_condition = function(test) {
     // Test that flag is not captured
     test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "The user doesn't have the flag");
     test.done();    
+};
+
+exports.test_multi_players = function(test) {
+	 var game_id = "test-game-workflow";
+    
+    // Create game with ten people
+    test.ok(controller.create_game(game_id, user1.latitude, user1.longitude), "Could not create game");
+	test.ok(controller.join_game(game_id, user.id, user1), "user1 could not join game");
+	test.ok(controller.join_game(game_id, user.id, user2), "user2 could not join game");
+	test.ok(controller.join_game(game_id, user.id, user3), "user3 could not join game");
+	test.ok(controller.join_game(game_id, user.id, user4), "user4 could not join game");
+	test.ok(controller.join_game(game_id, user.id, user5), "user5 could not join game");
+	test.ok(controller.join_game(game_id, user.id, user6), "user6 could not join game");
+	test.ok(controller.join_game(game_id, user.id, user7), "user7 could not join game");
+	test.ok(controller.join_game(game_id, user.id, user8), "user8 could not join game");
+	test.ok(controller.join_game(game_id, user.id, user9), "user9 could not join game");
+	test.ok(controller.join_game(game_id, user.id, user10), "user10 could not join game");
+
+
+	test.done();
 };
