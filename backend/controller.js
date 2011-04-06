@@ -9,7 +9,7 @@ var algorithms = new algorithms_class.Algorithms();
 /**
  * Constant that determines the side length of the field in miles
  */
-var GAME_SIZE_IN_MI = 0.125;
+var GAME_SIZE_IN_MI = 0.5;
 
 /**
  * Update the user's location
