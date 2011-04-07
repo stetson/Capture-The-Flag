@@ -2,7 +2,7 @@
 #define LOGIC_H
 
 // Define global constants
-#define TOLERANCE .0035     // Tolerance for distance between objects in mi
+#define TOLERANCE .005     // Tolerance for distance between objects in mi
 
 #include <v8.h>
 #include <node.h>
