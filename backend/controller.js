@@ -9,7 +9,7 @@ var algorithms = new algorithms_class.Algorithms();
 /**
  * Constant that determines the side length of the field in miles
  */
-var GAME_SIZE_IN_MI = 0.5;
+var GAME_SIZE_IN_MI = 0.25;
 
 /**
  * Update the user's location
@@ -111,12 +111,12 @@ exports.create_game = function(game_id, latitude, longitude) {
             red_flag_captured: false,
             blue_flag_captured: false,
             red_bounds: {
-                top_left: algorithms.add_miles_to_coordinate(latitude, longitude, Math.sqrt(GAME_SIZE_IN_MI), 315),
+                top_left: algorithms.add_miles_to_coordinate(latitude, longitude, Math.sqrt(2 * Math.pow(GAME_SIZE_IN_MI, 2)), 315),
                 bottom_right: algorithms.add_miles_to_coordinate(latitude, longitude, GAME_SIZE_IN_MI, 90)
             },
             blue_bounds: {
                 top_left: algorithms.add_miles_to_coordinate(latitude, longitude, GAME_SIZE_IN_MI, 270),
-                bottom_right: algorithms.add_miles_to_coordinate(latitude, longitude, Math.sqrt(GAME_SIZE_IN_MI), 135)
+                bottom_right: algorithms.add_miles_to_coordinate(latitude, longitude, Math.sqrt(2 * Math.pow(GAME_SIZE_IN_MI, 2)), 135)
             },
             last_update: new Date(),
             players: {},
