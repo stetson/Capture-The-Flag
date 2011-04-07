@@ -131,10 +131,10 @@
         game->Set(score, Integer::New(game->Get(score)->IntegerValue() + 1));
 
         // Increment the players score for captures
-	    player->Set(String::New("captures"), Integer::New(player->Get(String::New("captures"))->IntegerValue() + 1));
+        player->Set(String::New("captures"), Integer::New(player->Get(String::New("captures"))->IntegerValue() + 1));
         
-		// Take the flag away from them
-		player->Set(has_flag, Boolean::New(false));
+        // Take the flag away from them
+        player->Set(has_flag, Boolean::New(false));
 
         // Return the flag to its place
         game->Set(captured, Boolean::New(false));
@@ -241,6 +241,9 @@
     // ...place them in observer mode
     player1->Set(String::New("observer_mode"), Boolean::New(true));
 
+    // Increment player2's tags
+    player2->Set(String::New("tags"), Integer::New(player2->Get(String::New("tags"))->IntegerValue() + 1));
+
     // If they have the flag
     if (player1->Get(has_flag)->BooleanValue())
     {
@@ -250,10 +253,6 @@
       // Return it to its place
       captured = String::Concat(player2->Get(team)->ToString(), String::New("_flag_captured"));
       game->Set(captured, Boolean::New(false));
-	  
-	  // Increment player2's tags
-	  player2->Set(String::New("tags"), Integer::New(player2->Get(String::New("tags"))->IntegerValue() + 1));
-
     }
   }
 

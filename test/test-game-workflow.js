@@ -132,6 +132,12 @@ exports.test_flag_race_condition = function(test) {
     test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 got put into observer mode");
     test.strictEqual(false, ctf.game_data[game_id].players[user2.id].observer_mode, "user2 got put into observer mode");
     test.strictEqual(false, ctf.game_data[game_id].players[user3.id].observer_mode, "user3 got put into observer mode");
+    test.equal(0, ctf.game_data[game_id].players[user1.id].tags, "User1 has a tag");
+    test.equal(0, ctf.game_data[game_id].players[user2.id].tags, "User2 has a tag");
+    test.equal(0, ctf.game_data[game_id].players[user3.id].tags, "User3 has a tag");
+    test.equal(0, ctf.game_data[game_id].players[user1.id].captures, "User1 has a capture");
+    test.equal(0, ctf.game_data[game_id].players[user2.id].captures, "User2 has a capture");
+    test.equal(0, ctf.game_data[game_id].players[user3.id].captures, "User3 has a capture");
     
     // Have two red players reach flag at the same time
     user1.latitude = ctf.game_data[game_id].blue_flag.latitude;
@@ -179,6 +185,11 @@ exports.test_flag_race_condition = function(test) {
     test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "The flag is still captured");
     test.strictEqual(false, ctf.game_data[game_id].red_flag_captured, "The user doesn't have the flag");
     
+    // Check captures
+    test.equal(1, ctf.game_data[game_id].players[user1.id].captures, "User1 doesn't have a capture");
+    test.equal(0, ctf.game_data[game_id].players[user2.id].captures, "User1 has a capture");
+    test.equal(0, ctf.game_data[game_id].players[user3.id].captures, "User1 has a capture");
+    
     // Move other red player back on flag
     user3.latitude = ctf.game_data[game_id].blue_flag.latitude;
     user3.longitude = ctf.game_data[game_id].blue_flag.longitude;
@@ -197,6 +208,11 @@ exports.test_flag_race_condition = function(test) {
     
     // Run business logic
     logic.run(ctf.game_data[game_id]);
+    
+    // Check captures
+    test.equal(1, ctf.game_data[game_id].players[user1.id].captures, "User1 doesn't have a capture");
+    test.equal(0, ctf.game_data[game_id].players[user2.id].captures, "User1 has a capture");
+    test.equal(1, ctf.game_data[game_id].players[user3.id].captures, "User1 has a capture");
     
     // Test that flag is not captured
     test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "The user doesn't have the flag");

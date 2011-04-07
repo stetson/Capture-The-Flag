@@ -58,6 +58,10 @@ exports.test_win_flags = function(test) {
     test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "Blue flag is captured");
     test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 is in observer mode");
     test.strictEqual(false, ctf.game_data[game_id].players[user2.id].observer_mode, "user2 is in observer mode");
+    test.equal(0, ctf.game_data[game_id].players[user1.id].tags, "User1 has a tag");
+    test.equal(0, ctf.game_data[game_id].players[user2.id].tags, "User2 has a tag");
+    test.equal(0, ctf.game_data[game_id].players[user1.id].captures, "User1 has a capture");
+    test.equal(0, ctf.game_data[game_id].players[user2.id].captures, "User2 has a capture");
     
     // Move player over flag
     user1.latitude = ctf.game_data[game_id].blue_flag.latitude;
@@ -81,7 +85,11 @@ exports.test_win_flags = function(test) {
     // Run business logic
     logic.run(ctf.game_data[game_id]);
     
-    // Test that the user has the flag and that it is not captured
+    // Check captures
+    test.equal(1, ctf.game_data[game_id].players[user1.id].captures, "User1 has a capture");
+    test.equal(0, ctf.game_data[game_id].players[user2.id].captures, "User2 has a capture");
+    
+    // Test that the user does not have the flag and that it is not captured
     test.equal(1, ctf.game_data[game_id].red_score, "The red score is not 0");
     test.strictEqual(false, ctf.game_data[game_id].players[user1.id].has_flag, "The user doesn't have the flag");
     test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "The user doesn't have the flag");
@@ -120,6 +128,10 @@ exports.test_bounds_tagging = function(test) {
     test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "Blue flag is captured");
     test.strictEqual(true, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 not starting in observer mode");
     test.strictEqual(true, ctf.game_data[game_id].players[user2.id].observer_mode, "user2 not starting in observer mode");
+    test.equal(0, ctf.game_data[game_id].players[user1.id].tags, "User1 has a tag");
+    test.equal(0, ctf.game_data[game_id].players[user2.id].tags, "User2 has a tag");
+    test.equal(0, ctf.game_data[game_id].players[user1.id].captures, "User1 has a capture");
+    test.equal(0, ctf.game_data[game_id].players[user2.id].captures, "User2 has a capture");
     
     // Run business logic
     logic.run(ctf.game_data[game_id]);
@@ -142,6 +154,10 @@ exports.test_bounds_tagging = function(test) {
     test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "The user doesn't have the flag");
     test.strictEqual(true, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 not in observer mode");
     test.strictEqual(false, ctf.game_data[game_id].players[user2.id].observer_mode, "user1 in observer mode");
+    
+    // Check tags
+    test.equal(0, ctf.game_data[game_id].players[user1.id].tags, "User1 has a tag");
+    test.equal(1, ctf.game_data[game_id].players[user2.id].tags, "User2 does not have a tag");
     
     // Move back to starting points
     user1.latitude = ctf.game_data[game_id].origin.latitude + TWENTY_FEET;
@@ -199,12 +215,6 @@ exports.test_bounds_tagging = function(test) {
     test.strictEqual(true, ctf.game_data[game_id].blue_flag_captured, "The user doesn't have the flag");
     test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 in observer mode");
     
-	// FIXME - Test to see that tag score in incremented when user1 is tagged by user2
-    // test.equal(1, ctf.game_data[game_id].players[user2.id].tags, "User2 didn't get the tagging point");
-	
-	// FIXME - Test to see that captures score in incremented when user1 captures the flag
-	// test.equal(1, ctf.game_data[game_id].players[user1.id].captures, "The user didn't get the captures point");
-	
     // Move user2 over user 1
     user2.latitude = user1.latitude;
     user2.longitude = user1.longitude;
@@ -212,6 +222,9 @@ exports.test_bounds_tagging = function(test) {
     
     // Run logic
     logic.run(ctf.game_data[game_id]);
+    
+    // Test to see that tag score in incremented when user1 is tagged by user2
+    test.equal(2, ctf.game_data[game_id].players[user2.id].tags, "User2 didn't get the tagging point");
     
     // Test that user1 is in observer mode and does not have flag
     test.equal(0, ctf.game_data[game_id].red_score, "The red score is not 0");
@@ -228,7 +241,7 @@ exports.test_bounds_tagging = function(test) {
     // Run business logic
     logic.run(ctf.game_data[game_id]);
     
-    // Test that the user has the flag and that it is not captured
+    // Test that the user does not have the flag and that it is not captured
     test.equal(0, ctf.game_data[game_id].red_score, "The red score is not 0");
     test.strictEqual(false, ctf.game_data[game_id].players[user1.id].has_flag, "The user doesn't have the flag");
     test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "The user doesn't have the flag");
