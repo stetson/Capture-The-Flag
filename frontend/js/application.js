@@ -323,7 +323,7 @@ model = {
 	    var post_data = {
 	        latitude: model.user.latitude,
 	        longitude: model.user.longitude,
-	        name: model.user.name
+	        user_id: model.user.user_id
 	    };
 	    
 	    if (game_id) {
