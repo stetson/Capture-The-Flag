@@ -11,7 +11,7 @@ var user = {
 };
 
 // Populate data
-controller.create_game(game_id, user.latitude, user.longitude);
+controller.create_game(game_id, user.id, user.latitude, user.longitude);
 controller.join_game(game_id, user_id, user);
 controller.update_location(game_id, user_id, user);
 

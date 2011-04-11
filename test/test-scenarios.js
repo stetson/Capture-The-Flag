@@ -102,7 +102,7 @@ exports.test_double_tag_over_flag = function(test) {
     var game_id = "test_double_tag_over_flag";
 
     // Create game
-    test.ok(controller.create_game(game_id, user1.latitude, user1.longitude), "Could not create game");
+    test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
     test.ok(controller.join_game(game_id, user1.id, user1), "user1 could not join game"); // Red team
     test.ok(controller.join_game(game_id, user3.id, user3), "user3 could not join game"); // Blue team
     test.ok(controller.join_game(game_id, user4.id, user4), "user4 could not join game"); // Red team
@@ -162,7 +162,7 @@ exports.test_capture_after_point = function(test) {
     var game_id = "test_capture_after_point";
 
     // Create game
-    test.ok(controller.create_game(game_id, user1.latitude, user1.longitude), "Could not create game");
+    test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
     test.ok(controller.join_game(game_id, user1.id, user1), "user1 could not join game"); // Red
     test.ok(controller.join_game(game_id, user3.id, user3), "user3 could not join game"); // Blue
     test.ok(controller.join_game(game_id, user4.id, user4), "user4 could not join game"); // Red
@@ -223,7 +223,7 @@ exports.test_no_capture_in_observer_mode = function(test) {
     var game_id = "test_no_capture_in_observer_mode";
 
     // Create game
-    test.ok(controller.create_game(game_id, user1.latitude, user1.longitude), "Could not create game");
+    test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
     test.ok(controller.join_game(game_id, user1.id, user1), "user1 could not join game");
     test.ok(controller.join_game(game_id, user3.id, user3), "user3 could not join game");
     

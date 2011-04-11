@@ -30,7 +30,7 @@ var HALF_FIELD = 0.25;
 exports.test_win_flags = function(test) {
     // Create game and position players
     var game_id = "test-win-flags";
-    test.ok(controller.create_game(game_id, user1.latitude, user1.longitude), "Could not create game");
+    test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
     test.ok(controller.join_game(game_id, user1.id, user1), "user1 could not join game");
     test.ok(controller.join_game(game_id, user2.id, user2), "user2 could not join game");
     user1.latitude += TWENTY_FEET;
@@ -103,7 +103,7 @@ exports.test_win_flags = function(test) {
 exports.test_bounds_tagging = function(test) {
     // Create game and position players
     var game_id = "test-bounds-tagging";
-    test.ok(controller.create_game(game_id, user1.latitude, user1.longitude), "Could not create game");
+    test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
     test.ok(controller.join_game(game_id, user1.id, user1), "Could not join game");
     test.ok(controller.join_game(game_id, user2.id, user2), "Could not join game");
     user1.latitude += TWENTY_FEET;

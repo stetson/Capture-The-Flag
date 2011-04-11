@@ -10,7 +10,7 @@ exports.test_team_allocation = function(test) {
     };
     
     // Create game
-    controller.create_game(game_id, user.latitude, user.longitude);
+    controller.create_game(game_id, user.id, user.latitude, user.longitude);
     
     // Have 10 people join game
     for (i = 0; i < 10; i++) {
@@ -87,7 +87,7 @@ exports.test_team_switching = function(test) {
     };
     
     // Create game
-    controller.create_game(game_id, user.latitude, user.longitude);
+    controller.create_game(game_id, user.id, user.latitude, user.longitude);
     
     // Have some people join
     for (var i = 0; i < 10; i++) {

@@ -41,7 +41,7 @@ exports.test_game_workflow = function(test) {
     test.notStrictEqual(null, controller.update_location(game_id, user_id, user), "Should not allow user to update their location before joining");
     
     // Create game
-    test.ok(controller.create_game(game_id, user.latitude, user.longitude), "Could not create game");
+    test.ok(controller.create_game(game_id, user.id, user.latitude, user.longitude), "Could not create game");
     
     // Join game
     test.ok(controller.join_game(game_id, user_id, user), "Could not join game");
@@ -63,7 +63,7 @@ exports.test_flag_race_condition = function(test) {
     var game_id = "test-game-workflow";
     
     // Create game
-    test.ok(controller.create_game(game_id, user1.latitude, user1.longitude), "Could not create game");
+    test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
     test.ok(controller.join_game(game_id, user1.id, user1), "user1 could not join game");
     test.ok(controller.join_game(game_id, user2.id, user2), "user2 could not join game");
     test.ok(controller.join_game(game_id, user3.id, user3), "user3 could not join game");

@@ -99,7 +99,7 @@ exports.get_games = function(user_latitude, user_longitude) {
  * @returns {Boolean} if successful
  * @function
  */
-exports.create_game = function(game_id, latitude, longitude) {
+exports.create_game = function(game_id, user_id, latitude, longitude) {
     if (ctf.game_data[game_id] === undefined && latitude && longitude) {
         ctf.game_data[game_id] = {
             origin: {
@@ -123,7 +123,8 @@ exports.create_game = function(game_id, latitude, longitude) {
             red: 0,
             blue: 0,
             red_score: 0,
-            blue_score: 0
+            blue_score: 0,
+            creator: user_id
         };
         return true;
     } else {

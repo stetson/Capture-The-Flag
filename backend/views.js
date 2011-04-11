@@ -100,6 +100,14 @@ exports.get_games = function(request, response) {
 exports.create_game = function(request, response) {
     // Generate a new game id
     var game_id = "";
+    
+    if (request.body.user_id === undefined) {
+        response.send({"error": "Some required information was missing"}, 400);
+        return;
+    } else {
+        var user_id = request.body.user_id;
+    }
+    
     if (request.body !== undefined && request.body.game_id !== undefined) {
         game_id = request.body.game_id;
     } else if (request.body !== undefined && request.body.name !== undefined) {
@@ -119,7 +127,7 @@ exports.create_game = function(request, response) {
     }
     
     // Create the skeleton of the game
-    if (controller.create_game(game_id, latitude, longitude)) {
+    if (controller.create_game(game_id, user_id, latitude, longitude)) {
         response.send({"response": "OK"});
     } else {
         response.send({"error": "Game already exists"}, 409);

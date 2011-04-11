@@ -32,7 +32,7 @@ var user = {
  */
 exports.test_generated_bounds = function(test) {
     // Create game (see test-game-workflow.js)
-    controller.create_game(game_id, user.latitude, user.longitude);
+    controller.create_game(game_id, user_id, user.latitude, user.longitude);
     var game = ctf.game_data[game_id];
     
     // The different boundaries to test against

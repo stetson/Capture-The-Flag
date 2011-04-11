@@ -31,18 +31,18 @@ var tests = [
     { method: "GET", url: "/game?ax=grind", statusCode: 400, data: "error" },
     
     // Make sure we can create a game
-    { method: "POST", url: "/game", postData: "game_id=test_game&latitude=27&longitude=-83", statusCode: 200 },
+    { method: "POST", url: "/game", postData: "game_id=test_game&user_id=Bob&latitude=27&longitude=-83", statusCode: 200 },
     
     // Make sure we can't duplicate a game
-    { method: "POST", url: "/game", postData: "game_id=test_game&latitude=27&longitude=-83", statusCode: 409, data: "Game already exists" },
+    { method: "POST", url: "/game", postData: "game_id=test_game&user_id=Bob&latitude=27&longitude=-83", statusCode: 409, data: "Game already exists" },
     
     // Make sure crappy data won't corrupt game object
-    { method: "POST", url: "/game", postData: "game_id=test_game2", statusCode: 400 },
-    { method: "POST", url: "/game", postData: "game_id=test_game2&latitude=27", statusCode: 400 },
-    { method: "POST", url: "/game", postData: "game_id=test_game2&longitude=-83", statusCode: 400 },
-    { method: "POST", url: "/game", postData: "latitude=27&longitude=-83", statusCode: 400 },
-    { method: "POST", url: "/game", postData: "game_id=test_game2&potato=nomnom", statusCode: 400 },
-    { method: "POST", url: "/game", postData: "game_id=test_game2&latitude=27&longitude=-83", statusCode: 200 },
+    { method: "POST", url: "/game", postData: "game_id=test_game2&user_id=Bob", statusCode: 400 },
+    { method: "POST", url: "/game", postData: "game_id=test_game2&latitude=27&user_id=Bob", statusCode: 400 },
+    { method: "POST", url: "/game", postData: "game_id=test_game2&longitude=-83&user_id=Bob", statusCode: 400 },
+    { method: "POST", url: "/game", postData: "latitude=27&longitude=-83&user_id=Bob", statusCode: 400 },
+    { method: "POST", url: "/game", postData: "game_id=test_game2&potato=nomnom&user_id=Bob", statusCode: 400 },
+    { method: "POST", url: "/game", postData: "game_id=test_game2&latitude=27&longitude=-83&user_id=Bob", statusCode: 200 },
     
     // Not implemented (returned as 404 for now. this is an express issue)
     { method: "PUT", url: "/game", statusCode: 404 },
