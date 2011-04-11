@@ -383,35 +383,7 @@
   }
 
 
-   /**
-   * @name move_flags
-   * @memberOf logic
-   * @param game The game object
-   * @param player The player to inspect
-   * @function
-   * @private
-   */
-   
-   /**
-  void Logic::move_flags(const Local<Object>& game, const Local<Object>& player)
-  {
-     // Local Variables
-	  Local<String> latitude = String::New("latitude");
-      Local<String> longitude = String::New("longitude");
-	  
-	 // Figure out how to determine creator
 
-	 // Move Red flag
-	    -method for move flag (boolean false)
-			-when option selected boolean set to true
-				if boolean == true then:
-					-get the lat and long of the spot the creator clicked on.
-					-set flag lat and long = to it
-	 // Move Blue flag
-
-*/
-  
-  
 Persistent<FunctionTemplate> Logic::s_ct;
 
 extern "C" {

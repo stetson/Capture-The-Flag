@@ -231,6 +231,40 @@ http.use(express.static('./docs/'));
  **/
 http.post('/location', views.update_location);
 
+
+
+/**
+ * Updates flag's location
+ * <pre>
+ * 
+ * <b>url: /flag</b>           
+ * methods: GET, POST
+ * ..              
+ * 
+ * Client data:                    
+ *     accuracy: Number            
+ *     auth_token: String
+ *     game_id: String
+ *     latitude: Number
+ *     longitude: Number
+ *     name: String
+ *     user_id: String
+ * 
+ * Server data:                    
+ *     [game object]
+ * </pre>
+ * 
+ * @memberOf http
+ * @name post_location
+ * @link controller.move_flag
+ * @link ctf.game_data
+ * @param request
+ **/
+ 
+http.post('/flag', views.move_flag);
+
+
+
 /**
  * Returns a list of all games on this server
  * <pre>

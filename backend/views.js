@@ -82,6 +82,27 @@ exports.update_location = function(request, response) {
 	response.send({"error": update}, 400);
 };
 
+/**
+ * Flag location updates made by game creator
+ */
+ 
+exports.move_flag = function(request, response) {
+    // Record flag's location
+    if (request.body.team !== undefined && request.body.game_id !== undefined && request.body.user_id !== undefined && request.body.latitude !== undefined && request.body.longitude !== undefined) {
+    	var game_id = request.body.game_id;
+    	var user_id = request.body.user_id;
+		var team = request.body.team;
+    	var latitude = request.body.latitude;
+		var longitude = request.body.longitude;
+		
+		controller.move_flag(game_id, user_id, team, latitude, longitude);
+		
+    } else {
+        response.send({"error": "Some required information was missing"}, 400);
+        return;
+    }
+};
+
 exports.get_games = function(request, response) {
     if (request.query.latitude !== undefined && request.query.longitude !== undefined) {
     	var user_latitude = request.query.latitude;

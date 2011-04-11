@@ -39,6 +39,39 @@ exports.update_location = function(game_id, user_id, user) {
     return null;
 };
 
+
+/**
+ * Update flag's location
+ * 
+ * @memberOf controller
+ * @name update_flaglocation
+ * @param game_id {String} The id of the game
+ * @param user_id {String} The id of the user to update
+ * @param user {Object} The user to update (sent from client)
+ * @returns {String} error message
+ * @function
+ */
+
+exports.move_flag = function(game_id, user_id, team, latitude, longitude) {
+    if (ctf.game_data[game_id] === undefined) {
+        return "Invalid game";
+    }
+    
+	// Only allow creator to make changes
+    if (ctf.game_data[game_id].creator != user_id) {
+		return "Permission denied";
+	}
+	
+	// Change flag location
+	flag = team + "_flag";
+	ctf.game_data[game_id][flag].latitude = latitude;
+	ctf.game_data[game_id][flag].longitude = longitude;
+
+
+    return null;
+};
+
+
 /**
  * Get the locations of the other players
  * 
