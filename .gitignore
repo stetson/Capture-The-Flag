@@ -4,3 +4,5 @@
 /nodemon-ignore
 /.monitor
 update_location.csv
+/tests.html
+/.externalToolBuilders
