@@ -56,6 +56,9 @@ exports.test_game_workflow = function(test) {
     // Get location
     test.ok(controller.get_location(game_id));
     
+    // Leave the game
+    test.ok(controller.leave_game(game_id, user_id), "Could not leave game");
+    
     test.done();
 };
 
