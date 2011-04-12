@@ -224,17 +224,15 @@ http.use(express.static('./docs/'));
  * </pre>
  * 
  * @memberOf http
- * @name post_location
+ * @name update_location
  * @link controller.update_location
  * @link ctf.game_data
  * @param request
  **/
 http.post('/location', views.update_location);
 
-
-
 /**
- * Updates flag's location
+ * Move the flag
  * <pre>
  * 
  * <b>url: /flag</b>           
@@ -242,28 +240,26 @@ http.post('/location', views.update_location);
  * ..              
  * 
  * Client data:                    
- *     accuracy: Number            
- *     auth_token: String
  *     game_id: String
+ *     user_id: String
+ *     team: String
  *     latitude: Number
  *     longitude: Number
- *     name: String
- *     user_id: String
  * 
  * Server data:                    
- *     [game object]
+ *     200 OK
+ *         OR
+ *     4* error
  * </pre>
  * 
  * @memberOf http
- * @name post_location
+ * @name move_flag
  * @link controller.move_flag
  * @link ctf.game_data
  * @param request
  **/
  
 http.post('/flag', views.move_flag);
-
-
 
 /**
  * Returns a list of all games on this server
@@ -285,7 +281,7 @@ http.post('/flag', views.move_flag);
  * </pre>
  * 
  * @memberOf http
- * @name get_game
+ * @name get_games
  * @link controller.get_games
  * @param request
  */
@@ -312,7 +308,7 @@ http.get('/game', views.get_games);
  * </pre>
  * 
  * @memberOf http
- * @name post_game
+ * @name create_game
  * @link controller.create_game
  * @param request
  */
@@ -339,7 +335,7 @@ http.post('/game', views.create_game);
  * </pre>
  * 
  * @memberOf http
- * @name post_game_id
+ * @name join_game
  * @link controller.join_game
  * @link ctf.game_data
  * @param request
@@ -366,7 +362,7 @@ http.post('/game/:game_id', views.join_game);
  * </pre>
  * 
  * @memberOf http
- * @name post_game_id2
+ * @name leave_game
  * @link controller.leave_game
  * @link ctf.game_data
  * @param request

@@ -44,7 +44,7 @@ exports.update_location = function(game_id, user_id, user) {
  * Update flag's location
  * 
  * @memberOf controller
- * @name update_flaglocation
+ * @name move_flag
  * @param game_id {String} The id of the game
  * @param user_id {String} The id of the user to update
  * @param user {Object} The user to update (sent from client)
