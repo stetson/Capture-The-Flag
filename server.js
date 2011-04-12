@@ -346,6 +346,33 @@ http.post('/game', views.create_game);
  */
 http.post('/game/:game_id', views.join_game);
 
+/**
+ * Leave a game
+ * <pre>
+ * 
+ * <b>url: /game/:game_id</b>
+ * methods: DELETE
+ * ..
+ * 
+ * Client data:
+ *     user_id: String
+ * 
+ * Server data:
+ *     200 OK
+ *         OR
+ *     410 Gone (User was not in game)
+ *         OR
+ *     404 Not Found (Game did not exist)
+ * </pre>
+ * 
+ * @memberOf http
+ * @name post_game_id
+ * @link controller.join_game
+ * @link ctf.game_data
+ * @param request
+ */
+http['delete']('/game/:game_id', views.leave_game);
+
 // This is super s3cr3t :-)
 http.get('/admin.json', function(request, response) {
     response.send(ctf.game_data);

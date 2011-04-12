@@ -74,6 +74,19 @@ var tests = [
     { method: "POST", url: "/location", postData: "game_id=test_game&user_id=Frank&latitude=27&longitude=-83&accuracy=5", statusCode: 400, data: "Invalid user" },
     { method: "POST", url: "/location", postData: "game_id=test_game3&user_id=Bob&latitude=27&longitude=-83&accuracy=5", statusCode: 400, data: "Invalid game" },
     { method: "POST", url: "/location", postData: "game_id=test_game&user_id=Frank&latitude=somewhere&longitude=out_there", statusCode: 400, data: "Invalid data" },
+    
+    // Make sure fake people are gone
+    { method: "DELETE", url: "/game/test_game", postData: "user_id=Jesus", statusCode: 410},
+    
+    // Make sure missing information isn't accepted
+    { method: "DELETE", url: "/game/test_game", postData: "dog=Bob", statusCode: 400},
+    
+    // Make sure fake games are not found
+    { method: "DELETE", url: "/game/fake_game", postData: "user_id=Bob", statusCode: 404},
+    
+    // Remove Bob from his game, and make sure he can't come back
+    { method: "DELETE", url: "/game/test_game", postData: "user_id=Bob", statusCode: 200},
+    { method: "DELETE", url: "/game/test_game", postData: "user_id=Bob", statusCode: 410},
 ];
 
 var run_test = function(test, test_case) {
@@ -102,13 +115,13 @@ var run_test = function(test, test_case) {
             
             // Check the response for the given status code
             if (tests[test_case].statusCode !== undefined) {
-                test.equal(tests[test_case].statusCode, res.statusCode, "Status code for " + tests[test_case].url + " was not what was expected");
+                test.equal(tests[test_case].statusCode, res.statusCode, "Status code for " + tests[test_case].url + " was not what was expected [Test " + test_case + "]");
             }
             
             // Check the response for the given data
             res.on('data', function(chunk) {
                 if (tests[test_case].data !== undefined) {
-                    test.notEqual(-1, chunk.toString().indexOf(tests[test_case].data), "Test data (" + tests[test_case].data + ") was not found in response (" + chunk.toString().substring(0,50) + "...)");
+                    test.notEqual(-1, chunk.toString().indexOf(tests[test_case].data), "Test data (" + tests[test_case].data + ") was not found in response (" + chunk.toString().substring(0,50) + "...) [Test " + test_case + "]");
                 }
             });
             

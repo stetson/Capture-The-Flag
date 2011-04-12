@@ -61,7 +61,7 @@ exports.update_location = function(request, response) {
     if (update === null) {
         // Log the update
 	    try {
-            log.write('"' + user.name + '","' + user.latitude + '","' + user.longitude + '","' + user.accuracy + '","' + new Date() + '"\n');
+            log.write('"' + user.name + '","' + user.latitude.replace(/\s+$/, "") + '","' + user.longitude.replace(/\s+$/, "") + '","' + user.accuracy.replace(/\s+$/, "") + '","' + new Date() + '"\n');
 	    } catch (e) {
 	        log.end();
 	        log = fs.createWriteStream("update_location.csv", { flags: "a" });
@@ -170,4 +170,39 @@ exports.join_game = function(request, response) {
     } else {
         response.send({"error": "Could not join game"}, 404);
     }
+};
+
+exports.leave_game = function(request, response) {
+    // Ensure game was provided and exists
+    if (request.params.game_id !== undefined && 
+        ctf.game_data[request.params.game_id] !== undefined) {
+        var game_id = request.params.game_id;
+    } else {
+        response.send({"error": "Game was not found"}, 404);
+        return;
+    }
+    
+    // Ensure that player exists
+    if (request.body.user_id === undefined) {
+        response.send({"error": "Some required information was missing"}, 400);
+        return;
+    } 
+    
+    // Ensure that the player is in the game
+    var user_id = request.body.user_id.replace(/\s+$/, "");
+    if (ctf.game_data[game_id].players[user_id] === undefined) {
+        console.log(ctf.game_data[game_id].players[request.body.user_id]);
+        response.send({"error": "User was not found"}, 410);
+        return;
+    }
+    
+    // Attempt to remove the player from the game
+    if (controller.leave_game(game_id, user_id)) {
+        response.send({"response": "OK"});
+        return;
+    } else {
+        // Something is jacked up
+        response.send({"error": "Could not remove player from game"}, 500);
+    }
+    
 };

@@ -194,3 +194,32 @@ exports.join_game = function(game_id, user_id, user) {
         return true;
     }
 };
+
+/**
+ * Leave a game
+ * 
+ * @memberOf controller
+ * @name leave_game
+ * @param game_id {String} The id of the game to join
+ * @param user_id {String} The id of the user to join
+ * @returns {Boolean} if successful
+ * @function
+ */
+exports.leave_game = function(game_id, user_id) {
+    // Validate data
+    if (ctf.game_data[game_id] === undefined || 
+        ctf.game_data[game_id].players[user_id] === undefined) {
+        return false;
+    }
+    
+    // Decrement team count
+    ctf.game_data[game_id][ctf.game_data[game_id].players[user_id].team] -= 1;
+    if (ctf.game_data[game_id][ctf.game_data[game_id].players[user_id].team] < 0) {
+        ctf.game_data[game_id][ctf.game_data[game_id].players[user_id].team] = 0;
+    }        
+    
+    // Delete them from the game
+    delete ctf.game_data[game_id].players[user_id];
+    
+    return true;
+};
