@@ -82,9 +82,27 @@ exports.update_location = function(request, response) {
 	response.send({"error": update}, 400);
 };
 
-/**
- * Flag location updates made by game creator
- */
+exports.send_message = function(request, response) {
+    // Validate information
+    if (request.body.team !== undefined && request.body.game_id !== undefined && request.body.user_id !== undefined && request.body.latitude !== undefined && request.body.longitude !== undefined) {
+        var game_id = request.body.game_id;
+        var to_id = request.body.to_id;
+        var from_id = request.body.from_id;
+        var message = request.body.message;
+        
+        // Send the message
+        var error = controller.send_message(game_id, user_id, team, latitude, longitude);
+        if (! error) {
+            response.send({"response": "OK"}, 200);
+        } else {
+            // Message sending failed
+            response.send({"error": error}, 400);
+        }
+        
+    } else {
+        response.send({"error": "Some required information was missing"}, 400);
+    }
+};
  
 exports.move_flag = function(request, response) {
     // Record flag's location

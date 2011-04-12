@@ -41,6 +41,47 @@ exports.update_location = function(game_id, user_id, user) {
 
 
 /**
+ * Send a message from one user to another
+ * 
+ * @memberOf controller
+ * @name send_message
+ * @param game_id {String} The id of the game
+ * @param user_id {String} The id of the user receiving the message
+ * @param user_id {String} The id of the user sending the message
+ * @param message {Object} The message payload
+ * @returns {String} Failure message, or null if successful
+ * @function
+ */
+exports.send_message = function(game_id, to_id, from_id, message) {
+    if (ctf.game_data[game_id] === undefined) {
+        return "Game was not found";
+    }
+    
+    // Grab player objects
+    var to = ctf.game_data[game_id].players[to_id];
+    var from = ctf.game_data[game_id].players[from_id];
+    
+    // Make sure both players are in the game and the message is valid
+    if (to === undefined || from === undefined || message === undefined) {
+        return "Some required information was missing";
+    }
+    
+    // Only people on the same team to send messages
+    if (to.team != from.team) {
+        return "Players must be on the same team";
+    }
+    
+    // Add the message to the queue
+    ctf.game_data[game_id].players[to_id].messages.push({
+        from: from_id,
+        message: message
+    });
+    
+    return null;
+};
+
+
+/**
  * Update flag's location
  * 
  * @memberOf controller
@@ -190,6 +231,7 @@ exports.join_game = function(game_id, user_id, user) {
 		ctf.game_data[game_id].players[user_id].captures = 0;
 		ctf.game_data[game_id].players[user_id].tags = 0;
         ctf.game_data[game_id].players[user_id].observer_mode = true;
+        ctf.game_data[game_id].players[user_id].messages = [];
         ctf.game_data[game_id][ctf.game_data[game_id].players[user_id].team] += 1;
         return true;
     }

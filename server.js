@@ -112,7 +112,10 @@ global.ctf = {};
  *                 game_id: String,
  *                 last_update: DateTime,
  *                 team: String,
- *                 has_flag: Boolean
+ *                 has_flag: Boolean,
+ *                 tags: Number,
+ *                 captures: Number,
+ *                 messages: Array
  *             },
  *             ...
  *         }
@@ -230,6 +233,33 @@ http.use(express.static('./docs/'));
  * @param request
  **/
 http.post('/location', views.update_location);
+
+/**
+ * Send a message to another player
+ * <pre>
+ * 
+ * <b>url: /message</b>           
+ * methods: POST
+ * ..              
+ * 
+ * Client data:                    
+ *     game_id: {String} The id of the game
+ *     to_id: {String} The id of the user receiving the message
+ *     from_id: {String} The id of the user sending the message
+ *     message: {Object} The message payload
+ * 
+ * Server data:                    
+ *     200 OK
+ *         OR
+ *     4* error
+ * </pre>
+ * 
+ * @memberOf http
+ * @name send_message
+ * @link controller.send_message
+ * @param request
+ **/
+http.post('/message', views.send_message);
 
 /**
  * Move the flag
