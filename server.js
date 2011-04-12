@@ -366,8 +366,8 @@ http.post('/game/:game_id', views.join_game);
  * </pre>
  * 
  * @memberOf http
- * @name post_game_id
- * @link controller.join_game
+ * @name post_game_id2
+ * @link controller.leave_game
  * @link ctf.game_data
  * @param request
  */
