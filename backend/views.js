@@ -84,14 +84,14 @@ exports.update_location = function(request, response) {
 
 exports.send_message = function(request, response) {
     // Validate information
-    if (request.body.team !== undefined && request.body.game_id !== undefined && request.body.user_id !== undefined && request.body.latitude !== undefined && request.body.longitude !== undefined) {
+    if (request.body.game_id !== undefined && request.body.to_id !== undefined && request.body.from_id !== undefined && request.body.message !== undefined) {
         var game_id = request.body.game_id;
         var to_id = request.body.to_id;
         var from_id = request.body.from_id;
         var message = request.body.message;
         
         // Send the message
-        var error = controller.send_message(game_id, user_id, team, latitude, longitude);
+        var error = controller.send_message(game_id, to_id, from_id, message);
         if (! error) {
             response.send({"response": "OK"}, 200);
         } else {
