@@ -209,7 +209,6 @@ exports.leave_game = function(request, response) {
     // Ensure that the player is in the game
     var user_id = request.params.user_id.replace(/\s+$/, "");
     if (ctf.game_data[game_id].players[user_id] === undefined) {
-        console.log(ctf.game_data[game_id].players[user_id]);
         response.send({"error": "User was not found"}, 410);
         return;
     }
