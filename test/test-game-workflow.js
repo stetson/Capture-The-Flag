@@ -179,3 +179,45 @@ exports.test_flag_race_condition = function(test) {
     test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "The user doesn't have the flag");
     test.done();    
 };
+
+    exports.test_move_flag = function(test) {
+   // var game_id = "test-move-flag";
+// var user_id = "Bob the tester";
+   // var user1 = {
+      //  latitude: 29.034681,
+       // longitude: -81.303774     
+    //};
+    //Create Game
+    //test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
+    //Test for a player other than creator to move flag
+    //Try to move flag
+    //Strict flag testing (try to rapidly switch locations and see if it messes with game)
+    //Try to move two flags at same time
+    //Try to move a flag into the current bounds created
+    // Test how far they can move the flag
+    //See what happens if you move a flag ontop of a player or opposite flag area
+    //Test to see if anything weird happens in observer mode with a flag
+    //Test moving flag out of bounds but close enough that a player can grab it  
+    // More tests to see if someone has flag, 
+    //captured it, 
+    //or if more flags have been implemented
+
+    //Join Game
+ //test.ok(controller.join_game(game_id, user1.id, user1), "user1 could not join game");
+ 
+    //Test for a player other than creator to move flag
+    //Try to move flag
+    //More strict testing to search for cheating, and to see if the other flag moves accordingly
+    //Try to move two flags at same time
+    //Try to move a flag into the current bounds created
+    //Test how far they can move the flag
+    //See what happens if you move a flag ontop of a player or opposite flag area
+    //Test to see if anything weird happens in observer mode
+    //Test moving flag out of bounds but close enough that a player can grab it
+
+    //Creator leaves game
+    //test.ok(controller.leave_game(game_id, user1_id), "Could not leave game");
+    //Another player tries to move flag (can anyone do it?)
+     //controller.move_flag(game_id, user_id, team, latitude, longitude);
+    test.done();    
+};
