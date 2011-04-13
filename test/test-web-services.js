@@ -77,6 +77,18 @@ var tests = [
     { method: "POST", url: "/location", postData: "game_id=test_game3&user_id=Bob&latitude=27&longitude=-83&accuracy=5", statusCode: 400, data: "Invalid game" },
     { method: "POST", url: "/location", postData: "game_id=test_game&user_id=PeeWeeHerman&latitude=somewhere&longitude=out_there", statusCode: 400, data: "Invalid data" },
     
+    // Have Bob and Frank chat a bit
+    { method: "POST", url: "/message", postData: "game_id=test_game&to_id=Bob&from_id=Frank&message=How%20are%20you!%3F", statusCode: 200, data: "OK" },
+    { method: "POST", url: "/message", postData: "game_id=test_game&to_id=Frank&from_id=Bob&message=Good.%20And%20you%3F", statusCode: 200, data: "OK" },
+    { method: "POST", url: "/message", postData: "game_id=test_game&to_id=Bob&from_id=Frank&message=Doing%20well.", statusCode: 200, data: "OK" },
+    { method: "POST", url: "/message", postData: "game_id=test_game&to_id=Frank&from_id=Bob&message=awesome", statusCode: 200, data: "OK" },
+    
+    // If you can't say something nice, don't say nothin at all
+    { method: "POST", url: "/message", postData: "game_id=test_game&from_id=Bob&message=awesome", statusCode: 400, data: "required information" },
+    { method: "POST", url: "/message", postData: "game_id=fanstasy&to_id=Frank&from_id=Bob&message=awesome", statusCode: 400, data: "Game was not found" },
+    { method: "POST", url: "/message", postData: "game_id=test_game&to_id=DarthVader&from_id=Bob&message=awesome", statusCode: 400, data: "same team" },
+    { method: "POST", url: "/message", postData: "game_id=test_game&to_id=Frank&from_id=Bob&message=", statusCode: 400, data: "Message was blank" },
+    
     // Make sure fake people are gone
     { method: "DELETE", url: "/game/test_game/Unicorn", statusCode: 410},
     
@@ -89,18 +101,6 @@ var tests = [
     // Remove Bob from his game, and make sure he can't come back
     { method: "DELETE", url: "/game/test_game/Bob", statusCode: 200},
     { method: "DELETE", url: "/game/test_game/Bob", statusCode: 410},
-    
-    // Have Bob and Frank chat a bit
-    //{ method: "POST", url: "/message", postData: "game_id=test_game&to_id=Bob&from_id=Frank&message=How%20are%20you!%3F", statusCode: 200, data: "OK" },
-    //{ method: "POST", url: "/message", postData: "game_id=test_game&to_id=Frank&from_id=Bob&message=Good.%20And%20you%3F", statusCode: 200, data: "OK" },
-    //{ method: "POST", url: "/message", postData: "game_id=test_game&to_id=Bob&from_id=Frank&message=Doing%20well.", statusCode: 200, data: "OK" },
-    //{ method: "POST", url: "/message", postData: "game_id=test_game&to_id=Frank&from_id=Bob&message=awesome", statusCode: 200, data: "OK" },
-    
-    // If you can't say something nice, don't say nothin at all
-    //{ method: "POST", url: "/message", postData: "game_id=test_game&from_id=Bob&message=awesome", statusCode: 400, data: "required information" },
-    //{ method: "POST", url: "/message", postData: "game_id=fanstasy&to_id=Frank&from_id=Bob&message=awesome", statusCode: 400, data: "Game was not found" },
-    //{ method: "POST", url: "/message", postData: "game_id=test_game&to_id=DarthVader&from_id=Bob&message=awesome", statusCode: 400, data: "same team" },
-    //{ method: "POST", url: "/message", postData: "game_id=test_game&to_id=Frank&from_id=Bob&message=", statusCode: 400, data: "required information" },
 ];
 
 var run_test = function(test, test_case) {

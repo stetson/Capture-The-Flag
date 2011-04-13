@@ -62,8 +62,12 @@ exports.send_message = function(game_id, to_id, from_id, message) {
     var from = ctf.game_data[game_id].players[from_id];
     
     // Make sure both players are in the game and the message is valid
-    if (to === undefined || from === undefined || message === undefined) {
-        return "Some required information was missing";
+    if (to === undefined) {
+        return "Recipient was not found";
+    } else if (from === undefined) {
+        return "Sender was not found";
+    } else if (! message.replace(/\s+$/, "")) {
+        return "Message was blank";
     }
     
     // Only people on the same team to send messages
