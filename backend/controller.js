@@ -66,7 +66,7 @@ exports.send_message = function(game_id, to_id, from_id, message) {
         return "Recipient was not found";
     } else if (from === undefined) {
         return "Sender was not found";
-    } else if (! message.replace(/\s+$/, "")) {
+    } else if (! message) {
         return "Message was blank";
     }
     

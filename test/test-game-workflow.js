@@ -29,35 +29,72 @@ var user3 = {
 };
 
 exports.test_game_workflow = function(test) {
-    var user_id = "Bob the tester";
-    var game_id = "test_game";
-    var user = {
-        latitude: 29.034681,
-        longitude: -81.303774     
+    var game_id = "test_workflow";
+    var user1 = {
+            id: "Bob the tester",
+            latitude: 29.034681,
+            longitude: -81.303774     
     };
-    
+    var user2 = {
+            id: "Dan the man",
+            latitude: 29.034681,
+            longitude: -81.303774     
+    };
+    var user3 = {
+            id: "Dan the man",
+            latitude: 29.034681,
+            longitude: -81.303774     
+    };
+        
     // Test that invalid game is rejected
-    test.strictEqual(false, controller.join_game(game_id, user_id, user), "Should not allow user to join game before it is created");
-    test.notStrictEqual(null, controller.update_location(game_id, user_id, user), "Should not allow user to update their location before joining");
+    test.strictEqual(false, controller.join_game(game_id, user1.id, user1), "Should not allow user to join game before it is created");
+    test.notStrictEqual(null, controller.update_location(game_id, user1.id, user1), "Should not allow user to update their location before joining");
     
     // Create game
-    test.ok(controller.create_game(game_id, user.id, user.latitude, user.longitude), "Could not create game");
+    test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
     
     // Join game
-    test.ok(controller.join_game(game_id, user_id, user), "Could not join game");
-    test.notStrictEqual(undefined, ctf.game_data[game_id].players[user_id].observer_mode, "No observer mode");
-    test.notStrictEqual(undefined, ctf.game_data[game_id].players[user_id].team, "No team");
+    test.ok(controller.join_game(game_id, user1.id, user1), "Could not join game");
+    test.ok(controller.join_game(game_id, user2.id, user2), "Could not join game");
+    test.ok(controller.join_game(game_id, user3.id, user3), "Could not join game");
+    test.notStrictEqual(undefined, ctf.game_data[game_id].players[user1.id].observer_mode, "No observer mode");
+    test.notStrictEqual(undefined, ctf.game_data[game_id].players[user1.id].team, "No team");
     
     // Update location
-    test.strictEqual(null, controller.update_location(game_id, user_id, user), "Could not update location");
-    test.notStrictEqual(undefined, ctf.game_data[game_id].players[user_id].observer_mode, "No observer mode");
-    test.notStrictEqual(undefined, ctf.game_data[game_id].players[user_id].team, "No team");
+    test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location");
+    test.notStrictEqual(undefined, ctf.game_data[game_id].players[user1.id].observer_mode, "No observer mode");
+    test.notStrictEqual(undefined, ctf.game_data[game_id].players[user1.id].team, "No team");
     
     // Get location
     test.ok(controller.get_location(game_id));
     
+    // Pass messages
+    var message_status = controller.send_message(game_id, user1.id, user2.id, "I hope you lose.");
+    test.strictEqual(null, message_status, "Message sent to opposite team:" + message_status);
+    var message_status = controller.send_message(game_id, user1.id, user3.id, "This is my favoritest feature!");
+    test.strictEqual(null, message_status, "Could not send String message:" + message_status);
+    var complex_object = {
+        user_id: 34578975,
+        waypoints: {
+            0: {
+                latitude: 24.347467,
+                longitude: -84.34643
+            },
+            0: {
+                latitude: 24.356767,
+                longitude: -84.347653
+            },
+            0: {
+                latitude: 24.348567,
+                longitude: -84.3967543
+            }
+        }
+    };
+    var message_status = controller.send_message(game_id, user3.id, user1.id, complex_object);
+    test.strictEqual(null, message_status, "Could not send Object message:" + message_status);
+    
     // Leave the game
-    test.ok(controller.leave_game(game_id, user_id), "Could not leave game");
+    test.ok(controller.leave_game(game_id, user1.id), "Could not leave game");
     
     test.done();
 };

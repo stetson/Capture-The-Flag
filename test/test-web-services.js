@@ -83,11 +83,13 @@ var tests = [
     { method: "POST", url: "/message", postData: "game_id=test_game&to_id=Bob&from_id=Frank&message=Doing%20well.", statusCode: 200, data: "OK" },
     { method: "POST", url: "/message", postData: "game_id=test_game&to_id=Frank&from_id=Bob&message=awesome", statusCode: 200, data: "OK" },
     
+    // Allow blank messages (due to a bug in Connect)
+    { method: "POST", url: "/message", postData: "game_id=test_game&to_id=Frank&from_id=Bob&message=", statusCode: 200, data: "OK" },
+    
     // If you can't say something nice, don't say nothin at all
     { method: "POST", url: "/message", postData: "game_id=test_game&from_id=Bob&message=awesome", statusCode: 400, data: "required information" },
     { method: "POST", url: "/message", postData: "game_id=fanstasy&to_id=Frank&from_id=Bob&message=awesome", statusCode: 400, data: "Game was not found" },
     { method: "POST", url: "/message", postData: "game_id=test_game&to_id=DarthVader&from_id=Bob&message=awesome", statusCode: 400, data: "same team" },
-    { method: "POST", url: "/message", postData: "game_id=test_game&to_id=Frank&from_id=Bob&message=", statusCode: 400, data: "Message was blank" },
     
     // Make sure fake people are gone
     { method: "DELETE", url: "/game/test_game/Unicorn", statusCode: 410},
