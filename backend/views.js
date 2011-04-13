@@ -201,15 +201,15 @@ exports.leave_game = function(request, response) {
     }
     
     // Ensure that player exists
-    if (request.body.user_id === undefined) {
+    if (request.params.user_id === undefined) {
         response.send({"error": "Some required information was missing"}, 400);
         return;
     } 
     
     // Ensure that the player is in the game
-    var user_id = request.body.user_id.replace(/\s+$/, "");
+    var user_id = request.params.user_id.replace(/\s+$/, "");
     if (ctf.game_data[game_id].players[user_id] === undefined) {
-        console.log(ctf.game_data[game_id].players[request.body.user_id]);
+        console.log(ctf.game_data[game_id].players[user_id]);
         response.send({"error": "User was not found"}, 410);
         return;
     }
@@ -221,6 +221,5 @@ exports.leave_game = function(request, response) {
     } else {
         // Something is jacked up
         response.send({"error": "Could not remove player from game"}, 500);
-    }
-    
+    }    
 };

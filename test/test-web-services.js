@@ -50,6 +50,8 @@ var tests = [
     
     // Join the game
     { method: "POST", url: "/game/test_game", postData: "user_id=Bob&latitude=27&longitude=-83&accuracy=5", statusCode: 200, data: "red_flag" },
+    { method: "POST", url: "/game/test_game", postData: "user_id=DarthVader&latitude=27&longitude=-83&accuracy=5", statusCode: 200 },
+    { method: "POST", url: "/game/test_game", postData: "user_id=Frank&latitude=27&longitude=-83&accuracy=5", statusCode: 200 },
     
     // Make sure I can't join an imaginary game
     { method: "POST", url: "/game/fantasy", postData: "user_id=Bob", statusCode: 404, data: "error" },
@@ -71,22 +73,34 @@ var tests = [
     { method: "POST", url: "/location", postData: "game_id=test_game&user_id=PeeWeeHerman&latitude=27&longitude=-83&accuracy=5", statusCode: 400, data: "Invalid user" },
     
     // Make sure user can't be updated with crap information
-    { method: "POST", url: "/location", postData: "game_id=test_game&user_id=Frank&latitude=27&longitude=-83&accuracy=5", statusCode: 400, data: "Invalid user" },
+    { method: "POST", url: "/location", postData: "game_id=test_game&user_id=PeeWeeHerman&latitude=27&longitude=-83&accuracy=5", statusCode: 400, data: "Invalid user" },
     { method: "POST", url: "/location", postData: "game_id=test_game3&user_id=Bob&latitude=27&longitude=-83&accuracy=5", statusCode: 400, data: "Invalid game" },
-    { method: "POST", url: "/location", postData: "game_id=test_game&user_id=Frank&latitude=somewhere&longitude=out_there", statusCode: 400, data: "Invalid data" },
+    { method: "POST", url: "/location", postData: "game_id=test_game&user_id=PeeWeeHerman&latitude=somewhere&longitude=out_there", statusCode: 400, data: "Invalid data" },
     
     // Make sure fake people are gone
-    { method: "DELETE", url: "/game/test_game", postData: "user_id=Jesus", statusCode: 410},
+    { method: "DELETE", url: "/game/test_game/Unicorn", statusCode: 410},
     
-    // Make sure missing information isn't accepted
-    { method: "DELETE", url: "/game/test_game", postData: "dog=Bob", statusCode: 400},
+    // Make sure missing information isn't accepted (results in 404 because no matching route is found)
+    { method: "DELETE", url: "/game/test_game", statusCode: 404},
     
     // Make sure fake games are not found
-    { method: "DELETE", url: "/game/fake_game", postData: "user_id=Bob", statusCode: 404},
+    { method: "DELETE", url: "/game/fake_game/Bob", statusCode: 404},
     
     // Remove Bob from his game, and make sure he can't come back
-    { method: "DELETE", url: "/game/test_game", postData: "user_id=Bob", statusCode: 200},
-    { method: "DELETE", url: "/game/test_game", postData: "user_id=Bob", statusCode: 410},
+    { method: "DELETE", url: "/game/test_game/Bob", statusCode: 200},
+    { method: "DELETE", url: "/game/test_game/Bob", statusCode: 410},
+    
+    // Have Bob and Frank chat a bit
+    //{ method: "POST", url: "/message", postData: "game_id=test_game&to_id=Bob&from_id=Frank&message=How%20are%20you!%3F", statusCode: 200, data: "OK" },
+    //{ method: "POST", url: "/message", postData: "game_id=test_game&to_id=Frank&from_id=Bob&message=Good.%20And%20you%3F", statusCode: 200, data: "OK" },
+    //{ method: "POST", url: "/message", postData: "game_id=test_game&to_id=Bob&from_id=Frank&message=Doing%20well.", statusCode: 200, data: "OK" },
+    //{ method: "POST", url: "/message", postData: "game_id=test_game&to_id=Frank&from_id=Bob&message=awesome", statusCode: 200, data: "OK" },
+    
+    // If you can't say something nice, don't say nothin at all
+    //{ method: "POST", url: "/message", postData: "game_id=test_game&from_id=Bob&message=awesome", statusCode: 400, data: "required information" },
+    //{ method: "POST", url: "/message", postData: "game_id=fanstasy&to_id=Frank&from_id=Bob&message=awesome", statusCode: 400, data: "Game was not found" },
+    //{ method: "POST", url: "/message", postData: "game_id=test_game&to_id=DarthVader&from_id=Bob&message=awesome", statusCode: 400, data: "same team" },
+    //{ method: "POST", url: "/message", postData: "game_id=test_game&to_id=Frank&from_id=Bob&message=", statusCode: 400, data: "required information" },
 ];
 
 var run_test = function(test, test_case) {

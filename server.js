@@ -397,7 +397,7 @@ http.post('/game/:game_id', views.join_game);
  * @link ctf.game_data
  * @param request
  */
-http['delete']('/game/:game_id', views.leave_game);
+http['delete']('/game/:game_id/:user_id', views.leave_game);
 
 // This is super s3cr3t :-)
 http.get('/admin.json', function(request, response) {
