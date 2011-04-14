@@ -95,6 +95,12 @@ global.ctf = {};
  *         // The score for the blue team
  *         blue_score: Number,
  *         
+ *         // Whether or not the red flag is currently captured
+ *         red_flag_captured: Boolean,
+ *         
+ *         // Whether or not the blue flag is currently captured
+ *         blue_flag_captured: Boolean,
+ *         
  *         // The last time anyone in this game updated
  *         last_update: DateTime,
  *         
