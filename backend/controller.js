@@ -218,6 +218,16 @@ exports.create_game = function(game_id, user_id, latitude, longitude) {
             blue_score: 0,
             creator: user_id
         };
+        
+        // Fix the precision of the bounds so in_rectangle can accurately judge in bounds
+        ctf.game_data[game_id].red_bounds.top_left.latitude = ctf.game_data[game_id].red_bounds.top_left.latitude.toFixed(6);
+        ctf.game_data[game_id].red_bounds.top_left.longitude = ctf.game_data[game_id].red_bounds.top_left.longitude.toFixed(6);
+        ctf.game_data[game_id].red_bounds.bottom_right.latitude = ctf.game_data[game_id].red_bounds.bottom_right.latitude.toFixed(6);
+        ctf.game_data[game_id].red_bounds.bottom_right.longitude = ctf.game_data[game_id].red_bounds.bottom_right.longitude.toFixed(6);
+        ctf.game_data[game_id].blue_bounds.top_left.latitude = ctf.game_data[game_id].blue_bounds.top_left.latitude.toFixed(6);
+        ctf.game_data[game_id].blue_bounds.top_left.longitude = ctf.game_data[game_id].red_bounds.top_left.longitude;
+        ctf.game_data[game_id].blue_bounds.bottom_right.latitude = ctf.game_data[game_id].blue_bounds.bottom_right.latitude.toFixed(6);
+        ctf.game_data[game_id].blue_bounds.bottom_right.longitude = ctf.game_data[game_id].red_bounds.bottom_right.longitude;       
         return true;
     } else {
         return false;

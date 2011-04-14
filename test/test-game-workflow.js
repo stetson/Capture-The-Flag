@@ -53,6 +53,12 @@ exports.test_game_workflow = function(test) {
     // Create game
     test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
     
+    // Ensure points are as expected
+    test.equal(ctf.game_data[game_id].origin.latitude, ctf.game_data[game_id].red_bounds.bottom_right.latitude, "Red bounds are not drawn right");
+    test.equal(ctf.game_data[game_id].origin.latitude, ctf.game_data[game_id].blue_bounds.top_left.latitude, "Blue bounds are not drawn right");
+    test.equal(ctf.game_data[game_id].blue_bounds.top_left.longitude, ctf.game_data[game_id].red_bounds.top_left.longitude, "Top-left longitude does not match");
+    test.equal(ctf.game_data[game_id].blue_bounds.bottom_right.longitude, ctf.game_data[game_id].red_bounds.bottom_right.longitude, "Bottom-right longitude does not match");
+    
     // Join game
     test.ok(controller.join_game(game_id, user1.id, user1), "Could not join game");
     test.ok(controller.join_game(game_id, user2.id, user2), "Could not join game");

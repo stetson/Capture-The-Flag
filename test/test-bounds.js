@@ -11,7 +11,7 @@ global.ctf = {};
 ctf.game_data = {};
 var controller = require("../backend/controller.js");
 
-var FIELD_SIZE = 0.125;
+var FIELD_SIZE = 0.25;
 var TWENTY_FEET = 0.000001;
 var HALF_FIELD = FIELD_SIZE * 0.5;
 
@@ -60,24 +60,27 @@ exports.test_generated_bounds = function(test) {
         { latitude: user.latitude - TWENTY_FEET, longitude: game.blue_bounds.top_left.longitude, boundary: boundaries.blue, expected_result: true },
         
         // Test red corners
-        { latitude: game.red_bounds.top_left.latitude, longitude: game.red_bounds.top_left.longitude, boundary: boundaries.red, expected_result: true },
+        { latitude: game.red_bounds.top_left.latitude, longitude: game.red_bounds.top_left.longitude, boundary: boundaries.red, expected_result: false },
         { latitude: game.red_bounds.bottom_right.latitude, longitude: game.red_bounds.bottom_right.longitude, boundary: boundaries.red, expected_result: true },
         { latitude: game.red_bounds.bottom_right.latitude, longitude: game.red_bounds.top_left.longitude, boundary: boundaries.red, expected_result: true },
-        { latitude: game.red_bounds.top_left.latitude, longitude: game.red_bounds.bottom_right.longitude, boundary: boundaries.red, expected_result: true },
+        { latitude: game.red_bounds.top_left.latitude, longitude: game.red_bounds.bottom_right.longitude, boundary: boundaries.red, expected_result: false },
         
         // Test blue corners
-        { latitude: game.blue_bounds.top_left.latitude - TWENTY_FEET, longitude: game.blue_bounds.top_left.longitude, boundary: boundaries.blue, expected_result: true },
+        { latitude: game.blue_bounds.top_left.latitude, longitude: game.blue_bounds.top_left.longitude, boundary: boundaries.blue, expected_result: false },
+        { latitude: game.blue_bounds.top_left.latitude, longitude: game.blue_bounds.top_left.longitude, boundary: boundaries.red, expected_result: true },
         { latitude: game.blue_bounds.bottom_right.latitude, longitude: game.blue_bounds.bottom_right.longitude, boundary: boundaries.blue, expected_result: true },
         { latitude: game.blue_bounds.bottom_right.latitude, longitude: game.blue_bounds.top_left.longitude, boundary: boundaries.blue, expected_result: true },
         { latitude: game.blue_bounds.top_left.latitude - TWENTY_FEET, longitude: game.blue_bounds.bottom_right.longitude, boundary: boundaries.blue, expected_result: true },
-        //Test red inside 
+        
+        // Test red inside 
         {latitude: point_inside_red.latitude, longitude: point_inside_red.longitude, boundary: boundaries.field, expected_result: true },
-        //Test blue inside
+        
+        // Test blue inside
         {latitude: point_inside_blue.latitude, longitude: point_inside_blue.longitude, boundary: boundaries.field, expected_result: true },
         
-        //Test points close to line
-        {latitude: game.blue_bounds.top_left.latitude, longitude: game.red_bounds.top_left.longitude + TWENTY_FEET, boundary: boundaries.field, expected_result: true },
-        {latitude: game.blue_bounds.top_left.latitude, longitude: game.red_bounds.top_left.longitude - TWENTY_FEET, boundary: boundaries.field, expected_result: false }
+        // Test points close to line
+        {latitude: game.blue_bounds.top_left.latitude, longitude: game.blue_bounds.top_left.longitude + TWENTY_FEET, boundary: boundaries.field, expected_result: false },
+        {latitude: game.blue_bounds.top_left.latitude, longitude: game.blue_bounds.top_left.longitude - TWENTY_FEET, boundary: boundaries.field, expected_result: false }
     ];
     
     // Test to see if points are in the rectangle, and match against expected result:

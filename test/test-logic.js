@@ -172,6 +172,87 @@ exports.test_bounds_tagging = function(test) {
     // Run logic
     logic.run(ctf.game_data[game_id]);
     
+    // Move to origin
+    user1.latitude = ctf.game_data[game_id].origin.latitude;
+    user1.longitude = ctf.game_data[game_id].origin.longitude;
+    user2.latitude = ctf.game_data[game_id].origin.latitude;
+    user2.longitude = ctf.game_data[game_id].origin.longitude;
+    test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to starting point");
+    test.strictEqual(null, controller.update_location(game_id, user2.id, user2), "Could not update location to starting point");
+    
+    // Test for strange behavior about the origin
+    for (var i = 0; i < 10; i++) {
+        user1.longitude += (.0000001 * i);
+        user2.longitude += (.0000001 * i);
+        test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to starting point");
+        test.strictEqual(null, controller.update_location(game_id, user2.id, user2), "Could not update location to starting point");
+        
+        // Run logic
+        logic.run(ctf.game_data[game_id]);
+        
+        // Ensure that players are in expected bounds
+        test.strictEqual(true, algorithms.in_rectangle(user1.latitude, user1.longitude, 
+                ctf.game_data[game_id].red_bounds.top_left.latitude, ctf.game_data[game_id].red_bounds.top_left.longitude,
+                ctf.game_data[game_id].red_bounds.bottom_right.latitude, ctf.game_data[game_id].red_bounds.bottom_right.longitude)
+                , "user1 not in red bounds");
+        test.strictEqual(true, algorithms.in_rectangle(user2.latitude, user2.longitude, 
+                ctf.game_data[game_id].red_bounds.top_left.latitude, ctf.game_data[game_id].red_bounds.top_left.longitude,
+                ctf.game_data[game_id].red_bounds.bottom_right.latitude, ctf.game_data[game_id].red_bounds.bottom_right.longitude)
+                , "user2 not in red bounds");
+        test.strictEqual(false, algorithms.in_rectangle(user1.latitude, user1.longitude, 
+                ctf.game_data[game_id].blue_bounds.top_left.latitude, ctf.game_data[game_id].blue_bounds.top_left.longitude,
+                ctf.game_data[game_id].blue_bounds.bottom_right.latitude, ctf.game_data[game_id].blue_bounds.bottom_right.longitude)
+                , "user1 in blue bounds");
+        test.strictEqual(false, algorithms.in_rectangle(user2.latitude, user2.longitude, 
+                ctf.game_data[game_id].blue_bounds.top_left.latitude, ctf.game_data[game_id].blue_bounds.top_left.longitude,
+                ctf.game_data[game_id].blue_bounds.bottom_right.latitude, ctf.game_data[game_id].blue_bounds.bottom_right.longitude)
+                , "user2 in blue bounds");
+        
+        // Ensure observer mode is not switching
+        test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 in observer mode");
+        test.strictEqual(true, ctf.game_data[game_id].players[user2.id].observer_mode, "user2 not in observer mode");
+    }
+    
+    // Move a hair into blue territory
+    user1.latitude -= (.0000001 * i);
+    user2.latitude -= (.0000001 * i);
+    
+    // Run logic
+    logic.run(ctf.game_data[game_id]);
+    
+    // Ensure that players are in expected bounds
+    test.strictEqual(false, algorithms.in_rectangle(user1.latitude, user1.longitude, 
+            ctf.game_data[game_id].red_bounds.top_left.latitude, ctf.game_data[game_id].red_bounds.top_left.longitude,
+            ctf.game_data[game_id].red_bounds.bottom_right.latitude, ctf.game_data[game_id].red_bounds.bottom_right.longitude)
+            , "user1 in red bounds");
+    test.strictEqual(false, algorithms.in_rectangle(user2.latitude, user2.longitude, 
+            ctf.game_data[game_id].red_bounds.top_left.latitude, ctf.game_data[game_id].red_bounds.top_left.longitude,
+            ctf.game_data[game_id].red_bounds.bottom_right.latitude, ctf.game_data[game_id].red_bounds.bottom_right.longitude)
+            , "user2 in red bounds");
+    test.strictEqual(true, algorithms.in_rectangle(user1.latitude, user1.longitude, 
+            ctf.game_data[game_id].blue_bounds.top_left.latitude, ctf.game_data[game_id].blue_bounds.top_left.longitude,
+            ctf.game_data[game_id].blue_bounds.bottom_right.latitude, ctf.game_data[game_id].blue_bounds.bottom_right.longitude)
+            , "user1 not in blue bounds");
+    test.strictEqual(true, algorithms.in_rectangle(user2.latitude, user2.longitude, 
+            ctf.game_data[game_id].blue_bounds.top_left.latitude, ctf.game_data[game_id].blue_bounds.top_left.longitude,
+            ctf.game_data[game_id].blue_bounds.bottom_right.latitude, ctf.game_data[game_id].blue_bounds.bottom_right.longitude)
+            , "user2 not in blue bounds");
+    
+    // Ensure observer mode is not switching
+    test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 in observer mode");
+    test.strictEqual(true, ctf.game_data[game_id].players[user2.id].observer_mode, "user2 not in observer mode"); 
+    
+    // Move back to starting points
+    user1.latitude = ctf.game_data[game_id].origin.latitude + TWENTY_FEET;
+    user1.longitude = ctf.game_data[game_id].origin.longitude;
+    user2.latitude = ctf.game_data[game_id].origin.latitude - TWENTY_FEET;
+    user2.longitude = ctf.game_data[game_id].origin.longitude;
+    test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to starting point");
+    test.strictEqual(null, controller.update_location(game_id, user2.id, user2), "Could not update location to starting point");
+    
+    // Run logic
+    logic.run(ctf.game_data[game_id]);
+    
     // Test not in observer mode
     test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 in observer mode");
     

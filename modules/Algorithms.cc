@@ -66,10 +66,10 @@ double Algorithms::distance_in_miles(double p1_latitude, double p1_longitude, do
  */
 bool Algorithms::in_rectangle(double findLat, double findLong, double topLeftLat, double topLeftLong, double botRightLat, double botRightLong)
 {
-  bool isWithinRect = true;
-  if (findLat > topLeftLat || findLong < topLeftLong || findLat < botRightLat || findLong > botRightLong)
+  bool isWithinRect = false;
+  if (findLat < topLeftLat && findLong >= topLeftLong && findLat >= botRightLat && findLong <= botRightLong)
   {
-    isWithinRect = false;
+    isWithinRect = true;
   }
  return isWithinRect;
 }
