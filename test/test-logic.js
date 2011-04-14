@@ -69,7 +69,9 @@ exports.test_win_flags = function(test) {
     test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to starting point");
     
     // Run business logic
-    logic.run(ctf.game_data[game_id]);
+    for (var i = 0; i < 10; i++) {
+        logic.run(ctf.game_data[game_id]);
+    }
     
     // Test that the user has the flag and that it is captured
     test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 is on the flag, and is still in observer mode");
@@ -83,7 +85,9 @@ exports.test_win_flags = function(test) {
     test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to starting point");
     
     // Run business logic
-    logic.run(ctf.game_data[game_id]);
+    for (var i = 0; i < 10; i++) {
+        logic.run(ctf.game_data[game_id]);
+    }
     
     // Check captures
     test.equal(1, ctf.game_data[game_id].players[user1.id].captures, "User1 has a capture");
@@ -170,7 +174,9 @@ exports.test_bounds_tagging = function(test) {
     test.strictEqual(null, controller.update_location(game_id, user2.id, user2), "Could not update location to starting point");
     
     // Run logic
-    logic.run(ctf.game_data[game_id]);
+    for (var i = 0; i < 10; i++) {
+        logic.run(ctf.game_data[game_id]);
+    }
     
     // Move to origin
     user1.latitude = ctf.game_data[game_id].origin.latitude;
@@ -262,7 +268,9 @@ exports.test_bounds_tagging = function(test) {
     test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not move user1 out of bounds");
     
     // Run logic
-    logic.run(ctf.game_data[game_id]);
+    for (var i = 0; i < 10; i++) {
+        logic.run(ctf.game_data[game_id]);
+    }
     
     // Test in observer mode
     test.equal(0, ctf.game_data[game_id].red_score, "The red score is not 0");
@@ -279,7 +287,9 @@ exports.test_bounds_tagging = function(test) {
     test.strictEqual(null, controller.update_location(game_id, user2.id, user2), "Could not update location to starting point");
     
     // Run logic
-    logic.run(ctf.game_data[game_id]);
+    for (var i = 0; i < 10; i++) {
+        logic.run(ctf.game_data[game_id]);
+    }
     
     // Test not in observer mode
     test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 in observer mode");
@@ -290,7 +300,9 @@ exports.test_bounds_tagging = function(test) {
     test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to starting point");
     
     // Run business logic
-    logic.run(ctf.game_data[game_id]);
+    for (var i = 0; i < 10; i++) {
+        logic.run(ctf.game_data[game_id]);
+    }
     
     // Test that the user has the flag and that it is captured
     test.equal(0, ctf.game_data[game_id].red_score, "The red score is not 0");
@@ -324,7 +336,9 @@ exports.test_bounds_tagging = function(test) {
     test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to starting point");
     
     // Run business logic
-    logic.run(ctf.game_data[game_id]);
+    for (var i = 0; i < 10; i++) {
+        logic.run(ctf.game_data[game_id]);
+    }
     
     // Test that the user does not have the flag and that it is not captured
     test.equal(0, ctf.game_data[game_id].red_score, "The red score is not 0");
