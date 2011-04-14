@@ -45,7 +45,6 @@ var tests = [
     { method: "POST", url: "/game", postData: "game_id=test_game2&longitude=-83&user_id=Bob", statusCode: 400 },
     { method: "POST", url: "/game", postData: "latitude=27&longitude=-83&user_id=Bob", statusCode: 400 },
     { method: "POST", url: "/game", postData: "game_id=test_game2&potato=nomnom&user_id=Bob", statusCode: 400 },
-    { method: "POST", url: "/game", postData: "game_id=test_game2&latitude=27&longitude=-83&user_id=Bob", statusCode: 200 },
     
     // Not implemented (returned as 404 for now. this is an express issue)
     { method: "PUT", url: "/game", statusCode: 404 },
@@ -56,6 +55,9 @@ var tests = [
     { method: "POST", url: "/game/test_game", postData: "user_id=DarthVader&latitude=27&longitude=-83&accuracy=5", statusCode: 200 },
     { method: "POST", url: "/game/test_game", postData: "user_id=Frank&latitude=27&longitude=-83&accuracy=5", statusCode: 200 },
     
+    // Make sure our game is updated in the game list
+    { method: "GET", url: "/game?latitude=27&longitude=-83", statusCode: 200, data: '{"games":[{"name":"test_game","distance":0,"players":3}]}' },
+        
     // Make sure I can't join an imaginary game
     { method: "POST", url: "/game/fantasy", postData: "user_id=Bob", statusCode: 404, data: "error" },
     
@@ -160,7 +162,7 @@ var run_test = function(test, test_case) {
             // Check the response for the given data
             res.on('data', function(chunk) {
                 if (tests[test_case].data !== undefined) {
-                    test.notEqual(-1, chunk.toString().indexOf(tests[test_case].data), "Test data (" + tests[test_case].data + ") was not found in response (" + chunk.toString().substring(0,50) + "...) [Test " + test_case + "]");
+                    test.notEqual(-1, chunk.toString().indexOf(tests[test_case].data), "Test data (" + tests[test_case].data + ") was not found in response (" + chunk.toString().substring(0,200) + "...) [Test " + test_case + "]");
                 }
             });
             
