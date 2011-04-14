@@ -238,6 +238,11 @@
         return;
     }
 
+    // If player is in observer mode then exit
+    if (player1->Get(String::New("observer_mode"))->BooleanValue()) {
+        return;
+    }
+
     // ...place them in observer mode
     player1->Set(String::New("observer_mode"), Boolean::New(true));
 

@@ -146,7 +146,9 @@ exports.test_bounds_tagging = function(test) {
     test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to starting point");
     
     // Run logic
-    logic.run(ctf.game_data[game_id]);
+    for (var i = 0; i < 10; i++) {
+        logic.run(ctf.game_data[game_id]);
+    }
     
     // Test in observer_mode
     test.equal(0, ctf.game_data[game_id].red_score, "The red score is not 0");
@@ -221,7 +223,9 @@ exports.test_bounds_tagging = function(test) {
     test.strictEqual(null, controller.update_location(game_id, user2.id, user2), "Could not update location to starting point");
     
     // Run logic
-    logic.run(ctf.game_data[game_id]);
+    for (var i = 0; i < 10; i++) {
+        logic.run(ctf.game_data[game_id]);
+    }
     
     // Test to see that tag score in incremented when user1 is tagged by user2
     test.equal(2, ctf.game_data[game_id].players[user2.id].tags, "User2 didn't get the tagging point");
