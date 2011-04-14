@@ -106,12 +106,28 @@ exports.move_flag = function(game_id, user_id, team, latitude, longitude) {
     if (ctf.game_data[game_id].creator != user_id) {
 		return "Permission denied";
 	}
+    
+    // Only valid team choices allowed
+    if (team != "red" && team != "blue") {
+        return "Invalid team";
+    }
+    
+    // Ensure latitude is valid
+    if (isNaN(latitude) || latitude > 180 || latitude < -180) {
+        console.log(latitude);
+        return "Invalid latitude";
+    }
+    
+    // Ensure longitude is valid
+    if (isNaN(longitude) || longitude > 180 || longitude < -180) {
+        console.log(latitude);
+        return "Invalid longitude";
+    }
 	
 	// Change flag location
 	flag = team + "_flag";
 	ctf.game_data[game_id][flag].latitude = latitude;
 	ctf.game_data[game_id][flag].longitude = longitude;
-
 
     return null;
 };

@@ -113,11 +113,19 @@ exports.move_flag = function(request, response) {
     	var latitude = request.body.latitude;
 		var longitude = request.body.longitude;
 		
-		controller.move_flag(game_id, user_id, team, latitude, longitude);
+		if (ctf.game_data[game_id] === undefined) {
+		    response.send({"error": "Game was not found"}, 404);
+		    return;
+		}
 		
+		var status = controller.move_flag(game_id, user_id, team, latitude, longitude);
+		if (status === null) {
+		    response.send({"response": "OK"}, 200);
+		} else {
+		    response.send({"error": status}, 400);
+		}		
     } else {
         response.send({"error": "Some required information was missing"}, 400);
-        return;
     }
 };
 

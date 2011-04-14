@@ -77,6 +77,26 @@ var tests = [
     { method: "POST", url: "/location", postData: "game_id=test_game3&user_id=Bob&latitude=27&longitude=-83&accuracy=5", statusCode: 400, data: "Invalid game" },
     { method: "POST", url: "/location", postData: "game_id=test_game&user_id=PeeWeeHerman&latitude=somewhere&longitude=out_there", statusCode: 400, data: "Invalid data" },
     
+    // Move flag around
+    { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=red&latitude=27&longitude=-83", statusCode: 200, data: "OK" },
+    { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=blue&latitude=27&longitude=-83", statusCode: 200, data: "OK" },
+    
+    // Reject invalid data
+    { method: "POST", url: "/flag", postData: "user_id=Bob&team=red&latitude=27&longitude=-83", statusCode: 400, data: "required information" },
+    { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Frank&team=red&latitude=27&longitude=-83", statusCode: 400, data: "Permission denied" },
+    { method: "POST", url: "/flag", postData: "game_id=test_game&team=red&latitude=27&longitude=-83", statusCode: 400, data: "required information" },
+    { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&latitude=27&longitude=-83", statusCode: 400, data: "required information" },
+    { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=green&latitude=27&longitude=-83", statusCode: 400, data: "Invalid team" },
+    { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=red&longitude=-83", statusCode: 400, data: "required information" },
+    { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=red&latitude=27", statusCode: 400, data: "required information" },
+    { method: "POST", url: "/flag", postData: "game_id=fantasy&user_id=Bob&team=red&latitude=27&longitude=-83", statusCode: 404, data: "Game was not found" },
+
+    // Reject invalid coordinate
+    { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=red&latitude=500&longitude=-83", statusCode: 400, data: "Invalid latitude" },
+    { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=red&latitude=27&longitude=-500", statusCode: 400, data: "Invalid longitude" },
+    { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=red&latitude=Bob&longitude=-83", statusCode: 400, data: "Invalid latitude" },
+    { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=red&latitude=27&longitude=Platypus", statusCode: 400, data: "Invalid longitude" },
+
     // Have Bob and Frank chat a bit
     { method: "POST", url: "/message", postData: "game_id=test_game&to_id=Bob&from_id=Frank&message=How%20are%20you!%3F", statusCode: 200, data: "OK" },
     { method: "POST", url: "/message", postData: "game_id=test_game&to_id=Frank&from_id=Bob&message=Good.%20And%20you%3F", statusCode: 200, data: "OK" },
