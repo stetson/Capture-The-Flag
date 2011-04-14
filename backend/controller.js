@@ -114,13 +114,11 @@ exports.move_flag = function(game_id, user_id, team, latitude, longitude) {
     
     // Ensure latitude is valid
     if (isNaN(latitude) || latitude > 180 || latitude < -180) {
-        console.log(latitude);
         return "Invalid latitude";
     }
     
     // Ensure longitude is valid
     if (isNaN(longitude) || longitude > 180 || longitude < -180) {
-        console.log(latitude);
         return "Invalid longitude";
     }
 	
