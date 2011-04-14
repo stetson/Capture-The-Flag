@@ -313,7 +313,15 @@ http.post('/flag', views.move_flag);
  *     name: String                            
  * 
  * Server data:                                
- * [ "game_name", "game_name", ... ]
+ * {
+ *     games: [
+ *         {
+ *             name: String,
+ *             distance: Number,
+ *             players: Number
+ *         }
+ *     ]
+ * }
  * </pre>
  * 
  * @memberOf http

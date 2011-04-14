@@ -36,6 +36,9 @@ var tests = [
     // Make sure we can't duplicate a game
     { method: "POST", url: "/game", postData: "game_id=test_game&user_id=Bob&latitude=27&longitude=-83", statusCode: 409, data: "Game already exists" },
     
+    // Make sure our game shows up in the game list
+    { method: "GET", url: "/game?latitude=27&longitude=-83", statusCode: 200, data: '{"games":[{"name":"test_game","distance":0,"players":0}]}' },
+    
     // Make sure crappy data won't corrupt game object
     { method: "POST", url: "/game", postData: "game_id=test_game2&user_id=Bob", statusCode: 400 },
     { method: "POST", url: "/game", postData: "game_id=test_game2&latitude=27&user_id=Bob", statusCode: 400 },

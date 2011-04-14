@@ -170,9 +170,13 @@ exports.get_games = function(user_latitude, user_longitude) {
                     ctf.game_data[game_iterator].origin.longitude, 
                     user_latitude, 
                     user_longitude);
-            if (distance < ctf.constants.GAME_RADIUS || ! user_latitude || ! user_longitude)
+            if (distance < ctf.constants.GAME_RADIUS)
             {
-                games_in_radius.push( game_iterator );
+                games_in_radius.push({
+                    name: game_iterator,
+                    distance: distance,
+                    players: Object.keys(ctf.game_data[game_iterator].players).length
+                });
             }
         }
     }
