@@ -83,8 +83,8 @@ var tests = [
     { method: "POST", url: "/location", postData: "game_id=test_game&user_id=PeeWeeHerman&latitude=somewhere&longitude=out_there", statusCode: 400, data: "Invalid data" },
     
     // Move flag around
-    { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=red&latitude=27&longitude=-83", statusCode: 200, data: "OK" },
-    { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=blue&latitude=27&longitude=-83", statusCode: 200, data: "OK" },
+    { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=red&latitude=27.001&longitude=-83", statusCode: 200, data: "OK" },
+    { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=blue&latitude=26.999&longitude=-83", statusCode: 200, data: "OK" },
     
     // Reject invalid data
     { method: "POST", url: "/flag", postData: "user_id=Bob&team=red&latitude=27&longitude=-83", statusCode: 400, data: "required information" },
@@ -95,6 +95,7 @@ var tests = [
     { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=red&longitude=-83", statusCode: 400, data: "required information" },
     { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=red&latitude=27", statusCode: 400, data: "required information" },
     { method: "POST", url: "/flag", postData: "game_id=fantasy&user_id=Bob&team=red&latitude=27&longitude=-83", statusCode: 404, data: "Game was not found" },
+    { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=red&latitude=26.998&longitude=-83", statusCode: 400, data: "Not in the correct territory" },
 
     // Reject invalid coordinate
     { method: "POST", url: "/flag", postData: "game_id=test_game&user_id=Bob&team=red&latitude=500&longitude=-83", statusCode: 400, data: "Invalid latitude" },

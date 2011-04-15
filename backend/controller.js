@@ -121,6 +121,18 @@ exports.move_flag = function(game_id, user_id, team, latitude, longitude) {
     if (isNaN(longitude) || longitude > 180 || longitude < -180) {
         return "Invalid longitude";
     }
+    
+    // Ensure that the flag is placed in the correct territory
+    var territory = team + "_bounds";
+    if (! algorithms.in_rectangle(
+            latitude, longitude,
+            ctf.game_data[game_id][territory].top_left.latitude,
+            ctf.game_data[game_id][territory].top_left.longitude,
+            ctf.game_data[game_id][territory].bottom_right.latitude,
+            ctf.game_data[game_id][territory].bottom_right.longitude
+            )) {
+        return "Not in the correct territory";
+    }
 	
 	// Change flag location
 	flag = team + "_flag";
