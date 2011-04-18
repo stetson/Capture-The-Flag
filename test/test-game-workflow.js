@@ -223,17 +223,62 @@ exports.test_flag_race_condition = function(test) {
     test.done();    
 };
 
+/**
+
     exports.test_move_flag = function(test) {
-   // var game_id = "test-move-flag";
-// var user_id = "Bob the tester";
-   // var user1 = {
-      //  latitude: 29.034681,
-       // longitude: -81.303774     
-    //};
-    //Create Game
-    //test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
-    //Test for a player other than creator to move flag
-    //Try to move flag
+    var game_id = "test-move-flag";
+    var user1 = {
+            id: "Mike the Meek",
+            latitude: 29.034681,
+            longitude: -81.303774     
+    };
+    var user2 = {
+            id: "Matt the Marvelous",
+            latitude: 29.034681,
+            longitude: -81.303774     
+    };
+	
+    // Create Game
+    test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
+	test.strictEqual(null, controller.move_flag(game_id, user_id, team, latitude, longitude), "Could not update flag location");
+
+	
+	// Creator Moves Flag
+	test.ok(controller.move_flag(game_id, user1.id, team, latitude, longitude), "Player 1 could not move flag");
+
+	// Creator move flag while in observer mode
+	test.ok(controller.move_flag(game_id, user1.id.observer_mode, team, latitude, longitude), "Player 1 could not move flag while in observer mode");
+
+	
+    //  Non-Creator Moves Flag
+	test.ok(controller.move_flag(game_id, user2.id, team, latitude, longitude), "Player 2 could not move flag");
+
+	
+	// Creator moves red flag
+	red_flag.latitude = ctf.game_data[game_id].red_flag.latitude + TWENTY_FEET;
+    red_flag.longitude = ctf.game_data[game_id].red_flag.longitude;
+    test.ok(ctf.game_data[game_id].players[user1.id].move_flag.red_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.red_flag.longitude, 'Creator not move red flag');	
+    
+	// Creator moves blue flag
+	blue_flag.latitude = ctf.game_data[game_id].blue_flag.latitude + TWENTY_FEET;
+    blue_flag.longitude = ctf.game_data[game_id].blue_flag.longitude;
+    test.ok(ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.longitude, 'Creator not move blue flag');	
+    
+	// Creator moves red and blue flag
+	red_flag.latitude = ctf.game_data[game_id].red_flag.latitude + TWENTY_FEET;
+    red_flag.longitude = ctf.game_data[game_id].red_flag.longitude;
+	blue_flag.latitude = ctf.game_data[game_id].blue_flag.latitude + TWENTY_FEET;
+    blue_flag.longitude = ctf.game_data[game_id].blue_flag.longitude;
+    test.ok(ctf.game_data[game_id].players[user1.id].move_flag.red_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.red_flag.longitude,
+    ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.longitude, 'Creator could not move both red and blue flags');	
+    
+	
+
+*/
+	
+	
+	
+	
     //Strict flag testing (try to rapidly switch locations and see if it messes with game)
     //Try to move two flags at same time
     //Try to move a flag into the current bounds created
