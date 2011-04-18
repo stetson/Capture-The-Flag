@@ -247,13 +247,12 @@ exports.test_flag_race_condition = function(test) {
 	test.ok(controller.move_flag(game_id, user1.id, team, latitude, longitude), "Player 1 could not move flag");
 
 	// Creator move flag while in observer mode
-	test.ok(controller.move_flag(game_id, user1.id.observer_mode, team, latitude, longitude), "Player 1 could not move flag while in observer mode");
+	test.strictEqual(false, controller.move_flag(game_id, user1.id.observer_mode, team, latitude, longitude), "Player 1 could not move flag while in observer mode");
 
 	
     //  Non-Creator Moves Flag
 	test.ok(controller.move_flag(game_id, user2.id, team, latitude, longitude), "Player 2 could not move flag");
 
-	
 	// Creator moves red flag
 	red_flag.latitude = ctf.game_data[game_id].red_flag.latitude + TWENTY_FEET;
     red_flag.longitude = ctf.game_data[game_id].red_flag.longitude;
@@ -267,12 +266,33 @@ exports.test_flag_race_condition = function(test) {
 	// Creator moves red and blue flag
 	red_flag.latitude = ctf.game_data[game_id].red_flag.latitude + TWENTY_FEET;
     red_flag.longitude = ctf.game_data[game_id].red_flag.longitude;
+	
 	blue_flag.latitude = ctf.game_data[game_id].blue_flag.latitude + TWENTY_FEET;
     blue_flag.longitude = ctf.game_data[game_id].blue_flag.longitude;
+	
     test.ok(ctf.game_data[game_id].players[user1.id].move_flag.red_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.red_flag.longitude,
     ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.longitude, 'Creator could not move both red and blue flags');	
-    
+
+	// Creator tries to move red and blue flag out of territory 
+    latitude = ctf.game_data[game_id][territory].top_left.latitude + TWENTY_FEET;
+	longitude = ctf.game_data[game_id][territory].top_left.longitude + TWENTY_FEET;
+
+	test.ok(ctf.game_data[game_id].players[user1.id].move_flag.red_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.red_flag.longitude, 'The red flag is in bounds; can't move flag outside bounds');	
+    test.ok(ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.longitude, 'The blue flag is in bounds; can't move flag outside bounds');	
+
+
+	// Creator tries to move red flag into blue territory 
+    latitude = ctf.game_data[game_id][territory].blue_flag.top_left.latitude;
+	longitude = ctf.game_data[game_id][territory].blue_flag.top_left.longitude;
 	
+	test.ok(ctf.game_data[game_id].players[user1.id].move_flag.red_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.red_flag.longitude, 'The red flag can't go in blue zone');	
+   
+	// Creator tries to move blue flag into red territory 
+    latitude = ctf.game_data[game_id][territory].red_flag.top_left.latitude;
+	longitude = ctf.game_data[game_id][territory].red_flag.top_left.longitude;
+	
+    test.ok(ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.longitude, 'The blue flag can't go in red zone');	
+
 
 */
 	
@@ -280,7 +300,6 @@ exports.test_flag_race_condition = function(test) {
 	
 	
     //Strict flag testing (try to rapidly switch locations and see if it messes with game)
-    //Try to move two flags at same time
     //Try to move a flag into the current bounds created
     // Test how far they can move the flag
     //See what happens if you move a flag ontop of a player or opposite flag area
@@ -293,10 +312,7 @@ exports.test_flag_race_condition = function(test) {
     //Join Game
  //test.ok(controller.join_game(game_id, user1.id, user1), "user1 could not join game");
  
-    //Test for a player other than creator to move flag
-    //Try to move flag
     //More strict testing to search for cheating, and to see if the other flag moves accordingly
-    //Try to move two flags at same time
     //Try to move a flag into the current bounds created
     //Test how far they can move the flag
     //See what happens if you move a flag ontop of a player or opposite flag area
@@ -305,7 +321,6 @@ exports.test_flag_race_condition = function(test) {
 
     //Creator leaves game
     //test.ok(controller.leave_game(game_id, user1_id), "Could not leave game");
-    //Another player tries to move flag (can anyone do it?)
      //controller.move_flag(game_id, user_id, team, latitude, longitude);
     test.done();    
 };
