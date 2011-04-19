@@ -267,104 +267,75 @@ exports.test_game_disconnect = function(test) {
     test.done();
 };
 
-/**
-
-    //exports.test_move_flag = function(test) {
-    //var game_id = "test-move-flag";
-    //var user1 = {
-    //        id: "Mike the Meek",
-    //        latitude: 29.034681,
-    //        longitude: -81.303774     
-    //};
-    //var user2 = {
-    //        id: "Matt the Marvelous",
-    //        latitude: 29.034681,
-    //        longitude: -81.303774     
-    //};
+exports.test_move_flag = function(test) {
+    var game_id = "test-move-flag";
+    var user1 = {
+            id: "Mike the Meek",
+            latitude: 29.034681,
+            longitude: -81.303774     
+    };
+    var user2 = {
+            id: "Matt the Marvelous",
+            latitude: 29.034681,
+            longitude: -81.303774     
+    };
 	
     // Create Game
-    //test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
-	//test.strictEqual(null, controller.move_flag(game_id, user_id, team, latitude, longitude), "Could not update flag location");
-
+    test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
+    test.ok(controller.join_game(game_id, user1.id, user1), "user1 could not join game");
+    test.ok(controller.join_game(game_id, user2.id, user1), "user2 could not join game");
+    
+    var blue_flag = ctf.game_data[game_id].blue_flag;
+    var red_flag = ctf.game_data[game_id].red_flag;
+    var original_blue_flag = {
+        latitude: ctf.game_data[game_id].blue_flag.latitude,
+        longitude: ctf.game_data[game_id].blue_flag.longitude
+    };
+    var original_red_flag = {
+        latitude: ctf.game_data[game_id].red_flag.latitude,
+        longitude: ctf.game_data[game_id].red_flag.longitude
+    };
 	
 	// Creator Moves Flag
-	//test.ok(controller.move_flag(game_id, user1.id, team, latitude, longitude), "Player 1 could not move flag");
+	test.strictEqual(null, controller.move_flag(game_id, user1.id, "red", red_flag.latitude - TWENTY_FEET, red_flag.longitude), "Player 1 could not move flag");
 
 	// Creator move flag while in observer mode
-	//test.strictEqual(false, controller.move_flag(game_id, user1.id.observer_mode, team, latitude, longitude), "Player 1 could not move flag while in observer mode");
-
+	ctf.game_data[game_id].players[user1.id].observer_mode = true;
+	test.strictEqual(null, controller.move_flag(game_id, user1.id, "red", red_flag.latitude + TWENTY_FEET, red_flag.longitude), "Player 1 could not move flag while in observer mode");
+	ctf.game_data[game_id].players[user1.id].observer_mode = false;
 	
-    //  Non-Creator Moves Flag
-	//test.ok(controller.move_flag(game_id, user2.id, team, latitude, longitude), "Player 2 could not move flag");
+    // Non-Creator Moves Flag
+	test.notStrictEqual(null, controller.move_flag(game_id, user2.id, "red", red_flag.latitude, red_flag.longitude), "Player 2 could move flag");
 
-	// Creator moves red flag
-	//red_flag.latitude = ctf.game_data[game_id].red_flag.latitude + TWENTY_FEET;
-    //red_flag.longitude = ctf.game_data[game_id].red_flag.longitude;
-    //test.ok(ctf.game_data[game_id].players[user1.id].move_flag.red_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.red_flag.longitude, 'Creator not move red flag');	
-    
 	// Creator moves blue flag
-	//blue_flag.latitude = ctf.game_data[game_id].blue_flag.latitude + TWENTY_FEET;
-    //blue_flag.longitude = ctf.game_data[game_id].blue_flag.longitude;
-    //test.ok(ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.longitude, 'Creator not move blue flag');	
-    
-	// Creator moves red and blue flag
-	//red_flag.latitude = ctf.game_data[game_id].red_flag.latitude + TWENTY_FEET;
-    //red_flag.longitude = ctf.game_data[game_id].red_flag.longitude;
-	
-	//blue_flag.latitude = ctf.game_data[game_id].blue_flag.latitude + TWENTY_FEET;
-    //blue_flag.longitude = ctf.game_data[game_id].blue_flag.longitude;
-	
-    //test.ok(ctf.game_data[game_id].players[user1.id].move_flag.red_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.red_flag.longitude,
-    //ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.longitude, 'Creator could not move both red and blue flags');	
+    test.strictEqual(null, controller.move_flag(game_id, user1.id, "blue", blue_flag.latitude + TWENTY_FEET, blue_flag.longitude), 'Creator not move blue flag');	
 
 	// Creator tries to move red and blue flag out of territory 
-    //latitude = ctf.game_data[game_id][territory].top_left.latitude + TWENTY_FEET;
-	//longitude = ctf.game_data[game_id][territory].top_left.longitude + TWENTY_FEET;
+    blue_flag.latitude = (blue_flag.latitude + 180) % 180;
+    blue_flag.longitude = (blue_flag.longitude + 180) % 180;
+    test.notStrictEqual(null, controller.move_flag(game_id, user1.id, "red", blue_flag.latitude, blue_flag.longitude), "Player 1 could move flag OOB");
+    test.notStrictEqual(null, controller.move_flag(game_id, user1.id, "blue", blue_flag.latitude, blue_flag.longitude), "Player 1 could move flag OOB");
 
-	//test.ok(ctf.game_data[game_id].players[user1.id].move_flag.red_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.red_flag.longitude, 'The red flag is in bounds; can't move flag outside bounds');	
-    //test.ok(ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.longitude, 'The blue flag is in bounds; can't move flag outside bounds');	
+	// Creator tries to move red flag into blue territory and vice versa
+    test.notStrictEqual(null, controller.move_flag(game_id, user1.id, "red", original_blue_flag.latitude, original_blue_flag.longitude), "Player 1 could move red flag to blue territory");
+    test.notStrictEqual(null, controller.move_flag(game_id, user1.id, "blue", original_red_flag.latitude, original_red_flag.longitude), "Player 1 could move blue flag to red territory");
+    
+    // Move to original locations
+    test.strictEqual(null, controller.move_flag(game_id, user1.id, "blue", original_blue_flag.latitude, original_blue_flag.longitude), "Player 1 could move red flag to red territory");
+    test.strictEqual(null, controller.move_flag(game_id, user1.id, "red", original_red_flag.latitude, original_red_flag.longitude), "Player 1 could move blue flag to blue territory");
 
-
-	// Creator tries to move red flag into blue territory 
-    //latitude = ctf.game_data[game_id][territory].blue_flag.top_left.latitude;
-	//longitude = ctf.game_data[game_id][territory].blue_flag.top_left.longitude;
-	
-	//test.ok(ctf.game_data[game_id].players[user1.id].move_flag.red_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.red_flag.longitude, 'The red flag can't go in blue zone');	
-   
-	// Creator tries to move blue flag into red territory 
-    //latitude = ctf.game_data[game_id][territory].red_flag.top_left.latitude;
-	//longitude = ctf.game_data[game_id][territory].red_flag.top_left.longitude;
-	
-    //test.ok(ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.longitude, 'The blue flag can't go in red zone');	
-
-
-*/
-	
-	
-	
-	
-    //Strict flag testing (try to rapidly switch locations and see if it messes with game)
-    //Try to move a flag into the current bounds created
-    // Test how far they can move the flag
-    //See what happens if you move a flag ontop of a player or opposite flag area
-    //Test to see if anything weird happens in observer mode with a flag
-    //Test moving flag out of bounds but close enough that a player can grab it  
-    // More tests to see if someone has flag, 
-    //captured it, 
-    //or if more flags have been implemented
-
-    //Join Game
- //test.ok(controller.join_game(game_id, user1.id, user1), "user1 could not join game");
- 
-    //More strict testing to search for cheating, and to see if the other flag moves accordingly
-    //Try to move a flag into the current bounds created
-    //Test how far they can move the flag
-    //See what happens if you move a flag ontop of a player or opposite flag area
-    //Test to see if anything weird happens in observer mode
-    //Test moving flag out of bounds but close enough that a player can grab it
-
-    //Creator leaves game
-    //test.ok(controller.leave_game(game_id, user1_id), "Could not leave game");
-     //controller.move_flag(game_id, user_id, team, latitude, longitude);
-  //  test.done();    
-//};
+    // Test bad coordinates
+    test.notStrictEqual(null, controller.move_flag(game_id, user1.id, "red", 6578362347875, 7864578647547), "Bad coordinate was accepted");
+    test.notStrictEqual(null, controller.move_flag(game_id, user1.id, "red", -6578362347875, -7864578647547), "Bad coordinate was accepted");
+    test.notStrictEqual(null, controller.move_flag(game_id, user1.id, "red", "potato", "celery"), "Bad coordinate was accepted");
+    test.notStrictEqual(null, controller.move_flag(game_id, user1.id, "red", "potato", 50), "Bad coordinate was accepted");
+    test.notStrictEqual(null, controller.move_flag(game_id, user1.id, "red", 50, "celery"), "Bad coordinate was accepted");
+    test.notStrictEqual(null, controller.move_flag(game_id, user1.id, "red", -180.00000001, 0), "Bad coordinate was accepted");
+    test.notStrictEqual(null, controller.move_flag(game_id, user1.id, "red", 180.00000001, 0), "Bad coordinate was accepted");
+    test.notStrictEqual(null, controller.move_flag(game_id, user1.id, "red", 0, -180.00000001), "Bad coordinate was accepted");
+    test.notStrictEqual(null, controller.move_flag(game_id, user1.id, "red", 0, 180.00000001), "Bad coordinate was accepted");
+    test.notStrictEqual(null, controller.move_flag(game_id, user1.id, "red", NaN, 0), "Bad coordinate was accepted");
+    test.notStrictEqual(null, controller.move_flag(game_id, user1.id, "red", 0, NaN), "Bad coordinate was accepted");
+    
+    test.done();    
+};
