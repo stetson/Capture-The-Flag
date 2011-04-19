@@ -322,5 +322,5 @@ exports.test_flag_race_condition = function(test) {
     //Creator leaves game
     //test.ok(controller.leave_game(game_id, user1_id), "Could not leave game");
      //controller.move_flag(game_id, user_id, team, latitude, longitude);
-    test.done();    
-};
+  //  test.done();    
+//};
