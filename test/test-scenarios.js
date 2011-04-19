@@ -9,8 +9,6 @@ var logic = new logic_class.Logic();
 var algorithms_class = require("../modules/build/default/Algorithms.node");
 var algorithms = new algorithms_class.Algorithms();
 
-console.log("Logic: ", logic.INSTANCE_TOLERANCE);
-
 // Test users    
 var user1 = {
     id: "Bob the Tester",
