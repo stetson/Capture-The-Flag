@@ -19,37 +19,40 @@ var user3 = {
     id: "Jeremy the Brave",
     latitude: 29.034681,    // 29°02′04.9″N
     longitude: -81.303774   // 81°18′13.6″W
+};
 
-};var user4 = {
+var user4 = {
     id: "Player 4",
     latitude: 29.034681,    // 29°02′04.9″N
     longitude: -81.303774   // 81°18′13.6″W
 
-};var user5 = {
+};
+
+var user5 = {
     id: "Player 5",
     latitude: 29.034681,    // 29°02′04.9″N
     longitude: -81.303774   // 81°18′13.6″W
 };
 
 exports.test_observer_tagging = function(test) {
-    var user_id = "Red1";
-    var game_id = "test_game";
-    var user = {
+    var game_id = "test_observer_tagging";
+	
+    var Red1 = {
+		id: "Red1",
         latitude: 29.034681,
         longitude: -81.303774     
     };
     
-    var user_id = "Blue1";
-    var game_id = "test_game";
-    var user = {
+    var Blue1 = {
+		id: "Blue1",
         latitude: 29.034681,
         longitude: -81.303774     
     };
 	
 	// Create game
     test.ok(controller.create_game(game_id, Red1.id, Red1.latitude, Red1.longitude), "Could not create game");
-    test.ok(controller.join_game(game_id, Red1.id, Red1), "user1 could not join game"); // Red team
-    test.ok(controller.join_game(game_id, Blue1.id, Blue1), "user3 could not join game"); // Blue team
+    test.ok(controller.join_game(game_id, Red1.id, Red1), "Red1 could not join game"); // Red team
+    test.ok(controller.join_game(game_id, Blue1.id, Blue1), "Blue1 could not join game"); // Blue team
    
     // Run business logic
     logic.run(ctf.game_data[game_id]);
@@ -92,16 +95,16 @@ exports.test_observer_tagging = function(test) {
 };
 	
 exports.test_observer_capturing = function(test){
-	var user_id = "Red1";
-    var game_id = "test_game";
-    var user = {
+    var game_id = "test_observer_capturing";
+
+    var Red1 = {
+		id: "Red1",
         latitude: 29.034681,
         longitude: -81.303774     
     };
     
-    var user_id = "Blue1";
-    var game_id = "test_game";
-    var user = {
+    var Blue1 = {
+		id: "Blue1",
         latitude: 29.034681,
         longitude: -81.303774    
     };
@@ -147,10 +150,23 @@ exports.test_observer_capturing = function(test){
 };
 
 exports.test_capturing_over_team_bounds = function(test){
+	var game_id = "test_capturing_over_team_bounds";
 
+    var Red1 = {
+		id: "Red1",
+        latitude: 29.034681,
+        longitude: -81.303774     
+    };
+    
+    var Blue1 = {
+		id: "Blue1",
+        latitude: 29.034681,
+        longitude: -81.303774    
+    };
+	
 	// Create game
-	test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
-	test.ok(controller.join_game(game_id, user1.id, user1), "user1 could not join game"); // Red team
+	test.ok(controller.create_game(game_id, Red1.id, Red1.latitude, Red1.longitude), "Could not create game");
+	test.ok(controller.join_game(game_id, Red1.id, Red1), "Red1 could not join game"); // Red team
     test.ok(controller.join_game(game_id, Blue1.id, Blue1), "Blue1 could not join game"); // Blue team
 
 	// Run business logic
