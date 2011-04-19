@@ -45,19 +45,11 @@ exports.test_observer_tagging = function(test) {
         latitude: 29.034681,
         longitude: -81.303774     
     };
-    
-    var user_id = "Red2";
-    var game_id = "test_game";
-    var user = {
-        latitude: 29.034681,
-        longitude: -81.303774     
-    };
 	
-	//Create game
+	// Create game
     test.ok(controller.create_game(game_id, Red1.id, Red1.latitude, Red1.longitude), "Could not create game");
     test.ok(controller.join_game(game_id, Red1.id, Red1), "user1 could not join game"); // Red team
     test.ok(controller.join_game(game_id, Blue1.id, Blue1), "user3 could not join game"); // Blue team
-    test.ok(controller.join_game(game_id, Red2.id, Red2), "user4 could not join game"); // Red team
    
     // Run business logic
     logic.run(ctf.game_data[game_id]);
@@ -65,31 +57,42 @@ exports.test_observer_tagging = function(test) {
 	// Test preconditions
     test.equal("red", ctf.game_data[game_id].players[Red1.id].team, "Red1 isn't on the red team");
     test.equal("blue", ctf.game_data[game_id].players[Blue1.id].team, "Blue1 isn't on the red team");
-    test.equal("red", ctf.game_data[game_id].players[Red2.id].team, "Red2 isn't on the red team");
     test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 is in observer mode");
     test.strictEqual(false, ctf.game_data[game_id].players[Blue1.id].observer_mode, "Blue1 is in observer mode");
-    test.strictEqual(false, ctf.game_data[game_id].players[Red2.id].observer_mode, "Red2 is in observer mode");
    
-    // Move Red1 to blue flag area
+    // Move Red1 to blue flag area near edge
     Red1.latitude = ctf.game_data[game_id].blue_flag.latitude;
     Red1.longitude = ctf.game_data[game_id].blue_flag.longitude;
+	Red1.latitude += TWENTY_FEET/2;
 	
-    // Check to see if Red1 has flag
+	// Update logic
+    logic.run(ctf.game_data[game_id]);
+    
+	// Check to see if Red1 has flag
     test.strictEqual(true, ctf.game_data[game_id].players[Red1.id].has_flag, "Red1 does not have the flag");
 
     // Move Blue1 to outside field but within tagging range of Red1
-    
+    Blue1.latitude = ctf.game_data[game_id].blue_flag.latitude;
+    Blue1.longitude = ctf.game_data[game_id].blue_flag.longitude;
+	Blue1.latitude += TWENTY_FEET;
+	
     // Update logic
+    logic.run(ctf.game_data[game_id]);
     
-    // Check that Blue1 is in observer mode
-    
-    // Check to see if Red1 is still active and has flag
+    // Check that Red1 is not in observer mode
+	test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 is in observer mode");
+	
+	// Check that Blue1 is in observer mode
+    test.strictEqual(true, ctf.game_data[game_id].players[Blue1.id].observer_mode, "Blue1 is not in observer mode");
+	
+    // Check to see if Red1 has flag
+	test.strictEqual(true, ctf.game_data[game_id].players[Red1.id].has_flag, "Red1 does not have the flag");
 
     test.done();
 };
-
-exports.test_tagging = function(test) {
-    var user_id = "Red1";
+	
+exports.test_observer_capturing = function(test){
+	var user_id = "Red1";
     var game_id = "test_game";
     var user = {
         latitude: 29.034681,
@@ -102,71 +105,80 @@ exports.test_tagging = function(test) {
         latitude: 29.034681,
         longitude: -81.303774    
     };
-	
-	test.done();
-};
-	
-exports.test_observer_capturing = function(test){
-	// Create game
-    test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
-    test.ok(controller.join_game(game_id, user1.id, user1), "user1 could not join game"); // Red team
-    test.ok(controller.join_game(game_id, user2.id, user2), "user2 could not join game"); // Blue team
 
+	// Create game
+    test.ok(controller.create_game(game_id, Red1.id, Red1.latitude, Red1.longitude), "Could not create game");
+    test.ok(controller.join_game(game_id, Red1.id, Red1), "Red1 could not join game"); // Red team
+    test.ok(controller.join_game(game_id, Blue1.id, Blue1), "Blue1 could not join game"); // Blue team
+
+	// Run business logic
+    logic.run(ctf.game_data[game_id]);
+	
+	// Test preconditions
+    test.equal("red", ctf.game_data[game_id].players[Red1.id].team, "Red1 isn't on the red team");
+    test.equal("blue", ctf.game_data[game_id].players[Blue1.id].team, "Blue1 isn't on the red team");
+    test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 is in observer mode");
+    test.strictEqual(false, ctf.game_data[game_id].players[Blue1.id].observer_mode, "Blue1 is in observer mode");
+	
     // Move Red1 to blue flag area
-    user1.latitude = ctf.game_data[game_id].blue_flag.latitude;
-    user1.longitude = ctf.game_data[game_id].blue_flag.longitude;
+    Red1.latitude = ctf.game_data[game_id].blue_flag.latitude;
+    Red1.longitude = ctf.game_data[game_id].blue_flag.longitude;
+	
+	// Update logic
+    logic.run(ctf.game_data[game_id]);
 	
     // Check to see if Red1 has flag
-    test.strictEqual(true, ctf.game_data[game_id].players[user1.id].has_flag, "user1 does not have the flag");
+    test.strictEqual(true, ctf.game_data[game_id].players[Red1.id].has_flag, "Red1 does not have the flag");
 
     // Move Blue1 to tagging distance of Red1 within field
-    user2.latitude = ctf.game_data[game_id].blue_flag.latitude;
-    user2.longitude = ctf.game_data[game_id].blue_flag.longitude;
+    Blue1.latitude = ctf.game_data[game_id].blue_flag.latitude;
+    Blue1.longitude = ctf.game_data[game_id].blue_flag.longitude;
     
 	// Update logic
     logic.run(ctf.game_data[game_id]);
 	 
     // Check to see if Red1 is in observer mode
-    test.strictEqual(true, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 did not get put in observer mode");
+    test.strictEqual(true, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 did not get put in observer mode");
     
 	// Make sure Red1 does not have the flag
-    test.notEqual(true, ctf.game_data[game_id].players[user1.id].has_flag, "user3 does not have the flag");
+    test.notEqual(true, ctf.game_data[game_id].players[Red1.id].has_flag, "Red1 does not have the flag");
 
     test.done();
 };
 
-exports.test_observor_tagging = function(test){
+exports.test_capturing_over_team_bounds = function(test){
 
-	//Create game
+	// Create game
 	test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
 	test.ok(controller.join_game(game_id, user1.id, user1), "user1 could not join game"); // Red team
-    test.ok(controller.join_game(game_id, user2.id, user2), "user2 could not join game"); // Blue team
+    test.ok(controller.join_game(game_id, Blue1.id, Blue1), "Blue1 could not join game"); // Blue team
 
-	// Move Red1 to blue flag area near border
-	user1.latitude = ctf.game_data[game_id].blue_flag.latitude;
-    user1.longitude = ctf.game_data[game_id].blue_flag.longitude;
-	user1.latitude += TWENTY_FEET/2;
+	// Run business logic
+    logic.run(ctf.game_data[game_id]);
 	
-	//Check to see if Red1 has flag
-	test.strictEqual(true, ctf.game_data[game_id].players[user1.id].has_flag, "user1 does not have the flag");
+	// Test preconditions
+    test.equal("red", ctf.game_data[game_id].players[Red1.id].team, "Red1 isn't on the red team");
+    test.equal("blue", ctf.game_data[game_id].players[Blue1.id].team, "Blue1 isn't on the red team");
+    test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 is in observer mode");
+    test.strictEqual(false, ctf.game_data[game_id].players[Blue1.id].observer_mode, "Blue1 is in observer mode");
 	
-	// Move Blue1 to tagging distance of Red1 outside the field
-    user2.latitude = ctf.game_data[game_id].blue_flag.latitude;
-    user2.longitude = ctf.game_data[game_id].blue_flag.longitude;
-	user2.latitude += TWENTY_FEET;
+	// Move Red1 to near his own side near the border
+    Red1.latitude = ctf.game_data[game_id].origin.latitude - TWENTY_FEET/2;
+    Red1.longitude = ctf.game_data[game_id].origin.longitude;
 	
-	//Check Blue1 is in observer mode
-	test.strictEqual(true, ctf.game_data[game_id].players[user2.id].observer_mode, "user2 is not in observer mode");
+	//Move the Blue flag to near the border on the Blue side
+	ctf.game_data[game_id].blue_flag.latitude = ctf.game_data[game_id].origin.latitude + TWENTY_FEET/2;
+	ctf.game_data[game_id].blue_flag.longitude = ctf.game_data[game_id].origin.longitude;
 
-	//Run logic
-	logic.run(ctf.game_data[game_id]);
+	// Update logic
+    logic.run(ctf.game_data[game_id]);
 
-	//Check to see if Red1 is in observor mode
-	test.strictEqual(true, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 is not in observer mode");
+	// Check if Red1 is in observer mode
+	test.strictEqual(true, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 is not in observer mode");
+
+	// Check if Red 1 has the flag
+	test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].has_flag, "Red1 does have the flag");
 	
-	//Check to see if Red1 has the flag
-	test.strictEqual(true, ctf.game_data[game_id].players[user1.id].has_flag, "user1 does not have the flag");
-
 test.done();
 };
 
