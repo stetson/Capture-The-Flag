@@ -104,6 +104,9 @@ global.ctf = {};
  *         // The last time anyone in this game updated
  *         last_update: DateTime,
  *         
+ *         // The size of the field
+ *         field_size: Number,
+ *         
  *         // The player objects
  *         players: {
  *         

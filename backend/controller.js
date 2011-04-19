@@ -198,6 +198,15 @@ exports.get_games = function(user_latitude, user_longitude) {
 
 /**
  * Create a new game, and return the id
+ * <pre>
+ * |~~~~~~~~~~~~~~|
+ * |              |
+ * |______________|
+ * |          \   |
+ * |  r=sqrt(fs)\ | height = field_size
+ * |_____________\|
+ *    2 * field_size
+ * </pre>
  * 
  * @memberOf controller
  * @name create_game
@@ -207,24 +216,30 @@ exports.get_games = function(user_latitude, user_longitude) {
  * @returns {Boolean} if successful
  * @function
  */
-exports.create_game = function(game_id, user_id, latitude, longitude) {
+exports.create_game = function(game_id, user_id, latitude, longitude, field_size) {
     if (ctf.game_data[game_id] === undefined && latitude && longitude) {
+        // Dynamically set field size
+        if (! field_size) {
+            field_size = GAME_SIZE_IN_MI;
+        }
+        
+        // Create game
         ctf.game_data[game_id] = {
             origin: {
                 'latitude': latitude,
                 'longitude': longitude
             },
-            red_flag: algorithms.add_miles_to_coordinate(latitude, longitude, 0.9 * GAME_SIZE_IN_MI, 0),
-            blue_flag: algorithms.add_miles_to_coordinate(latitude, longitude, 0.9 * GAME_SIZE_IN_MI, 180),
+            red_flag: algorithms.add_miles_to_coordinate(latitude, longitude, 0.9 * field_size, 0),
+            blue_flag: algorithms.add_miles_to_coordinate(latitude, longitude, 0.9 * field_size, 180),
             red_flag_captured: false,
             blue_flag_captured: false,
             red_bounds: {
-                top_left: algorithms.add_miles_to_coordinate(latitude, longitude, Math.sqrt(2 * Math.pow(GAME_SIZE_IN_MI, 2)), 315),
-                bottom_right: algorithms.add_miles_to_coordinate(latitude, longitude, GAME_SIZE_IN_MI, 90)
+                top_left: algorithms.add_miles_to_coordinate(latitude, longitude, Math.sqrt(2 * Math.pow(field_size, 2)), 315),
+                bottom_right: algorithms.add_miles_to_coordinate(latitude, longitude, field_size, 90)
             },
             blue_bounds: {
-                top_left: algorithms.add_miles_to_coordinate(latitude, longitude, GAME_SIZE_IN_MI, 270),
-                bottom_right: algorithms.add_miles_to_coordinate(latitude, longitude, Math.sqrt(2 * Math.pow(GAME_SIZE_IN_MI, 2)), 135)
+                top_left: algorithms.add_miles_to_coordinate(latitude, longitude, field_size, 270),
+                bottom_right: algorithms.add_miles_to_coordinate(latitude, longitude, Math.sqrt(2 * Math.pow(field_size, 2)), 135)
             },
             last_update: new Date(),
             players: {},
@@ -232,7 +247,8 @@ exports.create_game = function(game_id, user_id, latitude, longitude) {
             blue: 0,
             red_score: 0,
             blue_score: 0,
-            creator: user_id
+            creator: user_id,
+            field_size: field_size
         };
         
         // Fix the precision of the bounds so in_rectangle can accurately judge in bounds
