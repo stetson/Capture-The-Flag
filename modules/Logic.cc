@@ -277,6 +277,9 @@
     Local<Object> flag;
     Local<String> team;
 	  Local<String> captured;
+	  Local<Object> bounds;
+	  Local<Object> top_left;
+	  Local<Object> bottom_right;
 
 	  // If the player is in observer mode, then short circuit
 	  if (player->Get(String::New("observer_mode"))->BooleanValue()) {
@@ -295,20 +298,30 @@
     {
       flag = game->Get(String::New("blue_flag"))->ToObject();
       captured = String::New("blue_flag_captured");
+      bounds = game->Get(String::New("blue_bounds"))->ToObject();
     }
     else
     {
       flag = game->Get(String::New("red_flag"))->ToObject();
       captured = String::New("red_flag_captured");
+      bounds = game->Get(String::New("red_bounds"))->ToObject();
     }
 
+    // Get the boundary points
+    top_left = bounds->Get(String::New("top_left"))->ToObject();
+    bottom_right = bounds->Get(String::New("bottom_right"))->ToObject();
+
     // Check to see if player's distance is less then the tolerance of the
-    // flags and if it is then give the player the opposite team's flag
+    // flags and if they are in the opposite team's bounds,
+    // then give the player the opposite team's flag
     if (Algorithms::distance_in_miles(
         player->Get(latitude)->NumberValue(), player->Get(longitude)->NumberValue(),
         flag->Get(latitude)->NumberValue(), flag->Get(longitude)->NumberValue())
       < TOLERANCE
-      && game->Get(captured)->IsFalse())
+      && game->Get(captured)->IsFalse()
+      && Algorithms::in_rectangle(player->Get(latitude)->NumberValue(), player->Get(longitude)->NumberValue(),
+          top_left->Get(latitude)->NumberValue(), top_left->Get(longitude)->NumberValue(),
+          bottom_right->Get(latitude)->NumberValue(), bottom_right->Get(longitude)->NumberValue()))
     {
       // Give player the flag
       player->Set(String::New("has_flag"), Boolean::New(true));

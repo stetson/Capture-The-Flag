@@ -171,56 +171,72 @@ exports.test_observer_capturing = function(test){
 
     test.done();
 };
+*/
 
 exports.test_capturing_over_team_bounds = function(test){
-	var game_id = "test_capturing_over_team_bounds";
+    var game_id = "test_capturing_over_team_bounds";
 
     var Red1 = {
-		id: "Red1",
+        id: "Red1",
         latitude: 29.034681,
         longitude: -81.303774     
     };
     
     var Blue1 = {
-		id: "Blue1",
-        latitude: 29.034681,
-        longitude: -81.303774    
+        id: "Blue1",
+        latitude: Red1.latitude - TWENTY_FEET,
+        longitude: Red1.longitude    
     };
-	
-	// Create game
-	test.ok(controller.create_game(game_id, Red1.id, Red1.latitude, Red1.longitude), "Could not create game");
-	test.ok(controller.join_game(game_id, Red1.id, Red1), "Red1 could not join game"); // Red team
+    
+    // Create game
+    test.ok(controller.create_game(game_id, Red1.id, Red1.latitude, Red1.longitude), "Could not create game");
+    test.ok(controller.join_game(game_id, Red1.id, Red1), "Red1 could not join game"); // Red team
     test.ok(controller.join_game(game_id, Blue1.id, Blue1), "Blue1 could not join game"); // Blue team
 
-	// Run business logic
+    // Run business logic
     logic.run(ctf.game_data[game_id]);
-	
-	// Test preconditions
+    
+    // Test preconditions
     test.equal("red", ctf.game_data[game_id].players[Red1.id].team, "Red1 isn't on the red team");
     test.equal("blue", ctf.game_data[game_id].players[Blue1.id].team, "Blue1 isn't on the red team");
     test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 is in observer mode");
     test.strictEqual(false, ctf.game_data[game_id].players[Blue1.id].observer_mode, "Blue1 is in observer mode");
-	
-	// Move Red1 to near his own side near the border
-    Red1.latitude = ctf.game_data[game_id].origin.latitude - TWENTY_FEET/2;
-    Red1.longitude = ctf.game_data[game_id].origin.longitude;
+    test.equal(0, ctf.game_data[game_id].players[Red1.id].captures, "Red1 should not have any captures");
+    test.equal(0, ctf.game_data[game_id].players[Blue1.id].tags, "Blue1 should not have any tags");
+    
+    // Move Red1 to near his own side near the border
+    var near_border = algorithms.add_miles_to_coordinate(ctf.game_data[game_id].origin.latitude,
+            ctf.game_data[game_id].origin.longitude, (TOLERANCE / 3), 0);
+    Red1.latitude =  near_border.latitude;
+    test.strictEqual(null, controller.update_location(game_id, Red1.id, Red1), "Could not move Red1");
 
-	//Move the Blue flag to near the border on the Blue side
-	test.ok(controller.move_flag(game_id, Blue1.id, ctf.game_data[game_id].players[Blue1.id].team,
-	ctf.game_data[game_id].origin.latitude + TWENTY_FEET/2, ctf.game_data[game_id].origin.longitude));
+    // Move the Blue flag to near the border on the Blue side
+    var near_border = algorithms.add_miles_to_coordinate(ctf.game_data[game_id].origin.latitude,
+            ctf.game_data[game_id].origin.longitude, (TOLERANCE / 3), 180);
+    test.strictEqual(null, controller.move_flag(game_id, Red1.id, "blue",
+            near_border.latitude, near_border.longitude));
 
-	// Update logic
-    logic.run(ctf.game_data[game_id]);
+    // Update logic
+    for (var i = 0; i < 100; i++) {
+        logic.run(ctf.game_data[game_id]);
+    }
 
-	// Check if Red1 is in observer mode
-	test.strictEqual(true, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 is not in observer mode");
+    // Check if Red1 is in observer mode
+    test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 is in observer mode");
 
-	// Check if Red 1 has the flag
-	test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].has_flag, "Red1 does have the flag");
-	
+    // Check if Red 1 has the flag
+    test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].has_flag, "Red1 does have the flag");
+    
+    // Check that Red1 has no captures
+    test.equal(0, ctf.game_data[game_id].players[Red1.id].captures, "Red1 should not have any captures");
+    
+    // Check that Blue1 has no tags
+    test.equal(0, ctf.game_data[game_id].players[Blue1.id].tags, "Blue1 should not have any tags");
+    
 test.done();
 };
 
+/**
 exports.test_double_tag_over_flag = function(test) {
     var game_id = "test_double_tag_over_flag";
 
