@@ -275,7 +275,7 @@ exports.test_flag_race_condition = function(test) {
 
 	// Creator tries to move red and blue flag out of territory 
     //latitude = ctf.game_data[game_id][territory].top_left.latitude + TWENTY_FEET;
-	longitude = ctf.game_data[game_id][territory].top_left.longitude + TWENTY_FEET;
+	//longitude = ctf.game_data[game_id][territory].top_left.longitude + TWENTY_FEET;
 
 	//test.ok(ctf.game_data[game_id].players[user1.id].move_flag.red_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.red_flag.longitude, 'The red flag is in bounds; can't move flag outside bounds');	
     //test.ok(ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.latitude, ctf.game_data[game_id].players[user1.id].move_flag.blue_flag.longitude, 'The blue flag is in bounds; can't move flag outside bounds');	
