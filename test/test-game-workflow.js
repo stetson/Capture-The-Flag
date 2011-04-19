@@ -9,25 +9,6 @@ var logic = new logic_class.Logic();
 algorithms_class = require("../modules/build/default/Algorithms.node");
 var algorithms = new algorithms_class.Algorithms();
 
-// Test users    
-var user1 = {
-    id: "Bob the Tester",
-    latitude: 29.034681,    // 29°02′04.9″N
-    longitude: -81.303774   // 81°18′13.6″W
-};
-
-var user2 = {
-    id: "Laura the Amazing",
-    latitude: 29.034681,    // 29°02′04.9″N
-    longitude: -81.303774   // 81°18′13.6″W
-};
-
-var user3 = {
-    id: "Jeremy the Brave",
-    latitude: 29.034681,    // 29°02′04.9″N
-    longitude: -81.303774   // 81°18′13.6″W
-};
-
 exports.test_game_workflow = function(test) {
     var game_id = "test_workflow";
     var user1 = {
@@ -43,7 +24,7 @@ exports.test_game_workflow = function(test) {
     };
     
     var user3 = {
-            id: "Dan the man",
+            id: "Laura the amazing",
             latitude: 29.034681,
             longitude: -81.303774     
     };
@@ -68,6 +49,11 @@ exports.test_game_workflow = function(test) {
     test.notStrictEqual(undefined, ctf.game_data[game_id].players[user1.id].observer_mode, "No observer mode");
     test.notStrictEqual(undefined, ctf.game_data[game_id].players[user1.id].team, "No team");
     
+    // Ensure everyone is on the right team
+    test.equal("red", ctf.game_data[game_id].players[user1.id].team, "Not on red team");
+    test.equal("blue", ctf.game_data[game_id].players[user2.id].team, "Not on blue team");
+    test.equal("red", ctf.game_data[game_id].players[user3.id].team, "Not on red team");
+    
     // Update location
     test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location");
     test.notStrictEqual(undefined, ctf.game_data[game_id].players[user1.id].observer_mode, "No observer mode");
@@ -78,7 +64,7 @@ exports.test_game_workflow = function(test) {
     
     // Pass messages
     var message_status = controller.send_message(game_id, user1.id, user2.id, "I hope you lose.");
-    test.strictEqual(null, message_status, "Message sent to opposite team:" + message_status);
+    test.notStrictEqual(null, message_status, "Message sent to opposite team:" + message_status);
     var message_status = controller.send_message(game_id, user1.id, user3.id, "This is my favoritest feature!");
     test.strictEqual(null, message_status, "Could not send String message:" + message_status);
     var complex_object = {
@@ -109,6 +95,23 @@ exports.test_game_workflow = function(test) {
 
 exports.test_flag_race_condition = function(test) {
     var game_id = "test-game-workflow";
+    var user1 = {
+            id: "Bob the tester",
+            latitude: 29.034681,
+            longitude: -81.303774     
+    };
+    
+    var user2 = {
+            id: "Dan the man",
+            latitude: 29.034681,
+            longitude: -81.303774     
+    };
+    
+    var user3 = {
+            id: "Laura the amazing",
+            latitude: 29.034681,
+            longitude: -81.303774     
+    };
     
     // Create game
     test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
