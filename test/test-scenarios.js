@@ -435,3 +435,127 @@ exports.test_no_capture_in_observer_mode = function(test) {
     test.done();    
 };
 **/
+
+exports.test_double_entente = function(test) {
+    var game_id = "test_double_entente";
+    var user1 = {
+            id: "Bob the tester",
+            latitude: 29.034681,
+            longitude: -81.303774     
+    };
+    
+    var user2 = {
+            id: "Dan the man",
+            latitude: 29.034681,
+            longitude: -81.303774     
+    };
+    
+    // Create game
+    test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
+    test.ok(controller.join_game(game_id, user1.id, user1), "Could not join game");
+    test.ok(controller.join_game(game_id, user2.id, user2), "Could not join game");
+    
+    // Flag sit
+    user1.latitude = ctf.game_data[game_id].red_flag.latitude;
+    user1.longitude = ctf.game_data[game_id].red_flag.longitude;
+    user2.latitude = ctf.game_data[game_id].blue_flag.latitude;
+    user2.longitude = ctf.game_data[game_id].blue_flag.longitude;
+    test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to starting point");
+    test.strictEqual(null, controller.update_location(game_id, user2.id, user2), "Could not update location to starting point");
+    
+    // Run business logic
+    logic.run(ctf.game_data[game_id]);
+    
+    // Test preconditions
+    test.strictEqual(true, algorithms.in_rectangle(user1.latitude, user1.longitude,
+            ctf.game_data[game_id].red_bounds.top_left.latitude, ctf.game_data[game_id].red_bounds.top_left.longitude,
+            ctf.game_data[game_id].red_bounds.bottom_right.latitude, ctf.game_data[game_id].red_bounds.bottom_right.longitude), 'Player 1 not where expected');
+    test.strictEqual(true, algorithms.in_rectangle(user2.latitude, user2.longitude,
+            ctf.game_data[game_id].blue_bounds.top_left.latitude, ctf.game_data[game_id].blue_bounds.top_left.longitude,
+            ctf.game_data[game_id].blue_bounds.bottom_right.latitude, ctf.game_data[game_id].blue_bounds.bottom_right.longitude), 'Player 1 not where expected');
+    test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "user1 got put into observer mode");
+    test.strictEqual(false, ctf.game_data[game_id].players[user2.id].observer_mode, "user2 got put into observer mode");
+    test.equal(0, ctf.game_data[game_id].players[user1.id].tags, "User1 has a tag");
+    test.equal(0, ctf.game_data[game_id].players[user2.id].tags, "User2 has a tag");
+    test.equal(0, ctf.game_data[game_id].players[user1.id].captures, "User1 has a capture");
+    test.equal(0, ctf.game_data[game_id].players[user2.id].captures, "User2 has a capture");
+    test.equal(0, ctf.game_data[game_id].red_score, "Red score is not 0");
+    test.equal(0, ctf.game_data[game_id].blue_score, "Blue score is not 0");
+    test.strictEqual(false, ctf.game_data[game_id].players[user1.id].has_flag, "user1 does not have flag");
+    test.strictEqual(false, ctf.game_data[game_id].players[user1.id].has_flag, "user1 does not have flag");
+    
+    // Double capture
+    user1.latitude = ctf.game_data[game_id].blue_flag.latitude;
+    user1.longitude = ctf.game_data[game_id].blue_flag.longitude;
+    user2.latitude = ctf.game_data[game_id].red_flag.latitude;
+    user2.longitude = ctf.game_data[game_id].red_flag.longitude;
+    test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to flag");
+    test.strictEqual(null, controller.update_location(game_id, user2.id, user2), "Could not update location to flag");
+    
+    // Run business logic
+    logic.run(ctf.game_data[game_id]);
+    
+    // Test that both players have the flag
+    test.ok(ctf.game_data[game_id].players[user1.id].has_flag, "user1 does not have flag");
+    test.ok(ctf.game_data[game_id].players[user2.id].has_flag, "user2 does not have flag");
+    
+    // Move both players within range of each other across the boundary line
+    user1_new_location = algorithms.add_miles_to_coordinate(
+            ctf.game_data[game_id].origin.latitude,
+            ctf.game_data[game_id].origin.longitude, (TOLERANCE / 3), 180);
+    user2_new_location = algorithms.add_miles_to_coordinate(
+            ctf.game_data[game_id].origin.latitude,
+            ctf.game_data[game_id].origin.longitude, (TOLERANCE / 3), 0);
+    user1.latitude = user1_new_location.latitude;
+    user1.longitude = user1_new_location.longitude;
+    user2.latitude = user2_new_location.latitude;
+    user2.longitude = user2_new_location.longitude;
+    test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to border");
+    test.strictEqual(null, controller.update_location(game_id, user2.id, user2), "Could not update location to border");
+    
+    // Run business logic
+    for (var i = 0; i < 100; i++) {
+        logic.run(ctf.game_data[game_id]);
+    }
+    
+    // Test that tags and captures are 0 and no one is in observer mode
+    test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "User1 has a tag");
+    test.strictEqual(false, ctf.game_data[game_id].players[user2.id].observer_mode, "User2 has a tag");
+    test.equal(0, ctf.game_data[game_id].players[user1.id].tags, "User1 has a tag");
+    test.equal(0, ctf.game_data[game_id].players[user2.id].tags, "User2 has a tag");
+    test.equal(0, ctf.game_data[game_id].players[user1.id].captures, "User1 has a capture");
+    test.equal(0, ctf.game_data[game_id].players[user2.id].captures, "User2 has a capture");
+    test.equal(0, ctf.game_data[game_id].red_score, "Red score is not 0");
+    test.equal(0, ctf.game_data[game_id].blue_score, "Blue score is not 0");
+    
+    // Swap places
+    user1_new_location = algorithms.add_miles_to_coordinate(
+            ctf.game_data[game_id].origin.latitude,
+            ctf.game_data[game_id].origin.longitude, (TOLERANCE / 3), 0);
+    user2_new_location = algorithms.add_miles_to_coordinate(
+            ctf.game_data[game_id].origin.latitude,
+            ctf.game_data[game_id].origin.longitude, (TOLERANCE / 3), 180);
+    user1.latitude = user1_new_location.latitude;
+    user1.longitude = user1_new_location.longitude;
+    user2.latitude = user2_new_location.latitude;
+    user2.longitude = user2_new_location.longitude;
+    test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to border");
+    test.strictEqual(null, controller.update_location(game_id, user2.id, user2), "Could not update location to border");
+    
+    // Run business logic
+    for (var i = 0; i < 100; i++) {
+        logic.run(ctf.game_data[game_id]);
+    }
+    
+    // Test that both players have no tags and 1 capture each, and that scores have been incremented
+    test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "User1 has a tag");
+    test.strictEqual(false, ctf.game_data[game_id].players[user2.id].observer_mode, "User2 has a tag");
+    test.equal(0, ctf.game_data[game_id].players[user1.id].tags, "User1 has a tag");
+    test.equal(0, ctf.game_data[game_id].players[user2.id].tags, "User2 has a tag");
+    test.equal(1, ctf.game_data[game_id].players[user1.id].captures, "User1 has a capture");
+    test.equal(1, ctf.game_data[game_id].players[user2.id].captures, "User2 has a capture");
+    test.equal(1, ctf.game_data[game_id].red_score, "Red score is not 1");
+    test.equal(1, ctf.game_data[game_id].blue_score, "Blue score is not 1");
+    
+    test.done();
+};
