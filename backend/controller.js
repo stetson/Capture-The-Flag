@@ -318,7 +318,14 @@ exports.leave_game = function(game_id, user_id) {
     ctf.game_data[game_id][ctf.game_data[game_id].players[user_id].team] -= 1;
     if (ctf.game_data[game_id][ctf.game_data[game_id].players[user_id].team] < 0) {
         ctf.game_data[game_id][ctf.game_data[game_id].players[user_id].team] = 0;
-    }        
+    }
+    
+    // Return the flag if they have it
+    if (ctf.game_data[game_id].players[user_id].has_flag) {
+        var flag = ctf.game_data[game_id].players[user_id].team = 
+            "red" ? "blue_flag_captured" : "red_flag_captured";
+        ctf.game_data[game_id][flag] = false;
+    }
     
     // Delete them from the game
     delete ctf.game_data[game_id].players[user_id];

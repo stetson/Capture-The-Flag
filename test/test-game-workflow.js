@@ -35,11 +35,13 @@ exports.test_game_workflow = function(test) {
             latitude: 29.034681,
             longitude: -81.303774     
     };
+    
     var user2 = {
             id: "Dan the man",
             latitude: 29.034681,
             longitude: -81.303774     
     };
+    
     var user3 = {
             id: "Dan the man",
             latitude: 29.034681,
@@ -221,6 +223,48 @@ exports.test_flag_race_condition = function(test) {
     // Test that flag is not captured
     test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "The user doesn't have the flag");
     test.done();    
+};
+
+exports.test_game_disconnect = function(test) {
+    var game_id = "test_game_disconnect";
+    var user1 = {
+            id: "Bob the tester",
+            latitude: 29.034681,
+            longitude: -81.303774     
+    };
+    
+    // Create game
+    test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
+    test.ok(controller.join_game(game_id, user1.id, user1), "user1 could not join game");
+    
+    // Run business logic
+    logic.run(ctf.game_data[game_id]);
+    
+    // Test preconditions
+    test.equal("red", ctf.game_data[game_id].players[user1.id].team, "User isn't on red team");
+    test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "User is in observer_mode");
+    
+    // Move player over flag
+    user1.latitude = ctf.game_data[game_id].blue_flag.latitude;
+    user1.longitude = ctf.game_data[game_id].blue_flag.longitude;
+    test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not move player over flag");
+    
+    // Run business logic
+    logic.run(ctf.game_data[game_id]);
+    
+    // Check that flag is captured
+    test.strictEqual(true, ctf.game_data[game_id].blue_flag_captured, "Blue flag is not captured");
+    
+    // Disconnect
+    test.ok(controller.leave_game(game_id, user1.id), "Could not leave game");
+    
+    // Run business logic
+    logic.run(ctf.game_data[game_id]);
+    
+    // Check that flag is captured
+    test.strictEqual(false, ctf.game_data[game_id].blue_flag_captured, "Blue flag is captured");
+    
+    test.done();
 };
 
 /**
