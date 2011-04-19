@@ -181,11 +181,11 @@ exports.test_capturing_over_team_bounds = function(test){
 	// Move Red1 to near his own side near the border
     Red1.latitude = ctf.game_data[game_id].origin.latitude - TWENTY_FEET/2;
     Red1.longitude = ctf.game_data[game_id].origin.longitude;
-	
+	/*
 	//Move the Blue flag to near the border on the Blue side
 	ctf.game_data[game_id].blue_flag.latitude = ctf.game_data[game_id].origin.latitude + TWENTY_FEET/2;
 	ctf.game_data[game_id].blue_flag.longitude = ctf.game_data[game_id].origin.longitude;
-
+*/
 	// Update logic
     logic.run(ctf.game_data[game_id]);
 
