@@ -170,7 +170,7 @@ exports.test_observer_capturing = function(test){
 
     test.done();
 };
-/**
+
 exports.test_capturing_over_team_bounds = function(test){
     var game_id = "test_capturing_over_team_bounds";
 
