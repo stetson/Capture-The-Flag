@@ -116,7 +116,6 @@ exports.test_observer_tagging = function(test) {
     test.done();
 };
 
-/**
 exports.test_observer_capturing = function(test){
     var game_id = "test_observer_capturing";
 
@@ -164,15 +163,14 @@ exports.test_observer_capturing = function(test){
     logic.run(ctf.game_data[game_id]);
 	 
     // Check to see if Red1 is in observer mode
-    test.strictEqual(true, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 did not get put in observer mode");
+    test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 should not in observer mode");
     
 	// Make sure Red1 does not have the flag
-    test.notEqual(true, ctf.game_data[game_id].players[Red1.id].has_flag, "Red1 does not have the flag");
+    test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].has_flag, "Red1 should not have the flag");
 
     test.done();
 };
-*/
-
+/**
 exports.test_capturing_over_team_bounds = function(test){
     var game_id = "test_capturing_over_team_bounds";
 
