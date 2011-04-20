@@ -68,8 +68,8 @@ exports.test_observer_tagging = function(test) {
 	// Test preconditions
     test.equal("red", ctf.game_data[game_id].players[Red1.id].team, "Red1 isn't on the red team");
     test.equal("blue", ctf.game_data[game_id].players[Blue1.id].team, "Blue1 isn't on the red team");
-    test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 is in observer mode");
-    test.strictEqual(false, ctf.game_data[game_id].players[Blue1.id].observer_mode, "Blue1 is in observer mode");
+    test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 should not be in observer mode");
+    test.strictEqual(false, ctf.game_data[game_id].players[Blue1.id].observer_mode, "Blue1 should not be in observer mode");
    
     // Move Red1 to blue flag area near edge
     var new_coordinates = algorithms.add_miles_to_coordinate(
@@ -127,8 +127,8 @@ exports.test_observer_capturing = function(test){
     
     var Blue1 = {
 		id: "Blue1",
-        latitude: 29.034681,
-        longitude: -81.303774    
+        latitude: Red1.latitude - TWENTY_FEET,
+        longitude: Red1.longitude   
     };
 
 	// Create game
@@ -142,8 +142,8 @@ exports.test_observer_capturing = function(test){
 	// Test preconditions
     test.equal("red", ctf.game_data[game_id].players[Red1.id].team, "Red1 isn't on the red team");
     test.equal("blue", ctf.game_data[game_id].players[Blue1.id].team, "Blue1 isn't on the red team");
-    test.strictEqual(true, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 should be in observer mode");
-    test.strictEqual(true, ctf.game_data[game_id].players[Blue1.id].observer_mode, "Blue1 should be in observer mode");
+    test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 should not be in observer mode");
+    test.strictEqual(false, ctf.game_data[game_id].players[Blue1.id].observer_mode, "Blue1 should not be in observer mode");
 	
     // Move Red1 to blue flag area
     Red1.latitude = ctf.game_data[game_id].blue_flag.latitude;
