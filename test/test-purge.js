@@ -66,8 +66,8 @@ exports.test_purge_players = function(test) {
             test.equal(0, ctf.game_data[game_id].blue);
             
             test.done();
-        }, ctf.constants.PURGE_USER_INTERVAL * ctf.constants.MINUTE);
-    }, ctf.constants.DISABLE_USER_INTERVAL * ctf.constants.MINUTE);
+        }, ctf.constants.PURGE_USER_INTERVAL * ctf.constants.MINUTE + 5);
+    }, ctf.constants.DISABLE_USER_INTERVAL * ctf.constants.MINUTE + 5);
 };
 
 exports.test_purge_games = function(test) {
