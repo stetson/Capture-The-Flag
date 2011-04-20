@@ -165,7 +165,9 @@ exports.test_observer_capturing = function(test){
     test.strictEqual(null, controller.update_location(game_id, Blue1.id, Blue1), "Could not move Red1");
     
 	// Update logic
-    logic.run(ctf.game_data[game_id]);
+    for (var i = 0; i < 100; i++) {
+        logic.run(ctf.game_data[game_id]);
+    }
 	
     // Check to see if Red1 is in observer mode
     test.strictEqual(true, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 should be in observer mode");
@@ -174,20 +176,6 @@ exports.test_observer_capturing = function(test){
     test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].has_flag, "Red1 should not have the flag");
 	
 	// Check that Blue1 has 1 tag
-    test.equal(1, ctf.game_data[game_id].players[Blue1.id].tags, "Blue1 should only have one tag");
-	
-	 // Update logic
-    for (var i = 0; i < 100; i++) {
-        logic.run(ctf.game_data[game_id]);
-    }
-
-    // Check if Red1 is in observer mode
-    test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 is in observer mode");
-
-    // Check if Red1 has the flag
-    test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].has_flag, "Red1 does have the flag");
-    
-    // Check that Blue1 has 1 tag
     test.equal(1, ctf.game_data[game_id].players[Blue1.id].tags, "Blue1 should only have one tag");
 
     test.done();
