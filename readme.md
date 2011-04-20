@@ -1,4 +1,4 @@
-# HTML5 Capture the Flag
+# Capture the Flag
 
 ## Installing
 
