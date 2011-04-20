@@ -162,7 +162,7 @@ exports.test_observer_capturing = function(test){
     // Move Blue1 to tagging distance of Red1 within field
     Blue1.latitude = ctf.game_data[game_id].blue_flag.latitude;
     Blue1.longitude = ctf.game_data[game_id].blue_flag.longitude;
-    test.strictEqual(null, controller.update_location(game_id, Blue1.id, Blue1), "Could not move Red1");
+    test.strictEqual(null, controller.update_location(game_id, Blue1.id, Blue1), "Could not move Blue1");
     
 	// Update logic
     for (var i = 0; i < 100; i++) {
