@@ -153,8 +153,33 @@ exports.move_flag = function(game_id, user_id, team, latitude, longitude) {
  * @function
  */
 exports.get_location = function(game_id) {
+    // Ensure game exists
     if (game_id && ctf.game_data[game_id]) {
-        return ctf.game_data[game_id].players;
+        // Push players into an array to be sorted
+        var players = [];
+        for (var player in ctf.game_data[game_id].players) {
+            players.push(ctf.game_data[game_id].players[player]);
+        }
+        
+        // Sort players using custom comparator
+        players.sort(function(a, b) {
+            if (a.captures === b.captures) {
+                if (a.tags === b.tags) {
+                    return 0;
+                }
+                return a.tags > b.tags ? -1 : 1;
+            }
+            return a.captures > b.captures ? -1 : 1;
+        });
+        
+        // Recreate sorted object
+        var players_object = {};
+        for (var player in players) {
+            players_object[players[player].id] = players[player];
+        }
+        
+        // Send the data back to the client
+        return players_object;
     } else {
         return false;
     }

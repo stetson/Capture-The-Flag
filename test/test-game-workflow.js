@@ -342,3 +342,65 @@ exports.test_move_flag = function(test) {
     
     test.done();    
 };
+
+exports.test_player_sorting = function(test) {
+    var game_id = "test_player_sorting";
+    
+    // Set up players, giving them a random amount of tags and captures
+    for (var i = 0; i < 100; i++) {
+        // Spec out a test player
+        var user = {
+            id: "player_" + i,
+            latitude: 27.0 + Math.random(),
+            longitude: -84 + Math.random()
+        };
+        
+        if (i === 0) {
+            // Set up game
+            test.ok(controller.create_game(game_id, user.id, 
+                    user.latitude, user.longitude), "Could not create game");
+        }
+        
+        // Add them to the game
+        test.ok(controller.join_game(game_id, user.id, user), 
+                "user " + i + " could not join game");
+        
+        // Give them a random number of tags and captures
+        ctf.game_data[game_id].players[user.id].tags 
+                = Math.floor(Math.random() * 20);
+        ctf.game_data[game_id].players[user.id].captures 
+                = Math.floor(Math.random() * 20);
+    }
+    
+    // Fetch players
+    var players = controller.get_location(game_id);
+    test.ok(players, "No players were fetched");
+    
+    // Test sorting
+    var previous_captures = Number.MAX_VALUE;
+    var previous_tags = Number.MAX_VALUE;
+    for (player in players) {
+        if (players.hasOwnProperty(player)) {
+            var new_captures = parseFloat(players[player].captures);
+            var new_tags = parseFloat(players[player].tags);
+            
+            // Compare captures
+            test.ok(new_captures <= previous_captures, 
+                    "Players were not properly ordered by captures - " + 
+                    new_captures + " > " + previous_captures);
+            
+            // Compare tags if captures are equal
+            if (new_captures === previous_captures) {
+                test.ok(new_tags <= previous_tags, 
+                        "Players were not properly ordered by tags - " + 
+                        new_tags + " > " + previous_tags);
+            }
+            
+            // Assign tags and captures for next comparison
+            previous_captures = new_captures;
+            previous_tags = new_tags;
+        }
+    }
+    
+    test.done();
+};
