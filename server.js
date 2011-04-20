@@ -195,16 +195,6 @@ var http = express.createServer();
 http.use(express.bodyParser());
 
 /**
- * Static files for frontend <br />
- * <b>url: / *</b>
- * 
- * @memberOf http
- * @name frontend 
- * @param request
- **/
-http.use(express.static('./frontend/'));
-
-/**
  * Documentation <br />
  * <b>url: / *</b>
  * 
