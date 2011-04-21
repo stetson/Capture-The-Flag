@@ -16,7 +16,7 @@ var started = false;
  */
 var tests = [
     // Make sure the server is reachable
-    { method: "GET", url: "/", statusCode: 200 },
+    { method: "GET", url: "/help/", statusCode: 200 },
     
     // Make sure people can't request games without a latitude and longitude
     { method: "GET", url: "/game", statusCode: 400 },

@@ -203,6 +203,9 @@ http.use(express.bodyParser());
  * @param request
  **/
 http.use(express.static('./docs/'));
+http.get('/', function(request, response) {
+    response.redirect('/help/');
+});
 
 /**
  * Updates the user's location

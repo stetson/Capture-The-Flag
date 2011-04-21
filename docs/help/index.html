@@ -1,7 +1,12 @@
 <HTML>
 <HEAD>
 	<TITLE>Capture the Flag: End-user documentation</TITLE>
-	<H1>End-user docs</H1>
+	<h1>Capture the Flag</h1>
+	<H2>End-user docs</H2>
+	<style type="text/css">
+	* { font-family: sans; }
+	body { margin: 20px 10%; }
+	</style>
 </HEAD>
 
 <BODY>
@@ -10,18 +15,17 @@
 	make it more "pretty". Also, include some statement about privacy, and how 
 	we'll use Facebook information (show profile picture and name). -->
 
-	<p>This is an online, version of Capture the flag that allows the users to use 
-	the GPS in a device that can connect to the internet, and allows for the user 
-	to be shown on the map to either play or observe a game in action. If the user
-	only has internet capability then they will be placed into observer mode and
-	be able to watch other players on the map.
+	<p>You're viewing the end-user documentation for Capture the Flag, a proof
+	of concept for real-time applications built on Node.js. It utilizes an Android
+	native application on the frontend to connect to a Node.js backend. For more 
+	information, view the web sites for each project:</p>
+	<a href="https://github.com/stetson/Capture-The-Flag">Node.js backend</a><br />
+	<a href="https://github.com/stetson/Capture-the-Flag-Android-Client"> Android frontend</a>
 	<br>
 	<p><Font size=4><b>Log in</b></Font>
 	<br>
 	<p>The way the user logs in is either by their facebook account or a guest 
 	account.
-	<br>
-	<p>
 	<br>
 	<p>If the user is using their facebook account then they can show on their 
 	facebook what they're doing 
@@ -65,11 +69,8 @@
 	flag for your team to be able to score. 
 	<br> 
 	<p>There are three buttons available center on blue flag, center on red flag,
-	and center on own position.
-	<br>
-	<p>
-	<br> 
-	<br><Font size=4><b>Observer Mode</b></Font>
+	and center on own position.</p>
+    <Font size=4><b>Observer Mode</b></Font>
 	<br>
 	<p>Observer mode is activated when:
 	<br> 
@@ -91,7 +92,7 @@
 	<p>
 	<br>   
 	
-	<h2><a name="signal_strength">Why do I get errors about geolocation?</a></h2>
+	<Font size=4><a name="signal_strength"><b>Why do I get errors about geolocation?</b></a></font>
 	<p>To play capture the flag, it is necessary to have very accurate readings from a GPS device. 
 	If this is not available, you will still be able to watch others play the game, but you yourself
 	will not be able to. Please ensure that your GPS device is on, and that you have given permissions
