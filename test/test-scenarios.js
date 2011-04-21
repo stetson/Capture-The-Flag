@@ -244,9 +244,9 @@ exports.test_double_tag_over_flag = function(test) {
     logic.run(ctf.game_data[game_id]);
     
     // Test preconditions
-    test.equal("red", ctf.game_data[game_id].players[Red1.id].team, "Red1 isn't on the red team");
-    test.equal("blue", ctf.game_data[game_id].players[Blue1.id].team, "Blue1 isn't on the blue. team");
-	test.equal("red", ctf.game_data[game_id].players[Red2.id].team, "Red2 isn't on the red team");
+    test.equal("red", ctf.game_data[game_id].players[Red1.id].team, "Red1 should be on the red team");
+    test.equal("blue", ctf.game_data[game_id].players[Blue1.id].team, "Blue1 should be on the blue team");
+	test.equal("red", ctf.game_data[game_id].players[Red2.id].team, "Red2 should be on the red team");
     test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 should not be in observer mode");
     test.strictEqual(false, ctf.game_data[game_id].players[Blue1.id].observer_mode, "Blue1 should not be in observer mode");
     test.strictEqual(false, ctf.game_data[game_id].players[Red2.id].observer_mode, "Red2 should not be in observer mode");	
@@ -291,68 +291,78 @@ exports.test_double_tag_over_flag = function(test) {
 	
     test.done();
 };
-/**
+
 exports.test_capture_after_point = function(test) {
     var game_id = "test_capture_after_point";
-
-    // Create game
-    test.ok(controller.create_game(game_id, user1.id, user1.latitude, user1.longitude), "Could not create game");
-    test.ok(controller.join_game(game_id, user1.id, user1), "user1 could not join game"); // Red
-    test.ok(controller.join_game(game_id, user3.id, user3), "user3 could not join game"); // Blue
-    test.ok(controller.join_game(game_id, user4.id, user4), "user4 could not join game"); // Red
-   
-    user1.latitude += TWENTY_FEET;
-    user3.latitude -= TWENTY_FEET;
-    user4.latitude += TWENTY_FEET;
-
-    test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to starting point");
-    test.strictEqual(null, controller.update_location(game_id, user3.id, user3), "Could not update location to starting point");
-    test.strictEqual(null, controller.update_location(game_id, user4.id, user4), "Could not update location to starting point");
+	
+	 var Red1 = {
+        id: "Red1",
+        latitude: 29.034681,
+        longitude: -81.303774     
+    };
     
+    var Blue1 = {
+        id: "Blue1",
+        latitude: Red1.latitude - TWENTY_FEET,
+        longitude: Red1.longitude    
+    };
+	
+	var Red2 = {
+        id: "Red2",
+        latitude: Red1.latitude,
+        longitude: Red1.longitude - TWENTY_FEET    
+    };
+	
+    // Create game
+    test.ok(controller.create_game(game_id, Red1.id, Red1.latitude, Red1.longitude), "Could not create game");
+    test.ok(controller.join_game(game_id, Red1.id, Red1), "Red1 could not join game"); // Red
+    test.ok(controller.join_game(game_id, Blue1.id, Blue1), "Blue1 could not join game"); // Blue
+    test.ok(controller.join_game(game_id, Red2.id, Red2), "Red2 could not join game"); // Red
+       
     // Run business logic
     logic.run(ctf.game_data[game_id]);
 
     // Test preconditions
-    test.equal("red", ctf.game_data[game_id].players[user1.id].team, "User 1 isn't on the red team");
-    test.equal("blue", ctf.game_data[game_id].players[user3.id].team, "User 3 isn't on the red team");
-    test.equal("red", ctf.game_data[game_id].players[user4.id].team, "User 4 isn't on the red team");
-    test.strictEqual(false, ctf.game_data[game_id].players[user1.id].observer_mode, "user 1 is in observer mode");
-    test.strictEqual(false, ctf.game_data[game_id].players[user3.id].observer_mode, "user 3 is in observer mode");
-    test.strictEqual(false, ctf.game_data[game_id].players[user4.id].observer_mode, "user 4 is in observer mode");
+    test.equal("red", ctf.game_data[game_id].players[Red1.id].team, "Red1 isn't on the red team");
+    test.equal("blue", ctf.game_data[game_id].players[Blue1.id].team, "Blue1 should be on the red team");
+    test.equal("red", ctf.game_data[game_id].players[Red2.id].team, "Red2 should be on the red team");
+    test.strictEqual(false, ctf.game_data[game_id].players[Red1.id].observer_mode, "Red1 should not be in observer mode");
+    test.strictEqual(false, ctf.game_data[game_id].players[Blue1.id].observer_mode, "Blue1 should not be in observer mode");
+    test.strictEqual(false, ctf.game_data[game_id].players[Red2.id].observer_mode, "Red2 should not be in observer mode");
     
     // Have two red players reach flag at the same time
-    user1.latitude = ctf.game_data[game_id].blue_flag.latitude;
-    user1.longitude = ctf.game_data[game_id].blue_flag.longitude;
-    test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to starting point");
-    user4.latitude = ctf.game_data[game_id].blue_flag.latitude;
-    user4.longitude = ctf.game_data[game_id].blue_flag.longitude;
-    test.strictEqual(null, controller.update_location(game_id, user4.id, user4), "Could not update location to starting point");
+    Red1.latitude = ctf.game_data[game_id].blue_flag.latitude;
+    Red1.longitude = ctf.game_data[game_id].blue_flag.longitude;
+    test.strictEqual(null, controller.update_location(game_id, Red1.id, Red1), "Could not update Red1's location to blue flag");
+    Red2.latitude = ctf.game_data[game_id].blue_flag.latitude;
+    Red2.longitude = ctf.game_data[game_id].blue_flag.longitude;
+    test.strictEqual(null, controller.update_location(game_id, Red2.id, Red2), "Could not update Red2's location to blue flag");
 
     // Run business logic
     logic.run(ctf.game_data[game_id]);
 
     // Test that first to join has flag
-    test.strictEqual(true, ctf.game_data[game_id].players[user1.id].has_flag, "user3 does not have the flag");
-    test.strictEqual(false, ctf.game_data[game_id].players[user4.id].has_flag, "user4 has the flag flag");
+    test.strictEqual(true, ctf.game_data[game_id].players[Red1.id].has_flag, "Red1 should have the flag");
+    test.strictEqual(false, ctf.game_data[game_id].players[Red2.id].has_flag, "Red2 should not have the flag");
 
     // Test that flag is captured
-    test.strictEqual(false, ctf.game_data[game_id].red_flag_captured, "The user doesn't have the flag");
-    test.strictEqual(true, ctf.game_data[game_id].blue_flag_captured, "The user doesn't have the flag");   
+    test.strictEqual(false, ctf.game_data[game_id].red_flag_captured, "The red flag should not be captured");
+    test.strictEqual(true, ctf.game_data[game_id].blue_flag_captured, "The blue flag should be captured");   
 
-    // Move player 1 with flag to own side
-    user1.latitude = ctf.game_data[game_id].origin.latitude + TWENTY_FEET;
-    user1.longitude = ctf.game_data[game_id].origin.longitude;
-    test.strictEqual(null, controller.update_location(game_id, user1.id, user1), "Could not update location to starting point");
+    // Move Red1 with flag to own side
+    Red1.latitude = ctf.game_data[game_id].origin.latitude + TWENTY_FEET;
+    Red1.longitude = ctf.game_data[game_id].origin.longitude;
+    test.strictEqual(null, controller.update_location(game_id, Red1.id, Red1), "Could not update Red1's location to red side");
     
     // Run business logic
     logic.run(ctf.game_data[game_id]);
 
-    // Test that player 4 now has the flag
-    test.strictEqual(true, ctf.game_data[game_id].players[user4.id].has_flag, "user4 does not have the flag");
+    // Test that Red2 now has the flag
+    test.strictEqual(true, ctf.game_data[game_id].players[Red2.id].has_flag, "Red2 should have the flag");
 
     test.done();    
 };
-
+/**
 exports.test_no_capture_in_observer_mode = function(test) {
     var game_id = "test_no_capture_in_observer_mode";
 
